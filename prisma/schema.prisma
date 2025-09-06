@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @unique
+  email     String?  @unique
+  role      Role     @default(student)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // student Student? @relation("UserStudent")
+}
+
+model Student {
+  id           String @id @default(uuid())
+  first_name   String
+  last_name    String
+  age          String
+  email        String
+  phone        String
+  address      String
+  valid_id_URL String
+  selfie_URL   String
+
+  invoices Invoice[]
+
+  // user User @relation("UserStudent", fields: [user_id], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Invoice {
+  id           String  @id @default(uuid())
+  reference_id String  @unique
+  studentId    String
+  student      Student @relation(fields: [studentId], references: [id])
+
+  courseTitle String
+  coursePrice Int
+
+  status InvoiceStatus @default(pending)
+
+  dueDate DateTime? @default(now())
+  paidAt  DateTime? @default(now())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum InvoiceStatus {
+  pending
+  accepted
+  rejected
+}
+
+enum Role {
+  admin
+  student
+}
