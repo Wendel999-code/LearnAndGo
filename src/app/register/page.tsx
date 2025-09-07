@@ -7,13 +7,11 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Upload, Info, LoaderCircle } from "lucide-react";
 import { motion } from "framer-motion";
-
 import { courses } from "@/lib/courses";
-
 import type { Variants } from "framer-motion";
 import CoursesCard from "@/components/courses-card";
-import { registerStudent } from "@/services/register/student";
 import toast from "react-hot-toast";
+import { registerStudentAndPayment } from "@/actions/register/register-payment";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0, y: 50, scale: 0.95 }, // start slightly lower and smaller
@@ -45,7 +43,7 @@ function CheckoutForm() {
     last_name: "",
     email: "",
     phone: "",
-    age: "",
+    age: 0,
     address: "",
     valid_id: null as File | null,
     selfie: null as File | null,
@@ -70,16 +68,32 @@ function CheckoutForm() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    setSubmitting(true);
-    try {
-      const res = await registerStudent(formData);
-      if (!res.success) toast.error(res.error);
 
-      toast.success("Application submitted successfully");
+    if (!selectedCourse) {
+      toast.error("Please select a course");
+      return;
+    }
+    if (!formData.valid_id) {
+      toast.error("Please upload a valid ID");
+      return;
+    }
+    if (!formData.selfie) {
+      toast.error("Please upload a selfie");
+      return;
+    }
+
+    setSubmitting(true);
+
+    try {
+      const res = await registerStudentAndPayment(formData);
+
+      toast.success("Redirecting to payment...");
+
+      window.location.href = res.invoice_url;
     } catch (error) {
-      console.error(error);
+      console.log(error);
     } finally {
       setSubmitting(false);
     }
@@ -313,7 +327,7 @@ function CheckoutForm() {
                   <p className="text-sm text-yellow-700 dark:text-yellow-200 leading-relaxed">
                     {" "}
                     <span className="font-semibold">Note:</span> Partial payment
-                    of at least <span className="font-bold">₱100</span> is
+                    of at least <span className="font-bold">₱500</span> is
                     required for all courses. You will be redirected to the
                     secure payment gateway after registration. Please review
                     your registration details carefully before proceeding.{" "}
@@ -325,12 +339,12 @@ function CheckoutForm() {
                 <Button
                   disabled={!selectedCourse || !formData.selfie || submitting}
                   type="submit"
-                  className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3 rounded-xl"
+                  className="w-full bg-yellow-500 cursor-pointer hover:bg-yellow-400 text-black font-bold py-3 rounded-xl"
                 >
                   {submitting ? (
                     <>
-                      <LoaderCircle />
-                      Proceed to Payment
+                      <LoaderCircle className="animate-spin" />
+                      Proceeding to Payment...
                     </>
                   ) : (
                     "  Proceed to Payment"
