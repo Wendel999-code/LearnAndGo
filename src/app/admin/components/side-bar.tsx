@@ -2,42 +2,100 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { PanelRightClose, PanelLeftClose } from "lucide-react";
+import { usePathname } from "next/navigation";
+import {
+  PanelRightClose,
+  PanelLeftClose,
+  Globe,
+  Home,
+  Users,
+  Calendar,
+  GraduationCap,
+  Award,
+  CreditCard,
+} from "lucide-react";
+
+const navItems = [
+  { label: "Home", href: "/admin", icon: Home },
+  { label: "Enrollees", href: "/admin/enrollees", icon: Users },
+   { label: "Payments", href: "/admin/payments", icon: CreditCard },
+  { label: "Schedule", href: "/admin/schedule", icon: Calendar },
+  { label: "Students", href: "/admin/students", icon: GraduationCap },
+  { label: "Certificates", href: "/admin/certificates", icon: Award },
+];
 
 function SideBar() {
   const [open, setOpen] = useState(true);
+  const pathname = usePathname();
+
   return (
     <aside
-      className={`bg-theme transition-all duration-300 border border-r overflow-hidden ease-in-out
-    ${open ? "w-64" : "w-16"}
-  `}
+      className={`sticky top-0 left-0 mt-2 rounded-sm h-screen flex flex-col border-r shadow-sm transition-all duration-300 ease-in-out
+        bg-white dark:bg-gray-900
+        ${open ? "w-64" : "w-20"}
+      `}
     >
-      <div className="flex items-center justify-between p-4">
-        <span className={`${open ? "block" : "hidden"} font-bold`}>
-          Dashboard
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+        <span
+          className={`flex items-center gap-2 text-lg font-semibold text-gray-800 dark:text-gray-100 transition-all
+            ${open ? "opacity-100" : "opacity-0 w-0"}
+          `}
+        >
+          <Globe className="w-5 h-5 shrink-0" />
+          {open && "Overview"}
         </span>
         <button
           onClick={() => setOpen(!open)}
-          className={`
-    text-gray-300 hover:text-white 
-    transition-all duration-300 ease-in-out
-    ${open ? "ml-0 rotate-0" : "ml-5 "}
-  `}
+          className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
         >
           {open ? <PanelLeftClose /> : <PanelRightClose />}
         </button>
       </div>
-      <nav className="flex flex-col space-y-2 px-2">
-        <Link href="/" className="hover:bg-gray-700 rounded px-2 py-1">
-          Home
-        </Link>
-        <Link
-          href="/admin/settings"
-          className="hover:bg-gray-700 rounded px-2 py-1"
-        >
-          Settings
-        </Link>
+
+      {/* Navigation */}
+      <nav className="flex-1 overflow-y-auto px-2 py-4 space-y-1">
+        {navItems.map((item) => {
+          const isActive = pathname === item.href;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all
+                ${
+                  isActive
+                    ? "bg-yellow-500 text-black dark:bg-yellow-600 dark:text-white shadow-md"
+                    : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                }
+              `}
+            >
+              <item.icon
+                className={`w-5 h-5 shrink-0 ${
+                  isActive ? "text-black dark:text-white" : ""
+                }`}
+              />
+              <span
+                className={`whitespace-nowrap transition-opacity duration-200 ${
+                  open ? "opacity-100" : "opacity-0 hidden"
+                }`}
+              >
+                {item.label}
+              </span>
+            </Link>
+          );
+        })}
       </nav>
+
+      {/* Footer */}
+      <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+        <p
+          className={`text-xs text-gray-500 dark:text-gray-400 transition-all ${
+            open ? "block" : "hidden"
+          }`}
+        >
+          © {new Date().getFullYear()} Driving School
+        </p>
+      </div>
     </aside>
   );
 }

@@ -5,7 +5,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
-import Header from "./landing/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,9 +41,6 @@ export default function RootLayout({
             >
               <div className="flex flex-col">
                 {" "}
-                <div>
-                  <Header />
-                </div>
                 <div>{children}</div>
               </div>
               <Toaster position="top-center" />

@@ -1,37 +1,27 @@
+"use server";
 
-import { stackServerApp } from "@/stack";
-import prisma from "@/lib/prisma-instance";
-
-export async function syncUser() {
+export async function getUser() {
     try {
-        const user = await stackServerApp.getUser();
-        if (!user) return null;
 
-        if (!user?.clientReadOnlyMetadata?.role) {
-            await user.update({
-                clientReadOnlyMetadata: {
-                    role: "student",
-                },
-            });
-        }
-
-        const existing = await prisma.user.findUnique({
-            where: { id: user.id },
+        const res = await fetch("https://api.stack-auth.com/api/v1/users", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Stack-Access-Type": "server",
+                "X-Stack-Project-Id": process.env.NEXT_PUBLIC_STACK_PROJECT_ID!,
+                "X-Stack-Secret-Server-Key": process.env.STACK_SECRET_SERVER_KEY!
+            }
         });
 
-        if (existing) return null
+        const data = await res.json();
 
-        await prisma.user.create({
-            data: {
-                id: user.id,
-                email: user.primaryEmail ?? null,
+        console.log(data.items)
 
-            },
-        });
+        return data
 
-        return
-    } catch (error) {
-        console.error("error in syncUser", error);
-        throw error;
+
+    } catch (error: any) {
+        console.error(error.response?.data || error.message);
+        return { success: false, message: "Cannot get user", user: null };
     }
 }

@@ -120,12 +120,11 @@
     @apply bg-background text-foreground;
   }
 
-  html{
+  html {
     @apply scroll-smooth;
   }
 
   .bg-theme {
     @apply bg-white dark:bg-zinc-950 transition-colors duration-300 ease-in-out;
   }
-  
 }

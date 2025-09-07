@@ -1,3 +1,5 @@
+"use client";
+
 import CoursesCard from "@/components/courses-card";
 import { courses } from "@/lib/courses";
 import { motion } from "framer-motion";

@@ -5,11 +5,7 @@ export default function Page() {
     <div>
       <SignUp
         fullPage={true}
-        extraInfo={
-          <>
-            By signing up, you agree to our <a href="/terms">Terms</a>
-          </>
-        }
+        extraInfo={<>By signing up, you agree to our Terms</>}
       />
     </div>
   );

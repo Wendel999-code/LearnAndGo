@@ -1,3 +1,4 @@
+import Header from "./components/header";
 import SideBar from "./components/side-bar";
 
 export default function AdminLayout({
@@ -6,27 +7,19 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-theme">
+    <div className="flex  flex-col min-h-screen bg-theme">
       {/* Sidebar */}
-      <SideBar />
-      {/* Main Content */}
-      <main className="flex-1 p-6">{children}</main>
+
+      <Header />
+
+      {/* Main Section */}
+      <div className="flex-1 flex  ">
+        {/* Header */}
+        <SideBar />
+
+        {/* Page Content */}
+        <main className="flex-1 p-2 ">{children}</main>
+      </div>
     </div>
   );
 }
-
-// import { syncUser } from "@/services/auth/user";
-
-// export default async function AdminLayout({
-//   children,
-// }: {
-//   children: React.ReactNode;
-// }) {
-//   await syncUser();
-//   return (
-//     <div className="">
-//       {" "}
-//       <h1>syncuser</h1> {children}
-//     </div>
-//   );
-// }
