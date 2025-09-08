@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
+import ReactQueryProvider from "@/provider/QueryClientProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,18 +34,20 @@ export default function RootLayout({
       >
         <StackProvider app={stackServerApp}>
           <StackTheme>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <div className="flex flex-col">
-                {" "}
-                <div>{children}</div>
-              </div>
-              <Toaster position="top-center" />
-            </ThemeProvider>
+            <ReactQueryProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <div className="flex flex-col">
+                  {" "}
+                  <div>{children}</div>
+                </div>
+                <Toaster position="top-center" />
+              </ThemeProvider>
+            </ReactQueryProvider>
           </StackTheme>
         </StackProvider>
       </body>

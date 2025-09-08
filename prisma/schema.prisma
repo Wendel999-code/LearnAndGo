@@ -18,17 +18,17 @@ model User {
 }
 
 model Student {
-  id                 String  @id @default(uuid())
-  first_name         String
-  last_name          String
-  age                Int
-  email              String
-  phone              String
-  address            String
-  valid_id_URL       String
-  selfie_URL         String
-  officiallyEnrolled Boolean @default(false)
+  id           String @id @default(uuid())
+  first_name   String
+  last_name    String
+  age          Int
+  email        String
+  phone        String
+  address      String
+  valid_id_URL String
+  selfie_URL   String
 
+  status   StudentStatus @default(PENDING)
   invoices Invoice[]
 
   // user User @relation("UserStudent", fields: [user_id], references: [id])
@@ -38,13 +38,14 @@ model Student {
 }
 
 model Invoice {
-  id           String  @id @default(uuid())
-  reference_id String  @unique
-  studentId    String
-  student      Student @relation(fields: [studentId], references: [id])
-  ammountPaid  Int     @default(0)
-  courseTitle  String
-  coursePrice  Int
+  id              String  @id @default(uuid())
+  reference_id    String  @unique
+  studentId       String
+  student         Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  ammountPaid     Int     @default(0)
+  payment_channel String?
+  courseTitle     String
+  coursePrice     Int
 
   status InvoiceStatus @default(PENDING)
 
@@ -60,6 +61,13 @@ enum InvoiceStatus {
   PAID
   FAILED
   EXPIRED
+}
+
+enum StudentStatus {
+  PENDING
+  ENROLLED
+  REJECTED
+  CANCELLED
 }
 
 enum Role {

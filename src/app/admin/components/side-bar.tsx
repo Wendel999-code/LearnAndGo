@@ -17,10 +17,11 @@ import {
 
 const navItems = [
   { label: "Home", href: "/admin", icon: Home },
-  { label: "Enrollees", href: "/admin/enrollees", icon: Users },
-   { label: "Payments", href: "/admin/payments", icon: CreditCard },
-  { label: "Schedule", href: "/admin/schedule", icon: Calendar },
+  { label: "Enrollees", href: "/admin/enrollee", icon: Users },
+  { label: "Payments", href: "/admin/payments", icon: CreditCard },
+
   { label: "Students", href: "/admin/students", icon: GraduationCap },
+  { label: "Schedule", href: "/admin/schedule", icon: Calendar },
   { label: "Certificates", href: "/admin/certificates", icon: Award },
 ];
 

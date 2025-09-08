@@ -3,8 +3,8 @@
 import prisma from "@/lib/prisma-instance";
 import supabase from "@/lib/supabase-storage";
 import axios from "axios";
-import { v4 as uuid } from "uuid";
 import { StudentFormData, StudentSchema } from "../zod/student";
+import { generateReferenceId } from "@/lib/utils";
 
 
 export async function registerStudentAndPayment(formData: StudentFormData) {
@@ -42,7 +42,7 @@ export async function registerStudentAndPayment(formData: StudentFormData) {
             supabase.storage.from("learn_and_go").getPublicUrl(selfiePath).data,
         ]);
 
-        const reference_id = uuid();
+        const reference_id = generateReferenceId()
 
         // ✅ Save to DB (must be sequential, depends on URLs)
         const student = await prisma.student.create({
@@ -60,6 +60,7 @@ export async function registerStudentAndPayment(formData: StudentFormData) {
                         reference_id,
                         courseTitle: parsed.courseTitle,
                         coursePrice: parsed.coursePrice,
+
                     },
                 },
             },
@@ -79,7 +80,7 @@ export async function registerStudentAndPayment(formData: StudentFormData) {
                 mobile_number: parsed.phone,
                 address: parsed.address,
             },
-            success_redirect_url: "https://fef8c0151a1d.ngrok-free.app",
+            success_redirect_url: "https://965365b51618.ngrok-free.app",
             currency: "PHP",
             items: [
                 {
@@ -114,6 +115,28 @@ export async function registerStudentAndPayment(formData: StudentFormData) {
     } catch (error: any) {
         console.error("Error in registerStudentAndPayment:", error);
         return { success: false, message: error.message };
+    }
+}
+
+
+export async function getEnrollees() {
+    try {
+        const response = await prisma.student.findMany({
+            where: {
+                status: "PENDING",
+            },
+            include: {
+                invoices: true,
+            },
+            orderBy: {
+                createdAt: "desc"
+            }
+        });
+        return { success: true, message: "Fetch successfully", data: response };
+
+    } catch (error: any) {
+        console.error("Error in getEnrollees:", error);
+        return { success: false, message: error.message, data: null };
     }
 }
 

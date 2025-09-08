@@ -11,7 +11,7 @@ import { courses } from "@/lib/courses";
 import type { Variants } from "framer-motion";
 import CoursesCard from "@/components/courses-card";
 import toast from "react-hot-toast";
-import { registerStudentAndPayment } from "@/actions/register/register-payment";
+import { registerStudentAndPayment } from "@/actions/student/student";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0, y: 50, scale: 0.95 }, // start slightly lower and smaller

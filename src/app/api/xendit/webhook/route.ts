@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
         status,
         ammountPaid: body.amount,
         paidAt: status === "PAID" ? new Date() : null,
+        payment_channel: body.payment_channel
       },
     });
 
