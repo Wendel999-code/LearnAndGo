@@ -80,7 +80,7 @@ export async function registerStudentAndPayment(formData: StudentFormData) {
                 mobile_number: parsed.phone,
                 address: parsed.address,
             },
-            success_redirect_url: "https://965365b51618.ngrok-free.app",
+            success_redirect_url: `https://965365b51618.ngrok-free.app/register-successfully/${reference_id}`,
             currency: "PHP",
             items: [
                 {
@@ -140,4 +140,43 @@ export async function getEnrollees() {
     }
 }
 
+
+
+export async function registerSuccessfully(reference_id: string) {
+    if (!reference_id) throw new Error("Reference ID is required");
+    try {
+        const response = await prisma.invoice.findUnique({
+            where: {
+                reference_id
+            }, select: {
+                reference_id: true,
+                coursePrice: true,
+                courseTitle: true,
+                ammountPaid: true,
+                student: {
+                    select: {
+                        first_name: true,
+                        last_name: true,
+
+                    }
+                }
+
+            }
+
+
+        });
+
+
+        if (!response) {
+            return { success: false, message: "Invoice not found", data: null };
+        }
+
+
+        return { success: true, message: "Successfully registered", data: response };
+
+    } catch (error: any) {
+        console.error("Error in registerSuccessfully:", error);
+        return { success: false, message: error.message, data: null };
+    }
+}
 
