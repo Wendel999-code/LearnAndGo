@@ -80,7 +80,7 @@ export async function registerStudentAndPayment(formData: StudentFormData) {
                 mobile_number: parsed.phone,
                 address: parsed.address,
             },
-            success_redirect_url: `https://965365b51618.ngrok-free.app/register-successfully/${reference_id}`,
+            success_redirect_url: `https://learn-and-go.wndl.dev/register-successfully/${reference_id}`,
             currency: "PHP",
             items: [
                 {
@@ -91,7 +91,7 @@ export async function registerStudentAndPayment(formData: StudentFormData) {
                     url: "https://2dbe44fe9e05.ngrok-free.app/#courses",
                 },
             ],
-            metadata: { student_id: student.id },
+            metadata: { student },
             should_send_email: true
         };
 
