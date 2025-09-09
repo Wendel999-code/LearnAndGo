@@ -48,9 +48,32 @@ function Hero() {
           <Link href="/register">
             <Button
               size="lg"
-              className="bg-black text-yellow-400 cursor-pointer hover:bg-gray-800 dark:bg-yellow-500 dark:text-black dark:hover:bg-yellow-400 rounded-xl shadow-md"
+              className="relative overflow-hidden group px-8 py-3 rounded-2xl font-semibold 
+             bg-black text-yellow-400 shadow-lg cursor-pointer 
+             hover:shadow-xl transition-all duration-300
+             dark:bg-yellow-500 dark:text-black dark:hover:bg-yellow-400"
             >
-              Enroll Now
+              {/* Glow / highlight effect */}
+              <span className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-yellow-500/20 opacity-0 group-hover:opacity-100 transition duration-500"></span>
+
+              {/* Text */}
+              <span className="relative z-10 flex items-center gap-2">
+                Enroll Now
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M17.25 8.25L21 12l-3.75 3.75M3 12h18"
+                  />
+                </svg>
+              </span>
             </Button>
           </Link>
         </motion.div>

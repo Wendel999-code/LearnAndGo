@@ -12,7 +12,7 @@ type Enrollee = {
   id: string;
   name: string;
   course: string;
-  amount: number;
+  price: number;
   amountPaid: number;
   reference_no: string;
   status: string;
@@ -28,7 +28,7 @@ export default function EnrolleesPage() {
           id: invoice.id,
           name: `${enrollee.first_name} ${enrollee.last_name}`,
           course: invoice.courseTitle,
-          amount: invoice.coursePrice,
+          price: invoice.coursePrice,
           amountPaid: invoice.ammountPaid,
           reference_no: invoice.reference_id,
           status: enrollee.status,
@@ -44,10 +44,10 @@ export default function EnrolleesPage() {
     { accessorKey: "name", header: "Name" },
     { accessorKey: "course", header: "Course" },
     {
-      accessorKey: "amount",
-      header: "Total Amount",
+      accessorKey: "price",
+      header: "Price",
       cell: ({ row }) => {
-        const value = row.getValue<number>("amount");
+        const value = row.getValue<number>("price");
         return <span>₱{value.toLocaleString()}</span>;
       },
     },
@@ -83,11 +83,10 @@ export default function EnrolleesPage() {
     {
       id: "actions",
       enableHiding: false,
-      cell: ({ row }) => <EnrolleeAction />,
+      cell: ({ row }) => <EnrolleeAction enrollee_id={row.original.id} />,
     },
   ];
 
- 
   if (error) return <div>Error: {(error as Error).message}</div>;
 
   return (

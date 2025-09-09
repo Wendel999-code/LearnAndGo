@@ -7,6 +7,7 @@ import Hero from "./landing/Hero";
 import { redirect } from "next/navigation";
 import Header from "./landing/Header";
 import { stackServerApp } from "@/stack";
+import Instructor from "./landing/Instructor";
 
 export default async function Home() {
   const user = await stackServerApp.getUser();
@@ -21,6 +22,7 @@ export default async function Home() {
       <Header />
       <Hero />
       <About />
+      <Instructor />
       <Courses />
       <Footer />
     </div>

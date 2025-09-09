@@ -46,7 +46,7 @@ export default function PaymentsPage() {
     { accessorKey: "course", header: "Course" },
     {
       accessorKey: "amount",
-      header: "Total Amount",
+      header: "Price",
       cell: ({ row }) => {
         const value = row.getValue<number>("amount");
         return <span>₱{value.toLocaleString()}</span>;
@@ -68,8 +68,10 @@ export default function PaymentsPage() {
   return (
     <GenericTable
       title="Enrollee Invoices"
+      loading={isLoading}
       data={tableData}
       columns={paymentColumns}
+      searchKey="reference_no"
     />
   );
 }

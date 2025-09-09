@@ -31,13 +31,13 @@ function SideBar() {
 
   return (
     <aside
-      className={`sticky top-0 left-0 mt-2 rounded-sm h-screen flex flex-col border-r shadow-sm transition-all duration-300 ease-in-out
+      className={`sticky top-0 left-0 mt-2 rounded-sm  border-t h-screen flex flex-col border-r shadow-sm transition-all duration-300 ease-in-out
         bg-white dark:bg-gray-900
         ${open ? "w-64" : "w-20"}
       `}
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="flex items-center justify-between  p-4 border-b border-gray-200 dark:border-gray-700">
         <span
           className={`flex items-center gap-2 text-lg font-semibold text-gray-800 dark:text-gray-100 transition-all
             ${open ? "opacity-100" : "opacity-0 w-0"}

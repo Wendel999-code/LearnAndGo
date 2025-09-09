@@ -125,6 +125,6 @@
   }
 
   .bg-theme {
-    @apply bg-white dark:bg-zinc-950 transition-colors duration-300 ease-in-out;
+    @apply bg-yellow-100 dark:bg-zinc-950 transition-colors duration-300 ease-in-out;
   }
 }

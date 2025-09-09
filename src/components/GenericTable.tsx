@@ -5,9 +5,10 @@ import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
+  getFilteredRowModel,
   SortingState,
-  useReactTable,
   ColumnDef,
+  useReactTable,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -18,12 +19,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
 
 type GenericTableProps<TData, TValue> = {
   title?: string;
   loading?: boolean;
   data: TData[];
   columns: ColumnDef<TData, TValue>[];
+  searchKey?: string; 
 };
 
 export function GenericTable<TData, TValue>({
@@ -31,27 +34,45 @@ export function GenericTable<TData, TValue>({
   loading = false,
   data,
   columns,
+  searchKey,
 }: GenericTableProps<TData, TValue>) {
+  
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [globalFilter, setGlobalFilter] = React.useState("");
 
   const table = useReactTable({
     data,
     columns,
-    state: { sorting },
+    state: { sorting, globalFilter },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+
+    globalFilterFn: (row, columnId, filterValue) => {
+      if (!searchKey) return true;
+      const value = row.getValue<string>(searchKey);
+      return value?.toLowerCase().includes(filterValue.toLowerCase());
+    },
   });
 
   return (
     <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm p-4">
-      {title && (
-        <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4">
+        {title && (
           <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
             {title}
           </h2>
-        </div>
-      )}
+        )}
+        {searchKey && (
+          <Input
+            placeholder={`Search by ${searchKey.replace("_", " ")}`}
+            value={globalFilter ?? ""}
+            onChange={(e) => setGlobalFilter(e.target.value)}
+            className="w-64"
+          />
+        )}
+      </div>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -78,7 +99,6 @@ export function GenericTable<TData, TValue>({
         </TableHeader>
         <TableBody>
           {loading ? (
-            // Skeleton rows
             Array.from({ length: 5 }).map((_, rowIdx) => (
               <TableRow key={`skeleton-${rowIdx}`}>
                 {columns.map((_, colIdx) => (
