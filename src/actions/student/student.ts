@@ -5,7 +5,6 @@ import supabase from "@/lib/supabase-storage";
 import axios from "axios";
 import { StudentFormData, StudentSchema } from "../zod/student";
 import { generateReferenceId } from "@/lib/utils";
-import { StudentWithInvoices } from "@/global/type";
 
 
 export async function registerStudentAndPayment(formData: StudentFormData) {
@@ -214,7 +213,6 @@ export async function verifyEnrollee(enrolle_id: string) {
         await prisma.student.update({
             where: {
                 id: enrolle_id,
-                status: "PENDING"
             },
             data: {
                 status: "ENROLLED"

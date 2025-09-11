@@ -1,4 +1,4 @@
-import { getEnrollee, getEnrollees } from "@/actions/student/student";
+import { getEnrollee, getEnrollees, verifyEnrollee } from "@/actions/student/student";
 import { Student, StudentWithInvoices } from "@/global/type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -32,3 +32,26 @@ export const useGetEnrollee = (enrollee_id: string, open: boolean) =>
         retry: 1,
         refetchOnWindowFocus: true,
     });
+
+
+
+
+export const useVerifyEnrollee = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (enrollee_id: string) => {
+
+            const res = await verifyEnrollee(enrollee_id);
+            if (!res.success) throw new Error(res.message);
+            return res;
+        },
+
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["get-enrollees"] });
+            queryClient.invalidateQueries({ queryKey: ["get-enrollee"] });
+
+
+        },
+    });
+};

@@ -7,16 +7,22 @@ import { Switch } from "@/components/ui/switch";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function ModeToggle() {
-  const { theme, setTheme } = useTheme();
-  const [isDark, setIsDark] = React.useState(theme === "dark");
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
-    setIsDark(theme === "dark");
-  }, [theme]);
+    setMounted(true);
+  }, []);
+
+  const isDark = resolvedTheme === "dark";
 
   function handleToggle(value: boolean) {
-    setIsDark(value);
     setTheme(value ? "dark" : "light");
+  }
+
+  if (!mounted) {
+    // Prevent mismatch: render a placeholder until client knows theme
+    return <div className="w-8 h-8" />;
   }
 
   return (
@@ -44,14 +50,7 @@ export function ModeToggle() {
           </motion.div>
         )}
       </AnimatePresence>
-      <Switch
-        checked={isDark}
-        onCheckedChange={handleToggle}
-        className={`${isDark
-            ? "bg-gray-700 data-[state=checked]:bg-gray-600"
-            : "bg-gray-300 data-[state=checked]:bg-gray-500"
-          }`}
-      />
+      <Switch checked={isDark} onCheckedChange={handleToggle} />
     </div>
   );
 }
