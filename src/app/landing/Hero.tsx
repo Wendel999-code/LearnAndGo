@@ -4,8 +4,20 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { ChevronRight, GraduationCap } from "lucide-react";
+import { getEnrollee } from "@/actions/student/student";
 
 function Hero() {
+
+
+  const handleFetch = async () => {
+    const res = await getEnrollee("4401e7bb-0ef7-4cdc-8531-be12e3bdc75a")
+
+    console.log(res);
+
+  }
+
+
   return (
     <section className="relative min-h-screen pt-22 flex justify-center bg-theme overflow-hidden ">
       {/* Overlay */}
@@ -32,7 +44,7 @@ function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-sm md:text-lg text-black/80 dark:text-gray-200"
+          className="text-sm md:text-lg text-black/80 font-serif dark:text-gray-400"
         >
           Master the road with our comprehensive driving courses. From beginner
           lessons to advanced techniques, we guide you every step of the way.
@@ -45,37 +57,30 @@ function Hero() {
           whileTap={{ scale: 0.95 }}
           className="flex justify-center"
         >
-          <Link href="/register">
-            <Button
-              size="lg"
-              className="relative overflow-hidden group px-8 py-3 rounded-2xl font-semibold 
-             bg-black text-yellow-400 shadow-lg cursor-pointer 
-             hover:shadow-xl transition-all duration-300
-             dark:bg-yellow-500 dark:text-black dark:hover:bg-yellow-400"
-            >
-              {/* Glow / highlight effect */}
-              <span className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-yellow-500/20 opacity-0 group-hover:opacity-100 transition duration-500"></span>
 
-              {/* Text */}
-              <span className="relative z-10 flex items-center gap-2">
-                Enroll Now
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17.25 8.25L21 12l-3.75 3.75M3 12h18"
-                  />
-                </svg>
-              </span>
-            </Button>
-          </Link>
+          <Button onClick={handleFetch}
+            size="default"
+            className="relative overflow-hidden 
+               bg-black text-yellow-400 
+               dark:bg-yellow-400 dark:text-black
+               font-semibold rounded-xl shadow-lg 
+               hover:shadow-xl transform transition-all duration-300 hover:scale-105 group"
+          >
+            {/* Hover overlay only for light mode */}
+            <span className="absolute inset-0 bg-gray-900 opacity-0 group-hover:opacity-100 transition-opacity duration-300 dark:hidden" />
+
+            {/* Hover overlay only for dark mode */}
+            <span className="absolute inset-0 bg-yellow-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden dark:block" />
+
+            <span className="relative z-10 flex items-center gap-2">
+              <GraduationCap className="w-4 h-4" />
+              Enroll Now
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </span>
+          </Button>
+
+
+
         </motion.div>
       </div>
     </section>

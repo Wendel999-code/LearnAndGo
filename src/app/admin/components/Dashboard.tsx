@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { Users, DollarSign, Car, Award, BarChart3 } from "lucide-react";
 
@@ -113,17 +115,15 @@ function Dashboard() {
                 <div className="flex items-center justify-between mb-4">
                   <div className={`p-3 rounded-xl ${stat.bgClass}`}>
                     <stat.icon
-                      className={`w-6 h-6 ${
-                        stat.bgClass.includes("yellow")
-                          ? "text-black"
-                          : "text-white"
-                      }`}
+                      className={`w-6 h-6 ${stat.bgClass.includes("yellow")
+                        ? "text-black"
+                        : "text-white"
+                        }`}
                     />
                   </div>
                   <span
-                    className={`text-sm font-medium ${
-                      stat.trend === "up" ? "text-green-600" : "text-red-600"
-                    }`}
+                    className={`text-sm font-medium ${stat.trend === "up" ? "text-green-600" : "text-red-600"
+                      }`}
                   >
                     {stat.change}
                   </span>

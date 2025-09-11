@@ -1,4 +1,5 @@
-export type StudentFormData = {
+export type Student = {
+    id: string;
     first_name: string;
     last_name: string;
     age: string;
@@ -7,6 +8,8 @@ export type StudentFormData = {
     address: string;
     courseTitle: string;
     coursePrice: number;
+    ammountPaid: number;
+    reference_id: string;
     valid_id: File | null;
     selfie: File | null;
 };

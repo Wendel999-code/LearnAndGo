@@ -121,11 +121,16 @@
   }
 
   html {
-    @apply scroll-smooth;
-    data-scroll-behavior: smooth;
+    font-family: "Inter", sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
   }
 
   .bg-theme {
-    @apply bg-yellow-100 dark:bg-zinc-950 transition-colors duration-300 ease-in-out;
+    @apply bg-white dark:bg-zinc-950 transition-colors duration-300 ease-in-out;
   }
 }

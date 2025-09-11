@@ -4,10 +4,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { GenericTable } from "@/components/GenericTable";
 import { useGetEnrollees } from "@/hooks/use-student";
-import Loading from "@/app/loading";
 import EnrolleeAction from "./components/EnrolleeAction";
-import TableSkeleton from "@/components/TableSkeleton";
 
+
+//serve as header
 type Enrollee = {
   id: string;
   name: string;
@@ -18,22 +18,22 @@ type Enrollee = {
   status: string;
 };
 
-export default function EnrolleesPage() {
+function EnrolleesPage() {
   const { data: enrollees, isLoading, error } = useGetEnrollees();
 
   // Map API data to Enrollee type
   const tableData: Enrollee[] = enrollees
     ? enrollees.flatMap((enrollee) =>
-        enrollee.invoices.map((invoice) => ({
-          id: invoice.id,
-          name: `${enrollee.first_name} ${enrollee.last_name}`,
-          course: invoice.courseTitle,
-          price: invoice.coursePrice,
-          amountPaid: invoice.ammountPaid,
-          reference_no: invoice.reference_id,
-          status: enrollee.status,
-        }))
-      )
+      enrollee.invoices.map((invoice) => ({
+        id: enrollee?.id,
+        name: `${enrollee.first_name} ${enrollee.last_name}`,
+        course: invoice.courseTitle,
+        price: invoice.coursePrice,
+        amountPaid: invoice.ammountPaid,
+        reference_no: invoice.reference_id,
+        status: enrollee.status,
+      }))
+    )
     : [];
 
   const enrolleeColumns: ColumnDef<Enrollee>[] = [
@@ -71,8 +71,8 @@ export default function EnrolleesPage() {
               status === "Paid"
                 ? "bg-green-700 w-16 text-white"
                 : status === "Pending"
-                ? "bg-yellow-500 w-16 text-black"
-                : "bg-red-500 w-16 text-white"
+                  ? "bg-yellow-500 w-16 text-black"
+                  : "bg-red-500 w-16 text-white"
             }
           >
             {status}
@@ -98,3 +98,6 @@ export default function EnrolleesPage() {
     />
   );
 }
+
+
+export default EnrolleesPage

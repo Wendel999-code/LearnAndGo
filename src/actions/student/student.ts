@@ -5,6 +5,7 @@ import supabase from "@/lib/supabase-storage";
 import axios from "axios";
 import { StudentFormData, StudentSchema } from "../zod/student";
 import { generateReferenceId } from "@/lib/utils";
+import { StudentWithInvoices } from "@/global/type";
 
 
 export async function registerStudentAndPayment(formData: StudentFormData) {
@@ -118,7 +119,6 @@ export async function registerStudentAndPayment(formData: StudentFormData) {
     }
 }
 
-
 export async function getEnrollees() {
     try {
         const response = await prisma.student.findMany({
@@ -139,8 +139,6 @@ export async function getEnrollees() {
         return { success: false, message: error.message, data: null };
     }
 }
-
-
 
 export async function registerSuccessfully(reference_id: string) {
     if (!reference_id) throw new Error("Reference ID is required");
@@ -177,6 +175,57 @@ export async function registerSuccessfully(reference_id: string) {
     } catch (error: any) {
         console.error("Error in registerSuccessfully:", error);
         return { success: false, message: error.message, data: null };
+    }
+}
+
+
+export async function getEnrollee(enrollee_id: string) {
+
+    if (!enrollee_id) throw new Error("Enrollee ID is required");
+    try {
+        const enrollee = await prisma.student.findUnique({
+            where: {
+                id: enrollee_id,
+            },
+            include: {
+                invoices: true
+            }
+        });
+
+        if (!enrollee) {
+            return { success: false, message: "Enrollee not found", data: null };
+        }
+
+        return {
+            success: true,
+            message: "Fetch successfully",
+            data: enrollee
+        };
+    } catch (error) {
+        console.error("Error in getEnrollee:", error);
+        return { success: false, message: error instanceof Error ? error.message : "Unknown error", data: null };
+    }
+}
+
+
+export async function verifyEnrollee(enrolle_id: string) {
+    try {
+
+        await prisma.student.update({
+            where: {
+                id: enrolle_id,
+                status: "PENDING"
+            },
+            data: {
+                status: "ENROLLED"
+            }
+        });
+        return { success: true, message: "Enrollee officially enrolled" };
+
+
+    } catch (error: any) {
+        console.log(error.message);
+        return { success: false, message: error.message };
     }
 }
 

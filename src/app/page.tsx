@@ -11,11 +11,15 @@ import Instructor from "./landing/Instructor";
 
 export default async function Home() {
   const user = await stackServerApp.getUser();
+  let role = user?.clientReadOnlyMetadata?.role;
 
-  const role = user?.clientReadOnlyMetadata?.role;
+  if (user && !user.clientReadOnlyMetadata?.role) {
+    await user.update({ clientReadOnlyMetadata: { role: "student" } });
+    role = "student";
+  }
 
-  if (role === "admin") redirect("/admin");
   if (role === "student") redirect("/student");
+  if (role === "admin") redirect("/admin");
 
   return (
     <div className="min-h-screen flex flex-col bg-theme">

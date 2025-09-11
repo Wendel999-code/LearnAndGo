@@ -1,5 +1,5 @@
-import { getEnrollees } from "@/actions/student/student";
-import { StudentWithInvoices } from "@/global/type";
+import { getEnrollee, getEnrollees } from "@/actions/student/student";
+import { Student, StudentWithInvoices } from "@/global/type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 
@@ -13,6 +13,22 @@ export const useGetEnrollees = () =>
         },
         staleTime: 60 * 60 * 1000,
         gcTime: 30 * 60 * 1000,
+        retry: 1,
+        refetchOnWindowFocus: true,
+    });
+
+
+export const useGetEnrollee = (enrollee_id: string, open: boolean) =>
+    useQuery<StudentWithInvoices>({
+        queryKey: ["get-enrollee", enrollee_id],
+        queryFn: async () => {
+            const res = await getEnrollee(enrollee_id);
+            if (!res.success) throw new Error(res.message);
+            return res.data!;
+        },
+        enabled: open,
+        staleTime: 60 * 60 * 1000, // 1h
+        gcTime: 30 * 60 * 1000, // was gcTime
         retry: 1,
         refetchOnWindowFocus: true,
     });

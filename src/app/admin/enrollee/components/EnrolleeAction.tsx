@@ -13,7 +13,8 @@ import { MoreHorizontal, Eye, XCircle, Trash2 } from "lucide-react";
 import { useState } from "react";
 import ApplicationModal from "./ApplicationModal";
 
-const EnrolleeAction = (enrolle_id: { enrollee_id: string }) => {
+function EnrolleeAction({ enrollee_id }: { enrollee_id: string }) {
+
   const [isPreview, setIsPreview] = useState(false);
 
   return (
@@ -50,7 +51,8 @@ const EnrolleeAction = (enrolle_id: { enrollee_id: string }) => {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <ApplicationModal isPreview={isPreview} setIsPreview={setIsPreview} />
+      <ApplicationModal isPreview={isPreview} setIsPreview={setIsPreview} enrolleeId={enrollee_id} />
+
     </>
   );
 };
