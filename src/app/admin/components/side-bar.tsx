@@ -14,12 +14,14 @@ import {
   Award,
   CreditCard,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { SeedSchedules } from "../../../../script/seed";
+import toast from "react-hot-toast";
 
 const navItems = [
   { label: "Home", href: "/admin", icon: Home },
   { label: "Enrollees", href: "/admin/enrollee", icon: Users },
   { label: "Payments", href: "/admin/payments", icon: CreditCard },
-
   { label: "Students", href: "/admin/students", icon: GraduationCap },
   { label: "Schedule", href: "/admin/schedule", icon: Calendar },
   { label: "Certificates", href: "/admin/certificates", icon: Award },
@@ -29,15 +31,20 @@ function SideBar() {
   const [open, setOpen] = useState(true);
   const pathname = usePathname();
 
+  const handleSeed = async () => {
+    const res = await SeedSchedules()
+    if (res.success) toast.success("Seed schedule success")
+  }
+
   return (
     <aside
-      className={`sticky top-0 left-0 mt-2 rounded-sm  border-t h-screen flex flex-col border-r shadow-sm transition-all duration-300 ease-in-out
-        bg-white dark:bg-gray-900
-        ${open ? "w-64" : "w-20"}
+      className={`sticky top-20 h-[calc(100vh-5rem)] flex flex-col border-r shadow-sm transition-all duration-300 ease-in-out
+       bg-theme
+        ${open ? "w-58" : "w-20"}
       `}
     >
       {/* Header */}
-      <div className="flex items-center justify-between  p-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
         <span
           className={`flex items-center gap-2 text-lg font-semibold text-gray-800 dark:text-gray-100 transition-all
             ${open ? "opacity-100" : "opacity-0 w-0"}
@@ -62,23 +69,20 @@ function SideBar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all
-                ${
-                  isActive
-                    ? "bg-yellow-500 text-black dark:bg-yellow-600 dark:text-white shadow-md"
-                    : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+              className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-300
+          ${isActive
+                  ? "bg-gradient-to-r font-sans from-yellow-400 via-yellow-500 to-yellow-600 text-black  shadow-md"
+                  : "text-gray-600 dark:text-gray-300 hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-200 dark:hover:from-gray-800 dark:hover:to-gray-700"
                 }
-              `}
+        `}
             >
               <item.icon
-                className={`w-5 h-5 shrink-0 ${
-                  isActive ? "text-black dark:text-white" : ""
-                }`}
+                className={`w-5 h-5 shrink-0 transition-colors ${isActive ? "text-black " : ""
+                  }`}
               />
               <span
-                className={`whitespace-nowrap transition-opacity duration-200 ${
-                  open ? "opacity-100" : "opacity-0 hidden"
-                }`}
+                className={`whitespace-nowrap transition-opacity duration-200 ${open ? "opacity-100" : "opacity-0 hidden"
+                  }`}
               >
                 {item.label}
               </span>
@@ -87,12 +91,14 @@ function SideBar() {
         })}
       </nav>
 
+
+      {/* <Button onClick={handleSeed}>Seed</Button> */}
+
       {/* Footer */}
       <div className="p-4 border-t border-gray-200 dark:border-gray-700">
         <p
-          className={`text-xs text-gray-500 dark:text-gray-400 transition-all ${
-            open ? "block" : "hidden"
-          }`}
+          className={`text-xs text-gray-500 dark:text-gray-400 transition-all ${open ? "block" : "hidden"
+            }`}
         >
           © {new Date().getFullYear()} Driving School
         </p>

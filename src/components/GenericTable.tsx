@@ -26,7 +26,7 @@ type GenericTableProps<TData, TValue> = {
   loading?: boolean;
   data: TData[];
   columns: ColumnDef<TData, TValue>[];
-  searchKey?: string; 
+  searchKey?: string;
 };
 
 export function GenericTable<TData, TValue>({
@@ -36,7 +36,7 @@ export function GenericTable<TData, TValue>({
   columns,
   searchKey,
 }: GenericTableProps<TData, TValue>) {
-  
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = React.useState("");
 
@@ -57,7 +57,7 @@ export function GenericTable<TData, TValue>({
   });
 
   return (
-    <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm p-4">
+    <div className=" border  bg-theme p-2  shadow-sm ">
       <div className="flex items-center justify-between mb-4">
         {title && (
           <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
@@ -90,8 +90,8 @@ export function GenericTable<TData, TValue>({
                   {header.column.getIsSorted() === "asc"
                     ? " 🔼"
                     : header.column.getIsSorted() === "desc"
-                    ? " 🔽"
-                    : null}
+                      ? " 🔽"
+                      : null}
                 </TableHead>
               ))}
             </TableRow>

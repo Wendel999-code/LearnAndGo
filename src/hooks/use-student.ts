@@ -1,5 +1,5 @@
 import { getEnrollee, getEnrollees, verifyEnrollee } from "@/actions/student/student";
-import { Student, StudentWithInvoices } from "@/global/type";
+import { StudentWithInvoices } from "@/global/type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 

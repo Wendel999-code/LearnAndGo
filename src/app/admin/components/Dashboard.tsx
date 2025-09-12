@@ -83,7 +83,7 @@ function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 border rounded-md dark:bg-gray-900 transition-colors duration-300">
+    <div className="min-h-screen    ">
       <main className="p-6 max-w-7xl mx-auto">
         <motion.div
           variants={containerVariants}
@@ -110,7 +110,7 @@ function Dashboard() {
                   y: -4,
                   boxShadow: "0 12px 32px rgba(0,0,0,0.12)",
                 }}
-                className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 transition-all"
+                className=" rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 transition-all"
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className={`p-3 rounded-xl ${stat.bgClass}`}>
@@ -140,7 +140,7 @@ function Dashboard() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Today's Schedule */}
-            <motion.div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col">
+            <motion.div className=" rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col">
               <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Today’s Classes
@@ -177,7 +177,7 @@ function Dashboard() {
             </motion.div>
 
             {/* Student Progress */}
-            <motion.div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+            <motion.div className="lg:col-span-2 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Course Analytics
@@ -186,32 +186,32 @@ function Dashboard() {
               </div>
               <div className="space-y-6">
                 {[
-                  "Theory Classes",
-                  "Practical Lessons",
-                  "Mock Tests",
-                  "Final Tests",
+                  { label: "Theoretical Lessons", color: "bg-blue-500", value: 85 },
+                  { label: "Practical Lessons", color: "bg-green-500", value: 88 },
+                  { label: "Refresher Lessons", color: "bg-yellow-500", value: 91 },
                 ].map((item, index) => (
                   <div key={index}>
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm text-gray-600 dark:text-gray-400">
-                        {item}
+                        {item.label}
                       </span>
                       <span className="text-sm font-medium text-gray-900 dark:text-white">
-                        {85 + index * 3}%
+                        {item.value}%
                       </span>
                     </div>
                     <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                       <motion.div
                         initial={{ width: 0 }}
-                        animate={{ width: `${85 + index * 3}%` }}
+                        animate={{ width: `${item.value}%` }}
                         transition={{ duration: 1, delay: index * 0.1 }}
-                        className="bg-yellow-500 h-2 rounded-full"
+                        className={`${item.color} h-2 rounded-full`}
                       />
                     </div>
                   </div>
                 ))}
               </div>
             </motion.div>
+
           </div>
         </motion.div>
       </main>

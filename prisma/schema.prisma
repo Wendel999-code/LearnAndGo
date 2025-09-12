@@ -31,10 +31,27 @@ model Student {
   status   StudentStatus @default(PENDING)
   invoices Invoice[]
 
-  // user User @relation("UserStudent", fields: [user_id], references: [id])
+  schedule Schedule[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Schedule {
+  id         String @id @default(uuid())
+  student_id String
+
+  startDayTime DateTime
+
+  sessionNo SessionNo
+
+  student Student @relation(fields: [student_id], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Prevent duplicate session for same student in one day
+  @@unique([student_id, sessionNo])
 }
 
 model Invoice {
@@ -54,6 +71,12 @@ model Invoice {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum SessionNo {
+  FIRST
+  SECOND
+  THIRD
 }
 
 enum InvoiceStatus {

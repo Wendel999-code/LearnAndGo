@@ -122,7 +122,7 @@ export async function getEnrollees() {
     try {
         const response = await prisma.student.findMany({
             where: {
-                status: "PENDING",
+                status: "PENDING"
             },
             include: {
                 invoices: true,
@@ -131,6 +131,12 @@ export async function getEnrollees() {
                 createdAt: "desc"
             }
         });
+        if (!response) {
+            return { success: false, message: "No enrollees", data: null };
+        }
+
+        console.log("enrollee here", response)
+
         return { success: true, message: "Fetch successfully", data: response };
 
     } catch (error: any) {

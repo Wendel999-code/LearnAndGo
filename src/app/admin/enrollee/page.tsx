@@ -7,13 +7,13 @@ import { useGetEnrollees } from "@/hooks/use-student";
 import EnrolleeAction from "./components/EnrolleeAction";
 
 
-//serve as header
+//serve as table header
 type Enrollee = {
   id: string;
   name: string;
   course: string;
   price: number;
-  amountPaid: number;
+  ammountPaid: number;
   reference_no: string;
   status: string;
 };
@@ -21,20 +21,35 @@ type Enrollee = {
 function EnrolleesPage() {
   const { data: enrollees, isLoading, error } = useGetEnrollees();
 
-  // Map API data to Enrollee type
+  console.log(enrollees);
+
+  // Map API data to Enrollee type 
   const tableData: Enrollee[] = enrollees
     ? enrollees.flatMap((enrollee) =>
-      enrollee.invoices.map((invoice) => ({
-        id: enrollee?.id,
-        name: `${enrollee.first_name} ${enrollee.last_name}`,
-        course: invoice.courseTitle,
-        price: invoice.coursePrice,
-        amountPaid: invoice.ammountPaid,
-        reference_no: invoice.reference_id,
-        status: enrollee.status,
-      }))
+      enrollee.invoices.length > 0
+        ? enrollee.invoices.map((invoice) => ({
+          id: enrollee.id,
+          name: `${enrollee.first_name} ${enrollee.last_name}`,
+          course: invoice.courseTitle ?? "N/A",
+          price: invoice.coursePrice ?? 0,
+          ammountPaid: invoice.ammountPaid ?? 0,
+          reference_no: invoice.reference_id ?? "N/A",
+          status: enrollee.status,
+        }))
+        : [
+          {
+            id: enrollee.id,
+            name: `${enrollee.first_name} ${enrollee.last_name}`,
+            course: "N/A",
+            price: 0,
+            ammountPaid: 0,
+            reference_no: "N/A",
+            status: enrollee.status,
+          },
+        ]
     )
     : [];
+
 
   const enrolleeColumns: ColumnDef<Enrollee>[] = [
     {
@@ -52,10 +67,10 @@ function EnrolleesPage() {
       },
     },
     {
-      accessorKey: "amountPaid",
+      accessorKey: "ammountPaid",
       header: "Amount Paid",
       cell: ({ row }) => {
-        const value = row.getValue<number>("amountPaid"); // fixed type
+        const value = row.getValue<number>("ammountPaid"); // fixed type
         return <span>₱{value.toLocaleString()}</span>;
       },
     },
@@ -72,7 +87,7 @@ function EnrolleesPage() {
                 ? "bg-green-700 w-16 text-white"
                 : status === "Pending"
                   ? "bg-yellow-500 w-16 text-black"
-                  : "bg-red-500 w-16 text-white"
+                  : "bg-yellow-600 w-16 text-white lowercase"
             }
           >
             {status}

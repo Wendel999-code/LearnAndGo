@@ -47,3 +47,14 @@ export type StudentWithInvoices = {
     selfie_URL: string;
 
 };
+
+
+
+export type Schedule = {
+    id: string;
+    first_name: string;
+    last_name: string;
+    courseTitle: string;
+    startDayTime: Date;
+    sessionNo: string;
+};
