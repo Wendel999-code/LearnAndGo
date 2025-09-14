@@ -7,9 +7,6 @@ import Link from "next/link";
 import { ChevronRight, GraduationCap } from "lucide-react";
 
 function Hero() {
-
-
-
   return (
     <section className="relative min-h-screen pt-22 flex justify-center bg-theme overflow-hidden ">
       {/* Overlay */}
@@ -24,12 +21,9 @@ function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-4xl md:text-6xl font-extrabold leading-tight text-black dark:text-yellow-300 drop-shadow-lg"
+          className="text-4xl md:text-6xl font-extrabold leading-tight  bg-gradient-to-r text-black from-yellow-300 via-yellow-400 to-yellow-500 dark:text-transparent bg-clip-text drop-shadow-md"
         >
-          Learn to Drive with{" "}
-          <span className="text-white dark:text-yellow-400 drop-shadow-md">
-            Confidence
-          </span>
+          Learn to Drive with <span className="">Confidence</span>
         </motion.h1>
 
         <motion.p
@@ -49,7 +43,6 @@ function Hero() {
           whileTap={{ scale: 0.95 }}
           className="flex justify-center"
         >
-
           <Link href={"/register"}>
             <Button
               size="default"
@@ -70,10 +63,8 @@ function Hero() {
                 Enroll Now
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </span>
-            </Button></Link>
-
-
-
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>

@@ -1,9 +1,9 @@
-import Schedule from '@/components/Schedule'
 import React from 'react'
+import SchedulePage from './components/Schedule'
 
 function page() {
   return (
-    <Schedule />
+    <SchedulePage />
   )
 }
 

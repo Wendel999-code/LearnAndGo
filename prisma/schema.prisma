@@ -22,7 +22,7 @@ model Student {
   first_name   String
   last_name    String
   age          Int
-  email        String
+  email        String @unique
   phone        String
   address      String
   valid_id_URL String

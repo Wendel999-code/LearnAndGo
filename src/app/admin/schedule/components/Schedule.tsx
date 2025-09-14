@@ -9,7 +9,9 @@ import Loading from "@/app/loading";
 const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 function SchedulePage() {
+
   const { data: schedules, isLoading, error } = useGetShedules();
+
   const [currentWeek, setCurrentWeek] = useState(0);
 
   if (isLoading) {
@@ -35,6 +37,7 @@ function SchedulePage() {
     }
     return slots;
   };
+
   const allTimes = generateTimeSlots();
 
   const formatTime = (time: string) => {
@@ -184,7 +187,7 @@ function SchedulePage() {
                           ) : (
                             <div className="space-y-2">
                               {sessions.map((session) => {
-                                let sessionColors =
+                                const sessionColors =
                                   session.sessionNo === "FIRST"
                                     ? "bg-blue-200 text-blue-800 dark:bg-blue-700 dark:text-blue-100"
                                     : session.sessionNo === "SECOND"
@@ -227,3 +230,6 @@ function SchedulePage() {
 }
 
 export default SchedulePage;
+
+
+

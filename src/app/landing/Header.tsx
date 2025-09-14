@@ -99,7 +99,6 @@ function Header() {
                   <h2 className="text-lg font-bold text-center text-black dark:text-yellow-400">
                     Menu
                   </h2>
-
                 </div>
 
                 <div className="flex flex-col pl-3 gap-4">
