@@ -5,27 +5,26 @@ const nextConfig: NextConfig = {
 
   experimental: {
     serverActions: {
-      bodySizeLimit: '3mb',
+      bodySizeLimit: "3mb",
     },
   },
 
   images: {
-    // remotePatterns: [
-    //   {
-    //     protocol: "https",
-    //     hostname: "www.pexels.com",
-    //   },
-    //   {
-    //     protocol: "https",
-    //     hostname: "images.pexels.com",
-    //   },
-    //   {
-    //     protocol: "https",
-    //     hostname: "randomuser.me",
-    //   },
-    // ],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "github.com",
+      },
+      //   {
+      //     protocol: "https",
+      //     hostname: "images.pexels.com",
+      //   },
+      //   {
+      //     protocol: "https",
+      //     hostname: "randomuser.me",
+      //   },
+    ],
   },
-
 };
 
 export default nextConfig;
