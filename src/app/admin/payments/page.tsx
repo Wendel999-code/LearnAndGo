@@ -6,7 +6,6 @@ import { formatToMDYWithTime } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 
-
 type Payment = {
   id: string;
   name: string;
@@ -22,40 +21,25 @@ type Payment = {
 export default function PaymentsPage() {
   const { data: enrollees, isLoading, error } = useGetEnrollees();
 
-
-  // Map API data to Enrollee type
   const tableData: Payment[] = enrollees
     ? enrollees.flatMap((enrollee) =>
-      enrollee.invoices.length > 0
-        ? enrollee.invoices.map((invoice) => ({
-          id: invoice.id,
-          name: `${enrollee.first_name} ${enrollee.last_name}`,
-          course: invoice.courseTitle ?? "N/A",
-          amount: invoice.coursePrice ?? 0,
-          amountPaid: invoice.ammountPaid ?? 0,
-          reference_no: invoice.reference_id ?? "N/A",
-          status: invoice.status,
-          payment_channel: invoice.payment_channel ?? "N/A",
-          paidAt: invoice.paidAt
-            ? formatToMDYWithTime(invoice.paidAt)
-            : "N/A",
-        }))
-        : [
-          {
-            id: enrollee.id,
-            name: `${enrollee.first_name} ${enrollee.last_name}`,
-            course: "N/A",
-            amount: 0,
-            amountPaid: 0,
-            reference_no: "N/A",
-            status: enrollee.status,
-            payment_channel: "N/A",
-            paidAt: "N/A",
-          },
-        ]
-    )
+        enrollee.invoices.length > 0
+          ? enrollee.invoices.map((invoice) => ({
+              id: invoice.id,
+              name: `${enrollee.first_name} ${enrollee.last_name}`,
+              course: enrollee.course ?? "N/A",
+              amount: invoice.price ?? 0,
+              amountPaid: invoice.ammountPaid ?? 0,
+              payment_channel: invoice.payment_channel,
+              paidAt: invoice.paidAt
+                ? formatToMDYWithTime(invoice.paidAt)
+                : null,
+              reference_no: invoice.reference_id ?? "N/A",
+              status: invoice.status as string,
+            }))
+          : []
+      )
     : [];
-
 
   const paymentColumns: ColumnDef<Payment>[] = [
     {
@@ -91,21 +75,21 @@ export default function PaymentsPage() {
         return (
           <Badge
             className={
-              status === "Paid"
-                ? "bg-green-700 w-16 text-white"
+              status === "PAID"
+                ? "bg-green-700 w-16 text-white lowercase"
                 : status === "Pending"
-                  ? "bg-yellow-500 w-16 text-black"
-                  : "bg-red-600 w-16 text-white lowercase"
+                ? "bg-yellow-500 w-16 text-black"
+                : "bg-red-600 w-16 text-white lowercase"
             }
           >
             {status}
           </Badge>
         );
       },
-    },];
+    },
+  ];
 
-
-  if (error) return <div>Error: {error.message}</div>
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <GenericTable

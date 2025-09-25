@@ -28,10 +28,13 @@ model Student {
   valid_id_URL String
   selfie_URL   String
 
+  course     String
+  course_key String
+
+  schedule Schedule?
+
   status   StudentStatus @default(PENDING)
   invoices Invoice[]
-
-  schedule Schedule[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -41,9 +44,9 @@ model Schedule {
   id         String @id @default(uuid())
   student_id String
 
-  startDayTime DateTime
-
-  sessionNo SessionNo
+  first_session  String?
+  second_session String?
+  third_session  String?
 
   student Student @relation(fields: [student_id], references: [id], onDelete: Cascade)
 
@@ -51,7 +54,7 @@ model Schedule {
   updatedAt DateTime @updatedAt
 
   // Prevent duplicate session for same student in one day
-  @@unique([student_id, sessionNo])
+  @@unique([student_id])
 }
 
 model Invoice {
@@ -61,8 +64,8 @@ model Invoice {
   student         Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
   ammountPaid     Int     @default(0)
   payment_channel String?
-  courseTitle     String
-  coursePrice     Int
+  item            String
+  price           Int
 
   status InvoiceStatus @default(PENDING)
 
@@ -73,11 +76,11 @@ model Invoice {
   updatedAt DateTime @updatedAt
 }
 
-enum SessionNo {
-  FIRST
-  SECOND
-  THIRD
-}
+// enum SessionNo {
+//   FIRST
+//   SECOND
+//   THIRD
+// }
 
 enum InvoiceStatus {
   PENDING

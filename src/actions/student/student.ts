@@ -49,6 +49,8 @@ export async function registerStudentAndPayment(formData: StudentFormData) {
       data: {
         first_name: parsed.first_name,
         last_name: parsed.last_name,
+        course: parsed.course,
+        course_key: parsed.course_key,
         age: parsed.age,
         email: parsed.email,
         phone: parsed.phone,
@@ -58,22 +60,13 @@ export async function registerStudentAndPayment(formData: StudentFormData) {
         invoices: {
           create: {
             reference_id,
-            courseTitle: parsed.courseTitle,
-            coursePrice: parsed.coursePrice,
+            item: parsed.course,
+            price: parsed.price,
           },
-        },
-        schedule: {
-          create: parsed.preferredSchedules.map((schedule) => ({
-            startDayTime: new Date(
-              `${schedule.date.toISOString().split("T")[0]}T${schedule.time}:00`
-            ),
-            sessionNo: schedule.session,
-          })),
         },
       },
       include: {
         invoices: true,
-        schedule: true,
       },
     });
 
@@ -81,7 +74,7 @@ export async function registerStudentAndPayment(formData: StudentFormData) {
     const payload = {
       external_id: reference_id,
       amount: 500,
-      description: parsed.courseTitle,
+      description: parsed.course,
       invoice_duration: 43200,
       customer: {
         given_names: parsed.first_name + " " + parsed.last_name,
@@ -94,11 +87,11 @@ export async function registerStudentAndPayment(formData: StudentFormData) {
       currency: "PHP",
       items: [
         {
-          name: parsed.courseTitle,
+          name: parsed.course,
           quantity: 1,
-          price: parsed.coursePrice,
+          price: parsed.price,
           category: "Driving Course",
-          url: "https://2dbe44fe9e05.ngrok-free.app/#courses",
+          url: "https://learn-and-go.wndl.dev/#courses",
         },
       ],
       metadata: { student },
@@ -161,8 +154,8 @@ export async function registerSuccessfully(reference_id: string) {
       },
       select: {
         reference_id: true,
-        coursePrice: true,
-        courseTitle: true,
+        price: true,
+        item: true,
         ammountPaid: true,
         student: {
           select: {

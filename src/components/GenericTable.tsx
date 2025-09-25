@@ -36,7 +36,6 @@ export function GenericTable<TData, TValue>({
   columns,
   searchKey,
 }: GenericTableProps<TData, TValue>) {
-
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = React.useState("");
 
@@ -90,8 +89,8 @@ export function GenericTable<TData, TValue>({
                   {header.column.getIsSorted() === "asc"
                     ? " 🔼"
                     : header.column.getIsSorted() === "desc"
-                      ? " 🔽"
-                      : null}
+                    ? " 🔽"
+                    : null}
                 </TableHead>
               ))}
             </TableRow>

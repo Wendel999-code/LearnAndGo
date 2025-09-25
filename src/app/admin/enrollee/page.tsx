@@ -6,7 +6,6 @@ import { GenericTable } from "@/components/GenericTable";
 import { useGetEnrollees } from "@/hooks/use-student";
 import EnrolleeAction from "./components/EnrolleeAction";
 
-
 //serve as table header
 type Enrollee = {
   id: string;
@@ -21,35 +20,21 @@ type Enrollee = {
 function EnrolleesPage() {
   const { data: enrollees, isLoading, error } = useGetEnrollees();
 
-  console.log(enrollees);
-
-  // Map API data to Enrollee type 
   const tableData: Enrollee[] = enrollees
     ? enrollees.flatMap((enrollee) =>
-      enrollee.invoices.length > 0
-        ? enrollee.invoices.map((invoice) => ({
-          id: enrollee.id,
-          name: `${enrollee.first_name} ${enrollee.last_name}`,
-          course: invoice.courseTitle ?? "N/A",
-          price: invoice.coursePrice ?? 0,
-          ammountPaid: invoice.ammountPaid ?? 0,
-          reference_no: invoice.reference_id ?? "N/A",
-          status: enrollee.status,
-        }))
-        : [
-          {
-            id: enrollee.id,
-            name: `${enrollee.first_name} ${enrollee.last_name}`,
-            course: "N/A",
-            price: 0,
-            ammountPaid: 0,
-            reference_no: "N/A",
-            status: enrollee.status,
-          },
-        ]
-    )
+        enrollee.invoices.length > 0
+          ? enrollee.invoices.map((invoice) => ({
+              id: enrollee.id,
+              name: `${enrollee.first_name} ${enrollee.last_name}`,
+              course: enrollee.course ?? "N/A",
+              price: invoice.price ?? 0,
+              ammountPaid: invoice.ammountPaid ?? 0,
+              reference_no: invoice.reference_id ?? "N/A",
+              status: enrollee.status as string,
+            }))
+          : []
+      )
     : [];
-
 
   const enrolleeColumns: ColumnDef<Enrollee>[] = [
     {
@@ -86,8 +71,8 @@ function EnrolleesPage() {
               status === "Paid"
                 ? "bg-green-700 w-16 text-white"
                 : status === "Pending"
-                  ? "bg-yellow-500 w-16 text-black"
-                  : "bg-yellow-600 w-16 text-white lowercase"
+                ? "bg-yellow-500 w-16 text-black"
+                : "bg-yellow-600 w-16 text-white lowercase"
             }
           >
             {status}
@@ -114,5 +99,4 @@ function EnrolleesPage() {
   );
 }
 
-
-export default EnrolleesPage
+export default EnrolleesPage;

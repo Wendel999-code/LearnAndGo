@@ -1,4 +1,39 @@
-import { SessionNo } from "@prisma/client";
+// types.ts
+import { InvoiceStatus, StudentStatus } from "@prisma/client";
+
+export type Invoice = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  status: InvoiceStatus;
+  reference_id: string;
+  studentId: string;
+  ammountPaid: number;
+  payment_channel: string | null;
+  item: string;
+  price: number;
+  dueDate: Date | null;
+  paidAt: Date | null;
+};
+
+export type Enrollee = {
+  id: string;
+  email: string;
+  createdAt: Date;
+  updatedAt: Date;
+  first_name: string;
+  last_name: string;
+  age: number;
+  phone: string;
+  address: string;
+  valid_id_URL: string;
+  selfie_URL: string;
+  course: string;
+  status: StudentStatus;
+  invoices: Invoice[];
+};
+
+export type EnrolleeResponse = Enrollee;
 
 export type Student = {
   id: string;
@@ -16,54 +51,38 @@ export type Student = {
   selfie: File | null;
 };
 
-export type Invoice = {
-  id: string;
-  courseTitle: string;
-  coursePrice: number;
-  createdAt: Date;
-  updatedAt: Date;
-  reference_id: string;
-  ammountPaid: number;
-  status: string;
-  dueDate: Date | null;
-  paidAt: Date | null;
-  studentId: string;
-  payment_channel: string | null;
+export type Schedules = {
+  first_session: string | null;
+  second_session: string | null;
+  third_session: string | null;
+  student: {
+    first_name: string;
+    last_name: string;
+    course: string;
+    course_key: string;
+    selfie_URL: string;
+  };
 };
 
-export type StudentWithInvoices = {
-  invoices: Invoice[];
-  id: string;
-  first_name: string;
-  last_name: string;
-  age: number;
-  email: string;
-  phone: string;
-  address: string;
-  status: string;
-  createdAt: Date;
-  updatedAt: Date;
-  valid_id_URL: string;
-  selfie_URL: string;
-};
-
-export type Schedule = {
-  id: string;
-  first_name: string;
-  last_name: string;
-  courseTitle: string;
-  startDayTime: Date;
-  sessionNo: string;
-};
-
-export interface StudentSchedule {
-  first_name: string;
-  last_name: string;
+export interface MySchedule {
   schedule: {
-    startDayTime: Date; // The date and time of the session
-    sessionNo: SessionNo; // Enum for the session number
-  }[];
-  invoices: {
-    courseTitle: string; // Course title from the invoice
-  }[];
+    first_session: string | null;
+    second_session: string | null;
+    third_session: string | null;
+  } | null;
+  first_name: string;
+  last_name: string;
+  course: string;
+}
+
+export interface StudentWithoutSchedule {
+  id: string;
+  first_name: string;
+  last_name: string;
+  course_key: string;
+  schedule: {
+    first_session: string | null;
+    second_session: string | null;
+    third_session: string | null;
+  } | null;
 }

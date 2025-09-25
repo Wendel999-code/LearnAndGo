@@ -15,8 +15,8 @@ import {
   CreditCard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SeedSchedules } from "../../../../script/seed";
 import toast from "react-hot-toast";
+import { SeedStudents } from "../../../../script/seed";
 
 const navItems = [
   { label: "Home", href: "/admin", icon: Home },
@@ -32,9 +32,9 @@ function SideBar() {
   const pathname = usePathname();
 
   const handleSeed = async () => {
-    const res = await SeedSchedules()
-    if (res.success) toast.success("Seed schedule success")
-  }
+    const res = await SeedStudents();
+    if (res.success) toast.success("Seed schedule success");
+  };
 
   return (
     <aside
@@ -55,7 +55,7 @@ function SideBar() {
         </span>
         <button
           onClick={() => setOpen(!open)}
-          className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          className="p-2 rounded-lg cursor-w-resize text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
         >
           {open ? <PanelLeftClose /> : <PanelRightClose />}
         </button>
@@ -70,19 +70,22 @@ function SideBar() {
               key={item.href}
               href={item.href}
               className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-300
-          ${isActive
-                  ? "bg-gradient-to-r font-sans from-yellow-400 via-yellow-500 to-yellow-600 text-black  shadow-md"
-                  : "text-gray-600 dark:text-gray-300 hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-200 dark:hover:from-gray-800 dark:hover:to-gray-700"
-                }
+          ${
+            isActive
+              ? "bg-gradient-to-r font-sans from-yellow-400 via-yellow-500 to-yellow-600 text-black  shadow-md"
+              : "text-gray-600 dark:text-gray-300 hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-200 dark:hover:from-gray-800 dark:hover:to-gray-700"
+          }
         `}
             >
               <item.icon
-                className={`w-5 h-5 shrink-0 transition-colors ${isActive ? "text-black " : ""
-                  }`}
+                className={`w-5 h-5 shrink-0 transition-colors ${
+                  isActive ? "text-black " : ""
+                }`}
               />
               <span
-                className={`whitespace-nowrap transition-opacity duration-200 ${open ? "opacity-100" : "opacity-0 hidden"
-                  }`}
+                className={`whitespace-nowrap transition-opacity duration-200 ${
+                  open ? "opacity-100" : "opacity-0 hidden"
+                }`}
               >
                 {item.label}
               </span>
@@ -91,14 +94,14 @@ function SideBar() {
         })}
       </nav>
 
-
       {/* <Button onClick={handleSeed}>Seed</Button> */}
 
       {/* Footer */}
       <div className="p-4 border-t border-gray-200 dark:border-gray-700">
         <p
-          className={`text-xs text-gray-500 dark:text-gray-400 transition-all ${open ? "block" : "hidden"
-            }`}
+          className={`text-xs text-gray-500 dark:text-gray-400 transition-all ${
+            open ? "block" : "hidden"
+          }`}
         >
           © {new Date().getFullYear()} Driving School
         </p>
