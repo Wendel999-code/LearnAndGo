@@ -13,6 +13,8 @@ import {
   GraduationCap,
   Award,
   CreditCard,
+  BookOpenCheck,
+  Speech,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
@@ -24,6 +26,8 @@ const navItems = [
   { label: "Payments", href: "/admin/payments", icon: CreditCard },
   { label: "Students", href: "/admin/students", icon: GraduationCap },
   { label: "Schedule", href: "/admin/schedule", icon: Calendar },
+  { label: "Courses", href: "/admin/courses", icon: BookOpenCheck },
+  { label: "Instructor", href: "/admin/instructor", icon: Speech },
   { label: "Certificates", href: "/admin/certificates", icon: Award },
 ];
 

@@ -1,13 +1,14 @@
 import {
   getEnrollee,
   getEnrollees,
+  getStudents,
   verifyEnrollee,
 } from "@/actions/student/student";
-import { EnrolleeResponse } from "@/global/type";
+import { student } from "@/global/type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useGetEnrollees = () =>
-  useQuery<EnrolleeResponse[]>({
+  useQuery<student[]>({
     queryKey: ["get-enrollees"],
     queryFn: async () => {
       const res = await getEnrollees();
@@ -21,7 +22,7 @@ export const useGetEnrollees = () =>
   });
 
 export const useGetEnrollee = (enrollee_id: string, open: boolean) =>
-  useQuery<EnrolleeResponse>({
+  useQuery<student>({
     queryKey: ["get-enrollee", enrollee_id],
     queryFn: async () => {
       const res = await getEnrollee(enrollee_id);
@@ -51,3 +52,17 @@ export const useVerifyEnrollee = () => {
     },
   });
 };
+
+export const useGetStudents = () =>
+  useQuery<student[]>({
+    queryKey: ["get-students"],
+    queryFn: async () => {
+      const res = await getStudents();
+      if (!res.success) throw new Error(res.message);
+      return res.data!;
+    },
+    staleTime: 60 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    retry: 1,
+    refetchOnWindowFocus: true,
+  });

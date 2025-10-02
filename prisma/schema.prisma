@@ -10,7 +10,7 @@ datasource db {
 model User {
   id        String   @id @unique
   email     String?  @unique
-  role      Role     @default(student)
+  role      Role     @default(STUDENT)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -92,11 +92,13 @@ enum InvoiceStatus {
 enum StudentStatus {
   PENDING
   ENROLLED
+  GRADUATED
   REJECTED
   CANCELLED
 }
 
 enum Role {
-  admin
-  student
+  ADMIN
+  STUDENT
+  INSTRUCTOR
 }

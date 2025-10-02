@@ -23,6 +23,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { addSchedule } from "@/actions/student/schedule";
 import toast from "react-hot-toast";
 import { Loader, Loader2Icon } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface AddScheduleProps {
   open: boolean;
@@ -33,6 +34,7 @@ interface AddScheduleProps {
 
 function AddSchedule({ open, setOpen, day, time }: AddScheduleProps) {
   const { data: students, isLoading } = useGetStudentWithoutSchedule();
+  const queryClient = useQueryClient();
   const [isAdding, setIsAdding] = React.useState(false);
 
   const [selectedStudent, setSelectedStudent] = React.useState<
@@ -62,6 +64,10 @@ function AddSchedule({ open, setOpen, day, time }: AddScheduleProps) {
       const res = await addSchedule(id, session, dayTime);
 
       if (res.success) {
+        queryClient.invalidateQueries({ queryKey: ["get-schedules"] });
+        queryClient.invalidateQueries({
+          queryKey: ["students-without-schedule"],
+        });
         toast.success(res.message);
       } else {
         toast.error(res.message);
@@ -144,7 +150,7 @@ function AddSchedule({ open, setOpen, day, time }: AddScheduleProps) {
                         1st Session
                       </Badge>
                       <span className="ml-2">
-                        {selectedStudent.first_session || "Available"}
+                        {selectedStudent.first_session}
                       </span>
                     </SelectItem>
 
@@ -156,7 +162,7 @@ function AddSchedule({ open, setOpen, day, time }: AddScheduleProps) {
                         2nd Session
                       </Badge>
                       <span className="ml-2">
-                        {selectedStudent.second_session || "Available"}
+                        {selectedStudent.second_session}
                       </span>
                     </SelectItem>
 
@@ -168,7 +174,7 @@ function AddSchedule({ open, setOpen, day, time }: AddScheduleProps) {
                         3rd Session
                       </Badge>
                       <span className="ml-2">
-                        {selectedStudent.third_session || "Available"}
+                        {selectedStudent.third_session}
                       </span>
                     </SelectItem>
                   </SelectContent>

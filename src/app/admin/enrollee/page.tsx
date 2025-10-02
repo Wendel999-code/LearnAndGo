@@ -21,18 +21,17 @@ function EnrolleesPage() {
   const { data: enrollees, isLoading, error } = useGetEnrollees();
 
   const tableData: Enrollee[] = enrollees
-    ? enrollees.flatMap((enrollee) =>
-        enrollee.invoices.length > 0
-          ? enrollee.invoices.map((invoice) => ({
-              id: enrollee.id,
-              name: `${enrollee.first_name} ${enrollee.last_name}`,
-              course: enrollee.course ?? "N/A",
-              price: invoice.price ?? 0,
-              ammountPaid: invoice.ammountPaid ?? 0,
-              reference_no: invoice.reference_id ?? "N/A",
-              status: enrollee.status as string,
-            }))
-          : []
+    ? enrollees.flatMap(
+        (enrollee) =>
+          enrollee.invoices?.map((invoice) => ({
+            id: enrollee.id,
+            name: `${enrollee.first_name} ${enrollee.last_name}`,
+            course: enrollee.course ?? "N/A",
+            price: invoice.price ?? 0,
+            ammountPaid: invoice.ammountPaid ?? 0,
+            reference_no: invoice.reference_id ?? "N/A",
+            status: enrollee.status as string,
+          })) ?? []
       )
     : [];
 

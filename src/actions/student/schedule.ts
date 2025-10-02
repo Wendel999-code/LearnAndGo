@@ -131,6 +131,8 @@ export const addSchedule = async (
   try {
     const updateData: Record<string, any> = {};
 
+
+    //match newly added session
     if (session === "first") {
       updateData.first_session = dayTime;
     } else if (session === "second") {

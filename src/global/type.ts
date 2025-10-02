@@ -1,4 +1,3 @@
-// types.ts
 import { InvoiceStatus, StudentStatus } from "@prisma/client";
 
 export type Invoice = {
@@ -16,7 +15,7 @@ export type Invoice = {
   paidAt: Date | null;
 };
 
-export type Enrollee = {
+export type student = {
   id: string;
   email: string;
   createdAt: Date;
@@ -29,26 +28,9 @@ export type Enrollee = {
   valid_id_URL: string;
   selfie_URL: string;
   course: string;
+  course_key: string;
   status: StudentStatus;
-  invoices: Invoice[];
-};
-
-export type EnrolleeResponse = Enrollee;
-
-export type Student = {
-  id: string;
-  first_name: string;
-  last_name: string;
-  age: string;
-  email: string;
-  phone: string;
-  address: string;
-  courseTitle: string;
-  coursePrice: number;
-  ammountPaid: number;
-  reference_id: string;
-  valid_id: File | null;
-  selfie: File | null;
+  invoices?: Invoice[];
 };
 
 export type Schedules = {

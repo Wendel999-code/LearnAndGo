@@ -5,7 +5,8 @@ import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { useGetShedules } from "@/hooks/use-schedule";
 import Loading from "@/app/loading";
 import { format } from "date-fns";
-
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { formatTime } from "@/lib/utils";
 import AddSchedule from "./AddSchedule";
 
@@ -21,7 +22,6 @@ const daysOfWeek = [
 
 function SchedulePage() {
   const { data: schedules, isLoading, error } = useGetShedules();
-  console.log("schedules here:", schedules);
 
   const [currentWeek, setCurrentWeek] = useState(0);
   const [openAddDialog, setOpenAddDialog] = useState(false);
@@ -162,108 +162,79 @@ function SchedulePage() {
                     {daysOfWeek.map((day, i) => {
                       const date = weekDates[i];
 
+                      // Collect all matched sessions with their type
                       const sessions =
-                        schedules?.filter((s) => {
-                          // Combine all three possible sessions into an array
+                        schedules?.flatMap((s) => {
                           const sessionsArray = [
-                            s.first_session,
-                            s.second_session,
-                            s.third_session,
+                            { key: "First Session", value: s.first_session },
+                            { key: "Second Session", value: s.second_session },
+                            { key: "Third Session", value: s.third_session },
                           ];
 
-                          return sessionsArray.some((sessionTime) => {
-                            if (!sessionTime) return false;
+                          return sessionsArray
+                            .map(({ key, value }) => {
+                              if (!value) return null;
 
-                            // Split into date part and time part
-                            const parts = sessionTime.split(" ");
-                            const datePart = parts.slice(0, 3).join(" "); // "Sep 25, 2025"
-                            const timePart = parts.slice(3).join(" "); // "5 PM – 7 PM"
+                              const parts = value.split(" ");
+                              const datePart = parts.slice(0, 3).join(" ");
+                              const timePart = parts.slice(3).join(" ");
+                              const sessionDate = new Date(datePart);
 
-                            const sessionDate = new Date(datePart);
+                              const sameDay =
+                                sessionDate.toDateString() ===
+                                date.toDateString();
+                              const sameTime = formatTime(time) === timePart;
 
-                            // Match the date column
-                            const sameDay =
-                              sessionDate.toDateString() ===
-                              date.toDateString();
-
-                            // Match the time slot string directly
-                            const sameTime = formatTime(time) === timePart;
-
-                            return sameDay && sameTime;
-                          });
+                              if (sameDay && sameTime) {
+                                return {
+                                  student: s.student,
+                                  course_key: s.student.course_key,
+                                  sessionType: key,
+                                };
+                              }
+                              return null;
+                            })
+                            .filter(Boolean);
                         }) ?? [];
 
                       return (
                         <td
                           key={day}
-                          className="px-6 py-4 cursor-pointer"
+                          className="px-6 py-3 cursor-pointer"
                           onClick={() => handleCellClick(date, time)}
                         >
                           {sessions.length === 0 ? (
-                            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-green-900 text-gray-300">
+                            <span className="px-4 py-1 rounded-full text-xs font-semibold bg-green-900 text-gray-300">
                               Available
                             </span>
                           ) : (
                             <div className="space-y-2">
-                              {sessions.map((session) => {
-                                let sessionLabel = "";
-                                let labelStyle = "";
-
-                                // Parse each session string into date + time
-                                const parseSession = (sessionTime: string) => {
-                                  const parts = sessionTime.split(" ");
-                                  const datePart = parts.slice(0, 3).join(" "); // e.g. "Sep 25, 2025"
-                                  const timePart = parts.slice(3).join(" "); // e.g. "5 PM – 7 PM"
-                                  return { datePart, timePart };
-                                };
-
-                                if (session.first_session) {
-                                  const { timePart } = parseSession(
-                                    session.first_session
-                                  );
-                                  if (timePart === formatTime(time)) {
-                                    sessionLabel = "First Session";
-                                    labelStyle = "text-blue-500 font-semibold";
-                                  }
-                                }
-
-                                if (session.second_session) {
-                                  const { timePart } = parseSession(
-                                    session.second_session
-                                  );
-                                  if (timePart === formatTime(time)) {
-                                    sessionLabel = "Second Session";
-                                    labelStyle =
-                                      "text-yellow-600 font-semibold";
-                                  }
-                                }
-
-                                if (session.third_session) {
-                                  const { timePart } = parseSession(
-                                    session.third_session
-                                  );
-                                  if (timePart === formatTime(time)) {
-                                    sessionLabel = "Third Session";
-                                    labelStyle = "text-red-500 font-semibold";
-                                  }
-                                }
+                              {sessions.map((session, idx) => {
+                                let badgeColor =
+                                  session?.sessionType === "First Session"
+                                    ? "bg-blue-500 text-white"
+                                    : session?.sessionType === "Second Session"
+                                    ? "bg-yellow-500 text-black"
+                                    : "bg-red-500 text-white";
 
                                 return (
                                   <div
-                                    key={`${session.student.first_name}-${sessionLabel}`}
-                                    className="p-2 text-center rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                                    key={`${session?.student.first_name}-${idx}`}
+                                    className="bg-gray-100 dark:bg-gray-800 border dark:border-gray-700 rounded-md p-2 flex flex-col items-center gap-1 text-center shadow-sm"
                                   >
-                                    <div className="items-center text-yellow-500 text-[12px]">
-                                      {session.student.course_key}
+                                    <div className="text-yellow-500 text-[11px] font-medium leading-tight">
+                                      {session?.course_key}
                                     </div>
-                                    <div className="text-sm">
-                                      {session.student.first_name}{" "}
-                                      {session.student.last_name}
+                                    <div className="text-[12px] font-semibold leading-tight">
+                                      {session?.student.first_name}{" "}
+                                      {session?.student.last_name}
                                     </div>
-                                    <div
-                                      className={`text-[10px] mt-1 ${labelStyle}`}
-                                    >
-                                      {sessionLabel}
+                                    <div>
+                                      <span
+                                        className={`${badgeColor} text-[9px] px-2 py-0.5 rounded-full`}
+                                      >
+                                        {session?.sessionType}
+                                      </span>
                                     </div>
                                   </div>
                                 );

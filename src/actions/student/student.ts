@@ -44,7 +44,6 @@ export async function registerStudentAndPayment(formData: StudentFormData) {
 
     const reference_id = generateReferenceId();
 
-    // ✅ Save to DB (must be sequential, depends on URLs)
     const student = await prisma.student.create({
       data: {
         first_name: parsed.first_name,
@@ -121,11 +120,14 @@ export async function registerStudentAndPayment(formData: StudentFormData) {
   }
 }
 
+//TODO FIXME PRISMA STATUS ENUM
 export async function getEnrollees() {
   try {
-    const response = await prisma.student.findMany({
+    const enrollees = await prisma.student.findMany({
       where: {
-        status: "PENDING",
+        NOT: {
+          OR: [{ status: "ENROLLED" }, { status: "GRADUATED" }],
+        },
       },
       include: {
         invoices: true,
@@ -134,14 +136,15 @@ export async function getEnrollees() {
         createdAt: "desc",
       },
     });
-    if (!response) {
-      return { success: false, message: "No enrollees", data: null };
+
+    if (enrollees.length === 0) {
+      return { success: false, message: "No enrollees found", data: [] };
     }
 
-    return { success: true, message: "Fetch successfully", data: response };
+    return { success: true, message: "Fetched successfully", data: enrollees };
   } catch (error: any) {
     console.error("Error in getEnrollees:", error);
-    return { success: false, message: error.message, data: null };
+    return { success: false, message: error.message, data: [] };
   }
 }
 
@@ -206,25 +209,54 @@ export async function getEnrollee(enrollee_id: string) {
     console.error("Error in getEnrollee:", error);
     return {
       success: false,
-      message: error instanceof Error ? error.message : "Unknown error",
+      message: error instanceof Error ? error.message : "Server error",
       data: null,
     };
   }
 }
 
 export async function verifyEnrollee(enrolle_id: string) {
+  if (!enrolle_id) throw new Error("Enrollee ID is required");
   try {
-    await prisma.student.update({
+    const res = await prisma.student.update({
       where: {
         id: enrolle_id,
       },
       data: {
         status: "ENROLLED",
       },
+      select: { id: true },
     });
-    return { success: true, message: "Enrollee officially enrolled" };
+
+    if (!res)
+      return { success: false, message: "Unable to verify enrollment." };
+
+    return { success: true, message: "Enrollment verified." };
   } catch (error: any) {
     console.log(error.message);
     return { success: false, message: error.message };
+  }
+}
+
+//TODO filter enrolled and graduated student
+export async function getStudents() {
+  try {
+    const student = await prisma.student.findMany({
+      where: {
+        OR: [{ status: "ENROLLED" }, { status: "GRADUATED" }],
+      },
+    });
+
+    if (student.length === 0)
+      return {
+        success: true,
+        message: "No student found.",
+        data: [],
+      };
+
+    return { success: true, message: "Fetched students.", data: student };
+  } catch (error: any) {
+    console.log(error.message);
+    return { success: false, message: error.message, data: [] };
   }
 }

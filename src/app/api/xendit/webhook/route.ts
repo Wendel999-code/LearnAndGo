@@ -22,6 +22,8 @@ export async function POST(req: NextRequest) {
     else if (body.status === "FAILED") status = "FAILED";
     else if (body.status === "EXPIRED") status = "EXPIRED";
 
+
+    //TODO move db call in action
     await prisma.invoice.updateMany({
       where: { reference_id },
       data: {

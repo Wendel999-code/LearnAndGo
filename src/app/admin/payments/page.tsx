@@ -6,6 +6,7 @@ import { formatToMDYWithTime } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 
+// table col header
 type Payment = {
   id: string;
   name: string;
@@ -22,22 +23,19 @@ export default function PaymentsPage() {
   const { data: enrollees, isLoading, error } = useGetEnrollees();
 
   const tableData: Payment[] = enrollees
-    ? enrollees.flatMap((enrollee) =>
-        enrollee.invoices.length > 0
-          ? enrollee.invoices.map((invoice) => ({
-              id: invoice.id,
-              name: `${enrollee.first_name} ${enrollee.last_name}`,
-              course: enrollee.course ?? "N/A",
-              amount: invoice.price ?? 0,
-              amountPaid: invoice.ammountPaid ?? 0,
-              payment_channel: invoice.payment_channel,
-              paidAt: invoice.paidAt
-                ? formatToMDYWithTime(invoice.paidAt)
-                : null,
-              reference_no: invoice.reference_id ?? "N/A",
-              status: invoice.status as string,
-            }))
-          : []
+    ? enrollees?.flatMap(
+        (enrollee) =>
+          enrollee.invoices?.map((invoice) => ({
+            id: invoice.id,
+            name: `${enrollee.first_name} ${enrollee.last_name}`,
+            course: enrollee.course ?? "N/A",
+            amount: invoice.price ?? 0,
+            amountPaid: invoice.ammountPaid ?? 0,
+            payment_channel: invoice.payment_channel,
+            paidAt: invoice.paidAt ? formatToMDYWithTime(invoice.paidAt) : null,
+            reference_no: invoice.reference_id ?? "N/A",
+            status: invoice.status as string,
+          })) ?? []
       )
     : [];
 
