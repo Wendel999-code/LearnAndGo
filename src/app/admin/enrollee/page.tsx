@@ -80,6 +80,7 @@ function EnrolleesPage() {
       },
     },
     {
+      header: "Actions",
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => <EnrolleeAction enrollee_id={row.original.id} />,

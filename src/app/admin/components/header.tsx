@@ -7,11 +7,12 @@ import Link from "next/link";
 
 function Header() {
   return (
-    <header className="sticky top-0 z-50 h-20 border-b border-gray-200 dark:border-gray-800 
+    <header
+      className="sticky top-0 z-50 h-20 border-b border-gray-200 dark:border-gray-800 
       bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 
-      dark:from-zinc-900 dark:via-zinc-950 dark:to-black shadow-md">
-      <div className="max-w-7xl mx-auto h-full flex items-center justify-between px-6">
-
+      dark:from-zinc-900 dark:via-zinc-950 dark:to-black shadow-xs"
+    >
+      <div className="max-w-7xl mx-auto h-full flex items-center justify-between ">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
           <div className="w-11 h-11 bg-black dark:bg-yellow-500 rounded-xl flex items-center justify-center shadow-lg transition-transform group-hover:scale-110">

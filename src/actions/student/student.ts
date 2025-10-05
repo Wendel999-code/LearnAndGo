@@ -138,7 +138,7 @@ export async function getEnrollees() {
     });
 
     if (enrollees.length === 0) {
-      return { success: false, message: "No enrollees found", data: [] };
+      return { success: true, message: "No enrollees found", data: [] };
     }
 
     return { success: true, message: "Fetched successfully", data: enrollees };

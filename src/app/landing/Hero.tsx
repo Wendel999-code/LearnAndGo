@@ -5,15 +5,19 @@ import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ChevronRight, GraduationCap } from "lucide-react";
+import Image from "next/image";
 
 function Hero() {
   return (
-    <section className="relative min-h-screen pt-22 flex justify-center bg-theme overflow-hidden ">
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-yellow-600 dark:from-zinc-950 dark:to-zinc-950" />
-
-      <div className="relative z-10 max-w-2xl text-center space-y-6">
-        <Badge className="mb-4 bg-black text-yellow-400 px-4 py-1 rounded-full shadow">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Left Content */}
+      <div className="relative z-10  max-w-xl px-6 md:px-12 space-y-6">
+        <Badge
+          className="mb-4 px-4 py-1 rounded-full shadow
+             bg-yellow-100 text-yellow-800
+             dark:bg-yellow-400/20 dark:text-yellow-300
+             font-medium tracking-wide"
+        >
           Professional Driving Education
         </Badge>
 
@@ -21,16 +25,17 @@ function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-4xl md:text-6xl font-extrabold leading-tight  bg-gradient-to-r text-black from-yellow-300 via-yellow-400 to-yellow-500 dark:text-transparent bg-clip-text drop-shadow-md"
+          className="text-4xl md:text-6xl font-extrabold leading-tight text-[#2E709E] dark:text-white"
         >
-          Learn to Drive with <span className="">Confidence</span>
+          Learn to Drive with{" "}
+          <span className="text-yellow-500">Confidence</span>
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-sm md:text-lg text-black/80 font-serif dark:text-gray-400"
+          className="text-base md:text-lg text-neutral-700 dark:text-gray-400"
         >
           Master the road with our comprehensive driving courses. From beginner
           lessons to advanced techniques, we guide you every step of the way.
@@ -41,32 +46,50 @@ function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           whileTap={{ scale: 0.95 }}
-          className="flex justify-center"
+          className="flex gap-4"
         >
-          <Link href={"/register"}>
-            <Button
-              size="default"
-              className="relative overflow-hidden 
-               bg-black text-yellow-400 
-               dark:bg-yellow-400 dark:text-black
-               font-semibold rounded-xl shadow-lg 
-               hover:shadow-xl transform transition-all duration-300 hover:scale-105 group"
+          <Link href="/register">
+            <button
+              className="group relative flex items-center gap-2 
+             rounded-xl bg-yellow-400 px-5 py-3 font-semibold text-black
+             shadow-lg transition-transform duration-300
+             hover:scale-105 hover:shadow-xl"
             >
-              {/* Hover overlay only for light mode */}
-              <span className="absolute inset-0 bg-gray-900 opacity-0 group-hover:opacity-100 transition-opacity duration-300 dark:hidden" />
-
-              {/* Hover overlay only for dark mode */}
-              <span className="absolute inset-0 bg-yellow-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden dark:block" />
-
-              <span className="relative z-10 flex items-center gap-2">
-                <GraduationCap className="w-4 h-4" />
-                Enroll Now
-                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </span>
-            </Button>
+              <GraduationCap className="h-4 w-4" />
+              Enroll Now
+              <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </button>
           </Link>
         </motion.div>
       </div>
+
+      {/* Right Image with faded yellow bg */}
+      <motion.div
+        animate={{ y: [0, -20, 0] }}
+        transition={{
+          repeat: Infinity,
+          duration: 4,
+          ease: "easeInOut",
+        }}
+        className="relative z-10"
+      >
+        {/* Gradient Glow - Light & Dark */}
+        <div
+          className="absolute bottom-12 right-0 w-[350px] h-[140px] 
+                  bg-gradient-to-t from-yellow-400/80 via-yellow-300/60 to-transparent 
+                  dark:from-yellow-500/50 dark:via-yellow-400/30 dark:to-transparent
+                  rounded-3xl blur-3xl opacity-80"
+        />
+
+        <Image
+          src="/red.png"
+          alt="Hero Car"
+          width={600}
+          height={300}
+          className="relative object-contain mx-auto drop-shadow-2xl"
+          priority
+        />
+      </motion.div>
     </section>
   );
 }
