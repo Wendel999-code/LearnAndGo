@@ -164,13 +164,13 @@ function ApplicationModalComponent({
                         Payment Invoice
                       </h3>
                     </div>
-                    {enrollee.invoices?.length > 0 && (
+                    {(enrollee.invoices ?? []).length > 0 && (
                       <Badge
                         variant="outline"
                         className="bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800"
                       >
-                        {enrollee.invoices.length}{" "}
-                        {enrollee.invoices.length === 1
+                        {(enrollee.invoices ?? []).length}{" "}
+                        {(enrollee.invoices ?? []).length === 1
                           ? "Invoice"
                           : "Invoices"}
                       </Badge>

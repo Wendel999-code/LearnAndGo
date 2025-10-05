@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
-import { SeedStudents } from "../../../../script/seed";
+// import { SeedStudents } from "../../../../script/seed";
 
 const navItems = [
   { label: "Home", href: "/admin", icon: Home },
@@ -35,10 +35,10 @@ function SideBar() {
   const [open, setOpen] = useState(true);
   const pathname = usePathname();
 
-  const handleSeed = async () => {
-    const res = await SeedStudents();
-    if (res.success) toast.success("Seed schedule success");
-  };
+  // const handleSeed = async () => {
+  //   const res = await SeedStudents();
+  //   if (res.success) toast.success("Seed schedule success");
+  // };
 
   return (
     <aside

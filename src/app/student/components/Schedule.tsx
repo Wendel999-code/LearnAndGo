@@ -91,8 +91,7 @@ function Page() {
           </div>
         ) : mySchedule ? (
           <>
-            {/* Display name and course once */}
-            <CardContent className="text-center space-y-2">
+            {/* <CardContent className="text-center space-y-2">
               <div className="text-lg font-semibold dark:text-white">
                 Fullname – {mySchedule.first_name} {mySchedule.last_name}
               </div>
@@ -103,7 +102,6 @@ function Page() {
               )}
             </CardContent>
 
-            {/* Sessions */}
             <CardFooter className="flex justify-center">
               {mySchedule.schedule?.length ? (
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
@@ -141,7 +139,7 @@ function Page() {
                   No sessions available.
                 </div>
               )}
-            </CardFooter>
+            </CardFooter> */}
           </>
         ) : (
           <div className="flex flex-col items-center justify-center p-12 text-gray-500">
