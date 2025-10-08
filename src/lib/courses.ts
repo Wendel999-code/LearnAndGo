@@ -25,13 +25,17 @@ export const courses = [
     ],
     price: 2500,
   },
-  // {
-  //   id: "ref",
-  //   level: "Refresher",
-  //   title: "Refresher Course",
-  //   desc: "Get back on the road with confidence after a break from driving.",
-  //   rating: 4.7,
-  //   features: ["10 hours of refresher lessons", "Confidence building exercises", "Updated road rules review"],
-  //   price: 1000,
-  // },
+  {
+    id: "ref",
+    level: "Refresher",
+    title: "Refresher Course",
+    desc: "Get back on the road with confidence after a break from driving.",
+    rating: 4.7,
+    features: [
+      "10 hours of refresher lessons",
+      "Confidence building exercises",
+      "Updated road rules review",
+    ],
+    price: 1000,
+  },
 ];

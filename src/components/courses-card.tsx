@@ -9,8 +9,9 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, ArrowRight } from "lucide-react";
+import { CheckCircle, ArrowRight, Star, Clock, Users } from "lucide-react";
 import { motion } from "framer-motion";
+import type { Variants } from "framer-motion";
 
 interface Course {
   id: string;
@@ -35,72 +36,154 @@ function CoursesCard({
   isSelected,
   onSelect,
   onEnroll,
+  index = 0,
 }: CourseCardProps) {
+  const cardVariants: Variants = {
+    hidden: { opacity: 0, y: 50, scale: 0.9 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.6,
+        delay: index * 0.1,
+        ease: "easeOut",
+      },
+    },
+  };
+
   const getLevelColor = (level: string) => {
     switch (level) {
       case "TDC":
-        return "bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900 dark:text-emerald-300";
+        return "bg-gradient-to-r from-emerald-400 to-emerald-600 text-white border-emerald-400";
       case "PDC":
-        return "bg-yellow-700 text-white border-amber-200 ";
+        return "bg-gradient-to-r from-yellow-400 to-yellow-600 text-black border-yellow-400";
       default:
-        return "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900 dark:text-blue-300";
+        return "bg-gradient-to-r from-blue-400 to-blue-600 text-white border-blue-400";
     }
   };
 
   return (
-    <motion.div whileHover={{ scale: 1.02 }} className="w-full max-w-sm">
+    <motion.div
+      variants={cardVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      whileHover={{
+        y: -10,
+        scale: 1.02,
+        transition: { type: "spring", stiffness: 300, damping: 20 },
+      }}
+      className="group w-full max-w-sm"
+    >
       <Card
-        className={`relative border rounded-2xl shadow-sm transition-all bg-white dark:bg-gray-900 
-        ${isSelected ? "ring-2 ring-yellow-500 shadow-md" : "hover:shadow-md"}`}
+        className={`relative border border-gray-200/50 dark:border-gray-700/50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 
+        bg-white/80 dark:bg-black/40 backdrop-blur-sm overflow-hidden
+        ${isSelected ? "ring-2 ring-yellow-400 shadow-xl" : ""}
+        group-hover:border-yellow-400/50`}
         onClick={onSelect}
       >
-        <CardHeader>
-          <div className="flex items-center justify-between mb-3">
+        {/* Gradient overlay on hover */}
+        <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/0 via-yellow-400/0 to-yellow-400/0 group-hover:from-yellow-400/5 group-hover:via-yellow-400/10 group-hover:to-yellow-400/5 transition-all duration-500" />
+
+        <CardHeader className="relative z-10 pb-4">
+          <div className="flex items-center justify-between mb-4">
             <Badge
-              className={`px-2 py-0.5 text-xs font-medium rounded-md ${getLevelColor(
-                course.id
+              className={`px-3 py-1 text-xs font-semibold rounded-full shadow-md ${getLevelColor(
+                course.level
               )}`}
             >
               {course.level}
             </Badge>
+            <div className="flex items-center gap-1">
+              <Star className="w-4 h-4 text-yellow-400 fill-current" />
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                {course.rating}
+              </span>
+            </div>
           </div>
-          <CardTitle className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+
+          <CardTitle className="text-xl font-bold text-black dark:text-white mb-3 group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">
             {course.title}
           </CardTitle>
-          <CardDescription className="text-sm text-gray-500 dark:text-gray-400">
+
+          <CardDescription className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
             {course.desc}
           </CardDescription>
         </CardHeader>
 
-        <CardContent>
-          <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-            {course.features.map((feat, i) => (
-              <li key={i} className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-emerald-500" />
+        <CardContent className="relative z-10">
+          <div className="space-y-3 text-sm text-gray-700 dark:text-gray-300 mb-6">
+            {course.features.slice(0, 3).map((feat, i) => (
+              <motion.div
+                key={i}
+                className="flex items-center gap-3"
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 + i * 0.1 }}
+              >
+                <div className="w-5 h-5 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center flex-shrink-0">
+                  <CheckCircle className="w-3 h-3 text-black" />
+                </div>
                 <span>{feat}</span>
-              </li>
+              </motion.div>
             ))}
-          </ul>
+          </div>
 
-          <div className="flex items-center justify-between mt-6 pt-4 border-t">
+          {/* Course Stats */}
+          <div className="grid grid-cols-2 gap-4 mb-6 p-4 bg-gray-50/50 dark:bg-black/20 rounded-xl">
+            <div className="text-center">
+              <div className="flex justify-center mb-1">
+                <Clock className="w-4 h-4 text-yellow-500" />
+              </div>
+              <div className="text-xs text-gray-600 dark:text-gray-400">
+                Duration
+              </div>
+              <div className="text-sm font-semibold text-black dark:text-white">
+                4-6 weeks
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="flex justify-center mb-1">
+                <Users className="w-4 h-4 text-yellow-500" />
+              </div>
+              <div className="text-xs text-gray-600 dark:text-gray-400">
+                Max Students
+              </div>
+              <div className="text-sm font-semibold text-black dark:text-white">
+                8 per class
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between pt-4 border-t border-gray-200/50 dark:border-gray-700/50">
             <div>
-              <span className="text-xs text-gray-500 dark:text-gray-400">
-                Price
+              <span className="text-xs text-gray-500 dark:text-gray-400 block">
+                Starting from
               </span>
-              <p className="text-xl font-bold text-yellow-500">
+              <p className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
                 ₱{course.price.toLocaleString()}
               </p>
             </div>
             {!onEnroll && (
               <Button
                 size="sm"
-                className="bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg"
+                className="bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 
+                  text-black font-bold px-6 py-2 rounded-xl shadow-lg hover:shadow-xl 
+                  transition-all duration-300 hover:scale-105 border-0 group/btn"
               >
-                Enroll Now <ArrowRight className="w-4 h-4 ml-1" />
+                <span className="flex items-center gap-2">
+                  Enroll Now
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                </span>
               </Button>
             )}
           </div>
         </CardContent>
+
+        {/* Decorative elements */}
+        <div className="absolute -top-10 -right-10 w-20 h-20 bg-gradient-to-br from-yellow-400/20 to-yellow-600/20 rounded-full blur-xl" />
+        <div className="absolute -bottom-10 -left-10 w-16 h-16 bg-gradient-to-br from-yellow-500/20 to-yellow-700/20 rounded-full blur-xl" />
       </Card>
     </motion.div>
   );

@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
-import { CarIcon, Menu } from "lucide-react";
+import { CarIcon, Menu, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import {
   Sheet,
@@ -17,155 +17,145 @@ import { motion } from "framer-motion";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 function Header() {
-  const headerRef = useRef<HTMLElement | null>(null);
-  const [white, setWhite] = useState(false);
-
-  useEffect(() => {
-    const about = document.getElementById("about");
-    const headerEl = headerRef.current;
-    if (!about || !headerEl) return;
-
-    const check = () => {
-      const headerHeight = headerEl.offsetHeight;
-      const aboutTop = about.getBoundingClientRect().top;
-      setWhite(aboutTop <= headerHeight);
-    };
-
-    let ticking = false;
-    const onScroll = () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(() => {
-          check();
-          ticking = false;
-        });
-      }
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", check);
-    window.addEventListener("load", check);
-    const initTimer = window.setTimeout(check, 120);
-    check();
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", check);
-      window.removeEventListener("load", check);
-      clearTimeout(initTimer);
-    };
-  }, []);
-
   return (
-    <header
-      ref={headerRef}
-      className={`sticky top-0 z-50 border-b transition-all duration-300 ${
-        white
-          ? "bg-white/80 backdrop-blur-md border-gray-200 dark:bg-zinc-950/80 dark:border-zinc-800"
-          : "bg-gradient-to-r from-yellow-400 to-yellow-600 border-transparent dark:from-zinc-950 dark:to-zinc-950"
-      }`}
-    >
-      <div className="container py-3">
-        <div className="flex items-center justify-between px-2 md:px-36">
+    <header className="sticky top-0  h-35 border-b border-gray-800 shadow-xs relative overflow-hidden">
+      <motion.div
+        initial={{
+          clipPath: "polygon(100% 0, 100% 0, 100% 100%, 100% 100%)",
+        }}
+        animate={{
+          clipPath: "polygon(0 0, 100% 0, 100% 100%, 36% 38%)",
+        }}
+        transition={{
+          duration: 1.2,
+          ease: "easeInOut",
+        }}
+        className="absolute top-0 right-0 h-full w-1/3 bg-gradient-to-br from-yellow-400 to-yellow-600 -z-10"
+      />
+
+      <div className="container mx-auto px-4 lg:px-8 md:pt-13">
+        <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo + Title */}
-          <Link href={"/"} className="flex items-center gap-2 group">
+          <Link href={"/"} className="flex items-center gap-3 group">
             <motion.div
               whileHover={{ rotate: -8, scale: 1.1 }}
-              className="w-10 h-10 bg-black dark:bg-yellow-500 rounded-lg flex items-center justify-center shadow-md transition-transform"
+              className="relative"
             >
-              <CarIcon className="w-6 h-6 text-yellow-400 dark:text-black" />
+              <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 dark:from-yellow-500 dark:to-yellow-400 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300">
+                <CarIcon className="w-7 h-7 text-black dark:text-black" />
+              </div>
             </motion.div>
             <motion.h1
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4 }}
-              className="text-xl md:text-2xl font-extrabold text-black dark:text-yellow-400 group-hover:text-yellow-700 dark:group-hover:text-yellow-300 transition-colors"
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="text-2xl lg:text-3xl font-extrabold text-gradient group-hover:scale-105 transition-transform duration-300"
             >
               Learn&Go
             </motion.h1>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
-            {["Courses", "About", "Contact"].map((item, i) => (
-              <Link
+          <nav className="hidden lg:flex items-center justify-between px-38 gap-8">
+            {["Courses", "About", "Instructors", "Contact"].map((item, i) => (
+              <motion.div
                 key={i}
-                href={`/#${item.toLowerCase()}`}
-                className="relative text-black dark:text-white font-medium 
-        hover:text-neutral-800 dark:hover:text-yellow-400 transition-colors
-        after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 
-        after:bg-black dark:after:bg-yellow-500 after:transition-all hover:after:w-full"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: i * 0.1 }}
               >
-                {item}
-              </Link>
+                <Link
+                  href={`/#${item.toLowerCase()}`}
+                  className="relative group text-black dark:text-white font-semibold text-sm lg:text-base
+                    hover:text-yellow-600 dark:hover:text-yellow-400 transition-all duration-300
+                    after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 
+                    after:bg-gradient-to-r after:from-yellow-400 after:to-yellow-600 
+                    after:transition-all after:duration-300 group-hover:after:w-full"
+                >
+                  {item}
+                </Link>
+              </motion.div>
             ))}
 
-            <Link href="/signin">
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-black text-black hover:bg-black hover:text-yellow-400 
-        dark:border-yellow-400 dark:text-yellow-400 
-        dark:hover:bg-yellow-400 dark:hover:text-black 
-        rounded-xl shadow-sm transition-all"
-              >
-                Sign In
-              </Button>
-            </Link>
-            <ModeToggle />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="flex items-center gap-4"
+            >
+              <Link href="/signin">
+                <Button
+                  className="relative group bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 
+                    text-black font-bold px-6 py-2.5 rounded-xl shadow-lg hover:shadow-xl 
+                    transition-all duration-300 hover:scale-105 border-0"
+                >
+                  <span className="flex items-center gap-2">
+                    Sign In
+                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-500 rounded-xl blur-md opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
+                </Button>
+              </Link>
+              {/* <ModeToggle /> */}
+            </motion.div>
           </nav>
 
           {/* Mobile Navigation */}
-          <div className="md:hidden flex items-center gap-3">
+          <div className="lg:hidden flex items-center gap-3">
             <ModeToggle />
             <Sheet>
               <SheetTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="rounded-lg border border-black/20 dark:border-yellow-400/40"
+                  className="rounded-xl  hover:bg-gray-50 dark:hover:bg-gray-800"
                 >
-                  <Menu className="h-5 w-5 text-black dark:text-yellow-400" />
+                  <Menu className="h-5 w-5 text-black dark:text-white" />
                 </Button>
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-[80vw] sm:w-[300px] rounded-md shadow-md bg-white dark:bg-zinc-950"
+                className="w-[85vw] sm:w-[350px] bg-white/95 dark:bg-black/95 backdrop-blur-xl border-l border-gray-200/50 dark:border-gray-800/50"
               >
-                {/* Accessible but visually hidden title */}
                 <SheetHeader>
                   <VisuallyHidden>
                     <SheetTitle>Navigation Menu</SheetTitle>
                   </VisuallyHidden>
                 </SheetHeader>
 
-                <div className="flex items-center justify-center mb-6">
-                  <h2 className="text-lg font-bold text-black dark:text-yellow-400">
-                    Menu
-                  </h2>
+                <div className="flex items-center justify-center mb-8 mt-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
+                      <CarIcon className="w-6 h-6 text-black" />
+                    </div>
+                    <h2 className="text-xl font-bold text-gradient">Menu</h2>
+                  </div>
                 </div>
 
-                <div className="flex flex-col pl-3 gap-4">
-                  {["Courses", "About", "Contact"].map((item, i) => (
-                    <SheetClose asChild key={i}>
-                      <Link
-                        href={`/#${item.toLowerCase()}`}
-                        className="text-black dark:text-white hover:text-yellow-600 dark:hover:text-yellow-400 font-medium transition-colors"
-                      >
-                        {item}
-                      </Link>
-                    </SheetClose>
-                  ))}
+                <div className="flex flex-col gap-6">
+                  {["Courses", "About", "Instructors", "Contact"].map(
+                    (item, i) => (
+                      <SheetClose asChild key={i}>
+                        <Link
+                          href={`/#${item.toLowerCase()}`}
+                          className="text-black dark:text-white hover:text-yellow-600 dark:hover:text-yellow-400 font-semibold text-lg transition-colors py-2"
+                        >
+                          {item}
+                        </Link>
+                      </SheetClose>
+                    )
+                  )}
                   <SheetClose asChild>
-                    <Link href="/signin">
+                    <Link href="/register" className="mt-4">
                       <Button
-                        variant="outline"
-                        className="border-black text-black hover:bg-black hover:text-yellow-400 
-                          dark:border-yellow-400 dark:text-yellow-400 
-                          dark:hover:bg-yellow-400 dark:hover:text-black 
-                          rounded-xl shadow-sm transition-all"
+                        className="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 
+                          text-black font-bold py-3 rounded-xl shadow-lg hover:shadow-xl 
+                          transition-all duration-300"
                       >
-                        Sign In
+                        <span className="flex items-center justify-center gap-2">
+                          Enroll Now
+                          <ChevronRight className="w-4 h-4" />
+                        </span>
                       </Button>
                     </Link>
                   </SheetClose>
@@ -175,6 +165,12 @@ function Header() {
           </div>
         </div>
       </div>
+
+      {/* <style jsx>{`
+        .clip-diagonal {
+          clip-path: polygon(0 0, 100% 0%, 100% 100%, 36% 38%);
+        }
+      `}</style> */}
     </header>
   );
 }

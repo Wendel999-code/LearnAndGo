@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import { courses } from "@/lib/courses";
 import CoursesCard from "@/components/courses-card";
+import { GraduationCap, ArrowRight, Phone } from "lucide-react";
 
 function Courses() {
   const containerVariants: Variants = {
@@ -12,110 +13,87 @@ function Courses() {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        duration: 0.6,
+        delayChildren: 0.2,
       },
     },
   };
 
   const headerVariants: Variants = {
-    hidden: { opacity: 0, y: -50, scale: 0.9 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.8,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      },
-    },
-  };
-
-  const titleVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
         duration: 0.6,
-        delay: 0.2,
-      },
-    },
-  };
-
-  const subtitleVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        delay: 0.4,
+        ease: [0.22, 1, 0.36, 1],
       },
     },
   };
 
   return (
-    <section id="courses" className="py-20 px-4 relative overflow-hidden">
-      {/* Background decorations */}
+    <section
+      id="courses"
+      className="py-20 lg:py-28 px-4 lg:px-8 relative overflow-hidden bg-white dark:bg-zinc-950"
+    >
+      {/* Subtle Background Grid */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
 
-
-      <div className="container mx-auto relative z-10">
+      <div className="container mx-auto relative z-10 max-w-7xl">
+        {/* Section Header */}
         <motion.div
-          className="text-center mb-16"
-          variants={headerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
+          className="text-center mb-16 lg:mb-20"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
         >
-          <motion.h2
-            className="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 dark:from-white dark:via-gray-200 dark:to-gray-400 bg-clip-text text-transparent"
-            variants={titleVariants}
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full bg-yellow-400/10 border border-yellow-400/20"
           >
-            Our <span className="bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">Courses</span>
+            <GraduationCap className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
+            <span className="text-sm font-medium text-yellow-700 dark:text-yellow-400">
+              Professional Training Programs
+            </span>
+          </motion.div>
+
+          <motion.h2
+            className="text-4xl lg:text-5xl font-bold text-zinc-900 dark:text-white mb-4"
+            variants={headerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            Our Courses
           </motion.h2>
 
-          <motion.div
-            className="w-24 h-1 bg-gradient-to-r from-yellow-400 to-orange-400 mx-auto mb-6 rounded-full"
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          />
-
           <motion.p
-            className="text-gray-600 dark:text-gray-300 max-w-3xl mx-auto text-lg leading-relaxed"
-            variants={subtitleVariants}
+            className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Choose from our comprehensive range of driving courses, expertly designed for different
-            skill levels and tailored to meet your specific learning needs.
+            Choose from our comprehensive range of LTO-accredited driving
+            courses, expertly designed for all skill levels and taught by
+            certified professionals.
           </motion.p>
         </motion.div>
 
+        {/* Courses Grid */}
         <motion.div
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10"
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.1 }}
         >
           {courses.map((course, idx) => (
-            <CoursesCard
-              key={course.id}
-              course={course}
-              index={idx}
-            />
+            <CoursesCard key={course.id} course={course} index={idx} />
           ))}
-        </motion.div>
-
-        {/* Bottom decoration */}
-        <motion.div
-          className="flex justify-center mt-16"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-        >
-          <div className="w-32 h-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent dark:via-gray-600 rounded-full" />
         </motion.div>
       </div>
     </section>
