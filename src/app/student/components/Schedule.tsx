@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { useGetMyShedule } from "@/hooks/use-schedule";
 import { Input } from "@/components/ui/input";
 import { Search, Inbox } from "lucide-react";
-import { useUser } from "@stackframe/stack";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -20,8 +19,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { formattedDate } from "@/lib/date";
 
 function Page() {
-  const user = useUser();
-
   const [searchEmail, setSearchEmail] = useState("");
 
   useEffect(() => {
@@ -54,7 +51,7 @@ function Page() {
               transition={{ duration: 0.6 }}
               className="text-4xl md:text-5xl font-extrabold text-yellow-400 tracking-tight"
             >
-              Hi, {user?.displayName || "Student"}!
+              Hi, "Student"!
             </motion.h1>
           </CardTitle>
           <CardDescription className="text-gray-300">

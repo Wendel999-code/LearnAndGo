@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/mode-toggle";
-import { UserButton, useUser } from "@stackframe/stack";
 import { motion } from "framer-motion";
 import { CarIcon, Menu, BookOpen, Info, Phone } from "lucide-react";
 import {
@@ -14,9 +13,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { SignedOut, SignIn, SignOutButton, UserButton } from "@clerk/nextjs";
 
 function StudentHeader() {
-  const user = useUser();
   const [open, setOpen] = useState(false);
 
   const links = [
@@ -47,7 +46,7 @@ function StudentHeader() {
         </Link>
 
         <div className="flex gap-3 ">
-          {user ? (
+          {/* {user ? (
             <UserButton />
           ) : (
             <Button
@@ -58,9 +57,11 @@ function StudentHeader() {
             >
               Sign In
             </Button>
-          )}
+          )} */}
 
           <ModeToggle />
+
+          <SignOutButton />
         </div>
       </div>
     </header>

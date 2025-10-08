@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { StackProvider, StackTheme } from "@stackframe/stack";
-import { stackServerApp } from "../stack";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import ReactQueryProvider from "@/provider/QueryClientProvider";
+import { ClerkProvider } from "@clerk/nextjs";
+import { shadcn } from "@clerk/themes";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,29 +28,38 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <StackProvider app={stackServerApp}>
-          <StackTheme>
-            <ReactQueryProvider>
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="dark"
-                enableSystem={false}
-                disableTransitionOnChange
-              >
-                <div className="flex flex-col">
-                  {" "}
-                  <div>{children}</div>
-                </div>
-                <Toaster position="top-center" />
-              </ThemeProvider>
-            </ReactQueryProvider>
-          </StackTheme>
-        </StackProvider>
-      </body>
-    </html>
+    <ClerkProvider
+      appearance={{
+        baseTheme: shadcn,
+        variables: {
+          colorPrimary: "#facc15",
+        },
+        elements: {
+          button:
+            "bg-yellow-400 hover:bg-yellow-500 text-black font-semibold rounded-lg",
+        },
+      }}
+    >
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <ReactQueryProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem={false}
+              disableTransitionOnChange
+            >
+              <div className="flex flex-col">
+                {" "}
+                <div>{children}</div>
+              </div>
+              <Toaster position="top-center" />
+            </ThemeProvider>
+          </ReactQueryProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

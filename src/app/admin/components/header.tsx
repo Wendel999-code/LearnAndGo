@@ -1,7 +1,6 @@
 "use client";
 
 import { ModeToggle } from "@/components/mode-toggle";
-import { UserButton } from "@stackframe/stack";
 import { CarIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -31,7 +30,6 @@ function Header() {
         {/* Actions */}
         <div className="flex items-center gap-3">
           <ModeToggle />
-          <UserButton />
         </div>
       </div>
     </header>

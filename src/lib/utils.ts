@@ -36,3 +36,5 @@ export function generateReferenceId(prefix = "LAG"): string {
     return `${format(start)} – ${format(end)}`;
   };
 
+
+  

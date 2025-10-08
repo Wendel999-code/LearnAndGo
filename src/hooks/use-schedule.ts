@@ -3,7 +3,7 @@ import {
   getSchedules,
   getStudentWithoutSchedule,
 } from "@/actions/student/schedule";
-import { MySchedule, Schedules, StudentWithoutSchedule } from "@/global/type";
+import { MySchedule, Schedules, StudentWithoutSchedule } from "@/constant/type";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetShedules = () =>

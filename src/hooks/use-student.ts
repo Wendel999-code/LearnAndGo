@@ -4,7 +4,7 @@ import {
   getStudents,
   verifyEnrollee,
 } from "@/actions/student/student";
-import { student } from "@/global/type";
+import { student } from "@/constant/type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useGetEnrollees = () =>

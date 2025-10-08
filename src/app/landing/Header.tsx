@@ -81,7 +81,7 @@ function Header() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="flex items-center gap-4"
             >
-              <Link href="/signin">
+              <Link href="/sign-in">
                 <Button
                   className="relative group bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 
                     text-black font-bold px-6 py-2.5 rounded-xl shadow-lg hover:shadow-xl 
