@@ -2,15 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  Star,
-  Heart,
-  MessageCircle,
-  Share2,
-  Award,
-  MapPin,
-  ThumbsUp,
-} from "lucide-react";
+import { Star, Award, MapPin } from "lucide-react";
 
 function Gallery() {
   const testimonials = [
@@ -110,20 +102,6 @@ function Gallery() {
 
   // Duplicate testimonials for infinite effect
   const duplicatedPosts = [...posts, ...posts, ...posts];
-
-  const handleLike = (id: number) => {
-    setPosts(
-      posts.map((post) =>
-        post.id === id
-          ? {
-              ...post,
-              liked: !post.liked,
-              likes: post.liked ? post.likes - 1 : post.likes + 1,
-            }
-          : post
-      )
-    );
-  };
 
   return (
     <section
@@ -240,53 +218,11 @@ function Gallery() {
                       className="w-full h-full object-cover"
                     />
                   </div>
-
-                  {/* Engagement Stats */}
-                  <div className="px-4 py-2 border-b border-zinc-200 dark:border-zinc-800">
-                    <div className="flex items-center gap-2 text-xs text-zinc-600 dark:text-zinc-400">
-                      <div className="flex items-center -space-x-1">
-                        <div className="w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center border border-white dark:border-zinc-900">
-                          <ThumbsUp className="w-2.5 h-2.5 text-white fill-white" />
-                        </div>
-                        <div className="w-4 h-4 bg-red-500 rounded-full flex items-center justify-center border border-white dark:border-zinc-900">
-                          <Heart className="w-2.5 h-2.5 text-white fill-white" />
-                        </div>
-                      </div>
-                      <span>{post.likes} likes</span>
-                    </div>
-                  </div>
                 </div>
               ))}
             </motion.div>
           </div>
         </div>
-
-        {/* Stats Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-16 px-4 max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-4"
-        >
-          {[
-            { value: "5,000+", label: "Happy Students" },
-            { value: "100%", label: "Success Rate" },
-            { value: "100%", label: "LTO Accredited" },
-          ].map((stat, index) => (
-            <div
-              key={index}
-              className="text-center p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800"
-            >
-              <div className="text-2xl lg:text-3xl font-bold text-yellow-600 dark:text-yellow-400 mb-2">
-                {stat.value}
-              </div>
-              <div className="text-sm text-zinc-600 dark:text-zinc-400">
-                {stat.label}
-              </div>
-            </div>
-          ))}
-        </motion.div>
       </div>
     </section>
   );

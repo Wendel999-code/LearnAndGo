@@ -37,8 +37,8 @@ export default function RootLayout({
             <ReactQueryProvider>
               <ThemeProvider
                 attribute="class"
-                defaultTheme="system"
-                enableSystem
+                defaultTheme="dark"
+                enableSystem={false}
                 disableTransitionOnChange
               >
                 <div className="flex flex-col">

@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { CarIcon, Menu, ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -96,13 +94,11 @@ function Header() {
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-500 rounded-xl blur-md opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
                 </Button>
               </Link>
-              {/* <ModeToggle /> */}
             </motion.div>
           </nav>
 
           {/* Mobile Navigation */}
           <div className="lg:hidden flex items-center gap-3">
-            <ModeToggle />
             <Sheet>
               <SheetTrigger asChild>
                 <Button
@@ -165,12 +161,6 @@ function Header() {
           </div>
         </div>
       </div>
-
-      {/* <style jsx>{`
-        .clip-diagonal {
-          clip-path: polygon(0 0, 100% 0%, 100% 100%, 36% 38%);
-        }
-      `}</style> */}
     </header>
   );
 }

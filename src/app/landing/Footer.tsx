@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
+import { ModeToggle } from "@/components/mode-toggle";
 
 function Footer() {
   const containerVariants: Variants = {
@@ -98,10 +99,10 @@ function Footer() {
             </h3>
             <ul className="space-y-4">
               {[
+                { href: "/", label: "Home" },
                 { href: "/#about", label: "About Us" },
                 { href: "/#courses", label: "Courses" },
                 { href: "/#instructors", label: "Instructors" },
-                { href: "/contact", label: "Contact" },
                 { href: "/register", label: "Register" },
               ].map((link, index) => (
                 <li key={index}>
@@ -125,7 +126,7 @@ function Footer() {
             </h3>
             <ul className="space-y-4">
               {[
-                "Basic Driving Course",
+                "Theoretical Driving Course",
                 "Practical Driving Course",
                 "Refresher Course",
                 "Defensive Driving",
@@ -241,6 +242,8 @@ function Footer() {
               >
                 Cookie Policy
               </Link>
+
+              <ModeToggle />
             </div>
           </div>
         </motion.div>

@@ -120,7 +120,6 @@ export async function registerStudentAndPayment(formData: StudentFormData) {
   }
 }
 
-//TODO FIXME PRISMA STATUS ENUM
 export async function getEnrollees() {
   try {
     const enrollees = await prisma.student.findMany({
@@ -238,7 +237,6 @@ export async function verifyEnrollee(enrolle_id: string) {
   }
 }
 
-//TODO filter enrolled and graduated student
 export async function getStudents() {
   try {
     const student = await prisma.student.findMany({
