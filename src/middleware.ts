@@ -1,5 +1,4 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { Role } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 const isPublicRoute = createRouteMatcher(["/", "/sign-in(.*)", "/sign-up(.*)"]);
@@ -27,31 +26,31 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
   if (isAuthenticated) {
     const role = sessionClaims?.metadata?.role;
 
-    if (role === Role.ADMIN && req.nextUrl.pathname.startsWith("/admin")) {
+    if (role === "ADMIN" && req.nextUrl.pathname.startsWith("/admin")) {
       return NextResponse.next(); // ✅ Allow admin dashboard
     }
 
-    if (role === Role.STUDENT && req.nextUrl.pathname.startsWith("/student")) {
+    if (role === "STUDENT" && req.nextUrl.pathname.startsWith("/student")) {
       return NextResponse.next(); // ✅ Allow student dashboard
     }
 
     if (
-      role === Role.INSTRUCTOR &&
+      role === "INSTRUCTOR" &&
       req.nextUrl.pathname.startsWith("/instructor")
     ) {
       return NextResponse.next(); // ✅ Allow instructor dashboard
     }
 
     //  If user role doesn’t match the route → redirect them
-    if (role === Role.ADMIN) {
+    if (role === "ADMIN") {
       return NextResponse.redirect(new URL("/admin", req.url));
     }
 
-    if (role === Role.STUDENT) {
+    if (role === "STUDENT") {
       return NextResponse.redirect(new URL("/student", req.url));
     }
 
-    if (role === Role.INSTRUCTOR) {
+    if (role === "INSTRUCTOR") {
       return NextResponse.redirect(new URL("/instructor", req.url));
     }
   }
