@@ -4,91 +4,110 @@ import prisma from "@/lib/prisma-instance";
 import supabase from "@/lib/supabase-storage";
 import axios from "axios";
 import { StudentFormData, StudentSchema } from "../zod/student";
-import { generateReferenceId } from "@/lib/utils";
+import { generateReferenceId } from "@/lib/utils/generate_id";
+import { Prisma } from "@prisma/client";
 
-export async function registerStudentAndPayment(formData: StudentFormData) {
+//helper 1: Upload file to Supabase
+async function uploadFile(folder: string, file: File) {
+  const path = `${folder}/${Date.now()}-${file.name}`;
+  const { error } = await supabase.storage
+    .from("learn_and_go")
+    .upload(path, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+  if (error) throw new Error(`Failed to upload ${folder}: ${error.message}`);
+  return path;
+}
+
+// Helper 2: Get public URL
+function getPublicUrl(path: string) {
+  const { data } = supabase.storage.from("learn_and_go").getPublicUrl(path);
+  if (!data) throw new Error(`Failed to get public URL for ${path}`);
+  return data.publicUrl;
+}
+
+// Helper 3: Create student + invoice in Prisma
+async function createStudentAndInvoice(
+  parsed: any,
+  validIdURL: string,
+  selfieURL: string,
+  course: any,
+  reference_id: string
+) {
   try {
-    // ✅ Validate inputs
-    const parsed = StudentSchema.parse(formData);
-
-    if (!parsed.valid_id || !parsed.selfie) {
-      throw new Error("Valid ID and selfie are required");
-    }
-
-    const timestamp = Date.now();
-    const validIdPath = `valid_ids/${timestamp}-${parsed.valid_id.name}`;
-    const selfiePath = `selfies/${timestamp}-${parsed.selfie.name}`;
-
-    // ✅ Upload both files in parallel
-    const [validIdResult, selfieResult] = await Promise.all([
-      supabase.storage
-        .from("learn_and_go")
-        .upload(validIdPath, parsed.valid_id, {
-          cacheControl: "3600",
-          upsert: false,
-        }),
-      supabase.storage.from("learn_and_go").upload(selfiePath, parsed.selfie, {
-        cacheControl: "3600",
-        upsert: false,
-      }),
-    ]);
-
-    if (validIdResult.error) throw validIdResult.error;
-    if (selfieResult.error) throw selfieResult.error;
-
-    // ✅ Fetch public URLs in parallel
-    const [validIdData, selfieData] = await Promise.all([
-      supabase.storage.from("learn_and_go").getPublicUrl(validIdPath).data,
-      supabase.storage.from("learn_and_go").getPublicUrl(selfiePath).data,
-    ]);
-
-    const reference_id = generateReferenceId();
-
-    const student = await prisma.student.create({
+    return await prisma.student.create({
       data: {
-        first_name: parsed.first_name,
-        last_name: parsed.last_name,
-        course: parsed.course,
-        course_key: parsed.course_key,
+        firstName: parsed.firstName,
+        lastName: parsed.lastName,
         age: parsed.age,
         email: parsed.email,
         phone: parsed.phone,
-        valid_id_URL: validIdData.publicUrl,
-        selfie_URL: selfieData.publicUrl,
+        valid_id_URL: validIdURL,
+        selfie_URL: selfieURL,
         address: parsed.address,
+        course: { connect: { id: course.id } },
         invoices: {
           create: {
             reference_id,
-            item: parsed.course,
-            price: parsed.price,
+            item: course.courseTitle,
+            price: course.price,
           },
         },
       },
-      include: {
-        invoices: true,
-      },
+      include: { invoices: true },
     });
+  } catch (err: any) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      switch (err.code) {
+        case "P2002":
+          // Unique constraint failed
+          throw new Error(`Duplicate field: ${err.meta?.target}`);
+        case "P2025":
+          // Record not found
+          throw new Error("Record not found when connecting course.");
+        default:
+          throw new Error(`Prisma error (${err.code}): ${err.message}`);
+      }
+    } else if (err instanceof Prisma.PrismaClientValidationError) {
+      throw new Error(`Validation error: ${err.message}`);
+    } else {
+      throw new Error(`Unexpected error: ${(err as Error).message}`);
+    }
+  }
+}
 
-    // ✅ Create invoice in Xendit
+// Helper 4: Create Xendit invoice
+async function createXenditInvoice(
+  reference_id: string,
+  parsed: any,
+  course: any,
+  student: any
+) {
+  try {
     const payload = {
       external_id: reference_id,
-      amount: 500,
-      description: parsed.course,
+      amount: course.price,
+      description: course.courseTitle,
       invoice_duration: 43200,
       customer: {
-        given_names: parsed.first_name + " " + parsed.last_name,
-        surname: parsed.last_name,
+        given_names: parsed.firstName,
+        surname: parsed.lastName,
         email: parsed.email,
         mobile_number: parsed.phone,
         address: parsed.address,
       },
-      success_redirect_url: `https://learn-and-go.wndl.dev/register-successfully/${reference_id}`,
+      success_redirect_url: `${
+        process.env.NODE_ENV === "production"
+          ? `${process.env.NEXT_PUBLIC_PROD_SUCCESS_REDIRECT_URL}/${reference_id}`
+          : `${process.env.NEXT_PUBLIC_DEV_SUCCESS_REDIRECT_URL}/${reference_id}`
+      }`,
       currency: "PHP",
       items: [
         {
-          name: parsed.course,
+          name: course.courseTitle,
           quantity: 1,
-          price: parsed.price,
+          price: course.price,
           category: "Driving Course",
           url: "https://learn-and-go.wndl.dev/#courses",
         },
@@ -115,7 +134,65 @@ export async function registerStudentAndPayment(formData: StudentFormData) {
 
     return response.data;
   } catch (error: any) {
-    console.error("Error in registerStudentAndPayment:", error);
+    throw new Error(`Failed to create invoice with Xendit: ${error.message}`);
+  }
+}
+
+// Main function
+export async function registerStudentAndPayment(formData: StudentFormData) {
+  try {
+    const parsed = StudentSchema.parse(formData);
+
+    if (!parsed.valid_id || !parsed.selfie)
+      throw new Error("Valid ID and selfie are required");
+
+    const reference_id = generateReferenceId();
+
+    // Upload files
+    const [validIdPath, selfiePath] = await Promise.all([
+      uploadFile("valid_ids", parsed.valid_id),
+      uploadFile("selfies", parsed.selfie),
+    ]);
+
+    // Get URLs
+    const [validIdURL, selfieURL] = await Promise.all([
+      getPublicUrl(validIdPath),
+      getPublicUrl(selfiePath),
+    ]);
+
+    // Get course
+    const course = await prisma.course.findUnique({
+      where: { id: parsed.course_id },
+      select: {
+        id: true,
+        courseTitle: true,
+        courseCode: true,
+        description: true,
+        price: true,
+      },
+    });
+    if (!course) throw new Error("Course not found");
+
+    // Create student and invoice
+    const student = await createStudentAndInvoice(
+      parsed,
+      validIdURL,
+      selfieURL,
+      course,
+      reference_id
+    );
+
+    // Create Xendit invoice
+    const invoice = await createXenditInvoice(
+      reference_id,
+      parsed,
+      course,
+      student
+    );
+
+    return { success: true, data: invoice };
+  } catch (error: any) {
+    console.error("Error in registerStudentAndPayment:", error.message);
     return { success: false, message: error.message };
   }
 }
@@ -130,6 +207,13 @@ export async function getEnrollees() {
       },
       include: {
         invoices: true,
+        course: {
+          select: {
+            courseTitle: true,
+            courseCode: true,
+            price: true,
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",
@@ -158,11 +242,19 @@ export async function registerSuccessfully(reference_id: string) {
         reference_id: true,
         price: true,
         item: true,
-        ammountPaid: true,
+        amountPaid: true,
+        payment_channel: true,
         student: {
           select: {
-            first_name: true,
-            last_name: true,
+            firstName: true,
+            lastName: true,
+            course: {
+              select: {
+                courseTitle: true,
+                price: true,
+                courseCode: true,
+              },
+            },
           },
         },
       },
@@ -242,6 +334,13 @@ export async function getStudents() {
     const student = await prisma.student.findMany({
       where: {
         OR: [{ status: "ENROLLED" }, { status: "GRADUATED" }],
+      },
+      include: {
+        course: {
+          select: {
+            courseTitle: true,
+          },
+        },
       },
     });
 

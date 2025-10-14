@@ -16,7 +16,7 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 function Header() {
   return (
-    <header className="sticky top-0  h-35 border-b border-gray-800 shadow-xs relative overflow-hidden">
+    <header className=" h-35 relative border-b border-gray-800 shadow-xs  overflow-hidden">
       <motion.div
         initial={{
           clipPath: "polygon(100% 0, 100% 0, 100% 100%, 100% 100%)",
@@ -28,7 +28,7 @@ function Header() {
           duration: 1.2,
           ease: "easeInOut",
         }}
-        className="absolute top-0 right-0 h-full w-1/3 bg-gradient-to-br from-yellow-400 to-yellow-600 -z-10"
+        className="absolute top-0 right-0 h-full w-1/3 bg-gradient-to-br from-yellow-400 to-yellow-600 "
       />
 
       <div className="container mx-auto px-4 lg:px-8 md:pt-13">
@@ -83,7 +83,7 @@ function Header() {
             >
               <Link href="/sign-in">
                 <Button
-                  className="relative group bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 
+                  className="relative group cursor-pointer bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 
                     text-black font-bold px-6 py-2.5 rounded-xl shadow-lg hover:shadow-xl 
                     transition-all duration-300 hover:scale-105 border-0"
                 >

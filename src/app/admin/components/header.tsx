@@ -1,10 +1,15 @@
 "use client";
 
 import { ModeToggle } from "@/components/mode-toggle";
+import { UserButton, useUser } from "@clerk/nextjs";
+import { dark, shadcn } from "@clerk/themes";
 import { CarIcon } from "lucide-react";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function Header() {
+  const { isLoaded } = useUser();
+
   return (
     <header
       className="sticky top-0 z-50 h-20 border-b border-gray-200 dark:border-gray-800 
@@ -30,6 +35,11 @@ function Header() {
         {/* Actions */}
         <div className="flex items-center gap-3">
           <ModeToggle />
+          {isLoaded ? (
+            <UserButton appearance={{ baseTheme: dark, theme: shadcn }} />
+          ) : (
+            <Skeleton className="h-8 w-8 rounded-full bg-gray-300 dark:bg-zinc-700 animate-pulse" />
+          )}
         </div>
       </div>
     </header>

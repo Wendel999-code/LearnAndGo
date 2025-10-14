@@ -18,12 +18,12 @@ import {
 } from "@/components/ui/dialog";
 import { useGetStudentWithoutSchedule } from "@/hooks/use-schedule";
 import { Button } from "@/components/ui/button";
-import { formatTime } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { addSchedule } from "@/actions/student/schedule";
 import toast from "react-hot-toast";
 import { Loader, Loader2Icon } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { formatTime } from "@/lib/utils/date";
 
 interface AddScheduleProps {
   open: boolean;

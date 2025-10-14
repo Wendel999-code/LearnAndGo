@@ -11,27 +11,30 @@ export async function getSchedules() {
         third_session: true,
         student: {
           select: {
-            first_name: true,
-            last_name: true,
-            course: true,
-            course_key: true,
+            firstName: true,
+            lastName: true,
             selfie_URL: true,
+            course: {
+              select: {
+                courseCode: true,
+              },
+            },
           },
         },
       },
     });
 
-    if (!res) {
-      return { success: false, message: "Schedule not found", data: null };
+    if (res.length === 0) {
+      return { success: true, message: "No schedule found", data: [] };
     }
 
-    return { success: true, message: "Fetch successfully", data: res };
+    return { success: true, message: "Fetch Schedule successfully", data: res };
   } catch (error) {
     console.log(error);
     return {
       success: false,
       message: error instanceof Error ? error.message : "Unknown error",
-      data: null,
+      data: [],
     };
   }
 }
@@ -45,9 +48,13 @@ export async function getMySchedule(email: string) {
     const res = await prisma.student.findUnique({
       where: { email },
       select: {
-        first_name: true,
-        last_name: true,
-        course: true,
+        firstName: true,
+        lastName: true,
+        course: {
+          select: {
+            courseTitle: true,
+          },
+        },
         schedule: {
           select: {
             first_session: true,
@@ -62,7 +69,7 @@ export async function getMySchedule(email: string) {
       return { success: false, message: "No schedule found", data: null };
     }
 
-    return { success: true, message: "Found schedule", data: res };
+    return { success: true, message: "Found my schedule", data: res };
   } catch (error) {
     console.log(error);
     return {
@@ -88,14 +95,11 @@ export const getStudentWithoutSchedule = async () => {
 
       select: {
         id: true,
-        first_name: true,
-        last_name: true,
-        course_key: true,
-        schedule: {
+        firstName: true,
+        lastName: true,
+        course: {
           select: {
-            first_session: true,
-            second_session: true,
-            third_session: true,
+            courseCode: true,
           },
         },
       },
@@ -104,21 +108,25 @@ export const getStudentWithoutSchedule = async () => {
       },
     });
 
-    if (!res) {
+    if (res.length === 0) {
       return {
-        success: false,
-        message: "Cannot find student without schedule",
-        data: null,
+        success: true,
+        message: "No student without schedule",
+        data: [],
       };
     }
 
-    return { success: true, message: "Found student", data: res };
+    return {
+      success: true,
+      message: "Found student without schedule",
+      data: res,
+    };
   } catch (error) {
     console.log(error);
     return {
       success: false,
       message: error instanceof Error ? error.message : "Unknown error",
-      data: null,
+      data: [],
     };
   }
 };
@@ -130,7 +138,6 @@ export const addSchedule = async (
 ) => {
   try {
     const updateData: Record<string, any> = {};
-
 
     //match newly added session
     if (session === "first") {

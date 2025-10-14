@@ -7,8 +7,8 @@ import Loading from "@/app/loading";
 import { format } from "date-fns";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { formatTime } from "@/lib/utils";
 import AddSchedule from "./AddSchedule";
+import { formatTime } from "@/lib/utils/date";
 
 const daysOfWeek = [
   "Monday",

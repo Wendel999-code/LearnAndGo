@@ -1,243 +1,225 @@
 "use client";
-import React from "react";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
 import { motion } from "framer-motion";
-import type { Variants } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import { Award, Star, Clock, CheckCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import {
-  Star,
-  Award,
-  Calendar,
-  MessageCircle,
-  CheckCircle,
-  Clock,
-} from "lucide-react";
 
-export default function InstructorPage() {
-  const instructors = [
-    {
-      id: 1,
-      name: "John Doe",
-      specialty: "Basic Driving Course",
-      bio: "10+ years of experience helping students drive safely and confidently.",
-      image:
-        "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg",
-      experience: "12 years",
-      certifications: ["LTO Certified", "Defensive Driving", "First Aid"],
-    },
-    {
-      id: 2,
-      name: "Sarah Smith",
-      specialty: "Practical Driving Course",
-      bio: "Expert in advanced road training and highway safety. Passionate about teaching drivers.",
-      image:
-        "https://www.yourtango.com/sites/default/files/image_blog/2024-09/traits-truly-good-woman.png",
-      experience: "8 years",
-      certifications: [
-        "LTO Certified",
-        "Highway Safety",
-        "Vehicle Maintenance",
-      ],
-    },
-    {
-      id: 3,
-      name: "Carlos Rivera",
-      specialty: "Refresher Driving Course",
-      bio: "Passionate about teaching drivers with patience and clarity.",
-      image:
-        "https://images.pexels.com/photos/1073097/pexels-photo-1073097.jpeg",
-      experience: "15 years",
-      certifications: [
-        "LTO Certified",
-        "Advanced Driving",
-        "Traffic Law Expert",
-      ],
-    },
-  ];
+const instructors = [
+  {
+    id: 1,
+    name: "John Doe",
+    specialty: "Basic Driving Course",
+    bio: "10+ years of experience helping students drive safely and confidently.",
+    image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg",
+    experience: "12 years",
+    certifications: ["LTO Certified", "Defensive Driving", "First Aid"],
+  },
+  {
+    id: 2,
+    name: "Sarah Smith",
+    specialty: "Practical Driving Course",
+    bio: "Expert in advanced road training and highway safety. Passionate about teaching drivers.",
+    image:
+      "https://www.yourtango.com/sites/default/files/image_blog/2024-09/traits-truly-good-woman.png",
+    experience: "8 years",
+    certifications: ["LTO Certified", "Highway Safety", "Vehicle Maintenance"],
+  },
+  {
+    id: 3,
+    name: "Carlos Rivera",
+    specialty: "Refresher Driving Course",
+    bio: "Passionate about teaching drivers with patience and clarity.",
+    image: "https://images.pexels.com/photos/1073097/pexels-photo-1073097.jpeg",
+    experience: "15 years",
+    certifications: ["LTO Certified", "Advanced Driving", "Traffic Law Expert"],
+  },
+];
 
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const cardVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    },
-  };
-
+export default function InstructorsSection() {
   return (
     <section
       id="instructors"
-      className="py-20 lg:py-28 px-4 lg:px-8 relative overflow-hidden bg-zinc-50 dark:bg-black"
+      className="relative min-h-screen overflow-hidden bg-gradient-to-br from-white via-yellow-50 to-yellow-100 dark:from-black dark:via-zinc-900 dark:to-yellow-950"
     >
       {/* Subtle Background Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
 
-      {/* Subtle Background Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
-
-      <div className="container mx-auto relative z-10 max-w-7xl">
-        {/* Section Header */}
+      <div className="container mx-auto px-8 py-20 lg:py-28 relative z-10">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16 lg:mb-20"
+          className="text-center mb-16 space-y-6"
         >
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full bg-yellow-400/10 border border-yellow-400/20"
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="inline-flex items-center gap-2 px-4 py-1 rounded-full shadow
+              bg-yellow-100 text-yellow-800
+              dark:bg-yellow-400/20 dark:text-yellow-300
+              font-medium tracking-wide"
           >
-            <Award className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
-            <span className="text-sm font-medium text-yellow-700 dark:text-yellow-400">
-              Our Team
-            </span>
+            <Award className="w-4 h-4" />
+            <span className="text-sm">Our Team</span>
           </motion.div>
-          <h2 className="text-4xl lg:text-5xl font-bold text-zinc-900 dark:text-white mb-4">
-            Meet Our Expert Instructors
-          </h2>
-          <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-4xl md:text-6xl font-extrabold leading-tight text-neutral-900 dark:text-white"
+          >
+            Meet Our Expert <span className="text-yellow-500">Instructors</span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="text-sm md:text-lg text-neutral-700 dark:text-gray-400 max-w-2xl mx-auto"
+          >
             Learn from certified professionals dedicated to making you a
             confident and safe driver.
-          </p>
+          </motion.p>
         </motion.div>
 
-        {/* Instructors Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          {instructors.map((instructor) => (
-            <motion.div
-              key={instructor.id}
-              variants={cardVariants}
-              className="group"
-            >
-              <div className="relative h-full bg-white dark:bg-zinc-900 rounded-2xl shadow-lg border border-zinc-200 dark:border-zinc-800 hover:border-yellow-400 dark:hover:border-yellow-500 transition-all duration-300 hover:shadow-xl hover:shadow-yellow-400/10 overflow-hidden">
-                {/* Hover Gradient Effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/0 via-yellow-500/0 to-yellow-600/0 group-hover:from-yellow-400/5 group-hover:via-yellow-500/5 group-hover:to-yellow-600/5 transition-all duration-300 pointer-events-none" />
-
-                {/* Instructor Image */}
-                <div className="relative p-8 pb-4">
-                  <div className="relative mx-auto w-32 h-32 rounded-full overflow-hidden border-4 border-yellow-400/20 group-hover:border-yellow-400/40 transition-all duration-300 shadow-lg">
-                    <img
-                      src={instructor.image}
-                      alt={instructor.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-
-                  {/* Floating Badge */}
-                  <div className="absolute top-6 right-6">
-                    <div className="bg-yellow-400 text-zinc-900 px-3 py-1 rounded-full text-xs font-semibold shadow-md flex items-center gap-1">
-                      <Star className="w-3 h-3 fill-current" />
-                      Expert
-                    </div>
-                  </div>
-                </div>
-
-                {/* Instructor Info */}
-                <div className="relative z-10 p-8 pt-0">
-                  <div className="text-center mb-6">
-                    <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">
-                      {instructor.name}
-                    </h3>
-                    <Badge className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-zinc-900 font-medium px-3 py-1 hover:from-yellow-500 hover:to-yellow-600">
-                      {instructor.specialty}
-                    </Badge>
-                  </div>
-
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400 text-center mb-6 leading-relaxed">
-                    {instructor.bio}
-                  </p>
-
-                  {/* Experience Badge */}
-                  <div className="flex items-center justify-center gap-2 mb-6 p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
-                    <Clock className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
-                    <span className="text-sm font-semibold text-zinc-900 dark:text-white">
-                      {instructor.experience}
-                    </span>
-                    <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                      of experience
-                    </span>
-                  </div>
-
-                  {/* Certifications */}
-                  <div className="space-y-3">
-                    <div className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wide">
-                      Certifications
-                    </div>
-                    <div className="space-y-2">
-                      {instructor.certifications.map((cert, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center gap-2 text-sm"
-                        >
-                          <div className="w-5 h-5 rounded-full bg-yellow-400/20 flex items-center justify-center flex-shrink-0">
-                            <CheckCircle className="w-3 h-3 text-yellow-600 dark:text-yellow-400" />
-                          </div>
-                          <span className="text-zinc-700 dark:text-zinc-300">
-                            {cert}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Contact Button */}
-                  <Button
-                    className="w-full mt-6 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors duration-300"
-                    size="sm"
-                  >
-                    <MessageCircle className="w-4 h-4 mr-2" />
-                    Contact Instructor
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Bottom CTA */}
-        {/* <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-center mt-16"
-        >
-          <p className="text-zinc-600 dark:text-zinc-400 mb-4">
-            Ready to start your driving journey?
-          </p>
-          <Button
-            size="lg"
-            className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-zinc-900 font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+        {/* Mobile Carousel */}
+        <div className="block lg:hidden">
+          <Swiper
+            spaceBetween={16}
+            slidesPerView={1.1}
+            centeredSlides={true}
+            grabCursor={true}
           >
-            Book Your First Lesson
-            <Calendar className="w-4 h-4 ml-2" />
-          </Button>
-        </motion.div> */}
+            {instructors.map((instructor, idx) => (
+              <SwiperSlide key={instructor.id}>
+                <InstructorCard instructor={instructor} index={idx} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+
+        {/* Desktop Grid */}
+        <div className="hidden lg:grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          {instructors.map((instructor, idx) => (
+            <InstructorCard
+              key={instructor.id}
+              instructor={instructor}
+              index={idx}
+            />
+          ))}
+        </div>
       </div>
     </section>
+  );
+}
+
+function InstructorCard({
+  instructor,
+  index,
+}: {
+  instructor: any;
+  index: number;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.6, delay: index * 0.15 }}
+      whileHover={{ y: -8, scale: 1.02 }}
+      className="group h-full"
+    >
+      <div className="relative h-full bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl border border-gray-200 dark:border-zinc-800 overflow-hidden transition-all duration-300">
+        {/* Gradient Overlay on Hover */}
+        <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/0 via-yellow-400/5 to-yellow-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+        {/* Header Section with Image */}
+        <div className="relative p-8 pb-6">
+          <div className="relative mx-auto w-32 h-32 rounded-2xl overflow-hidden shadow-xl">
+            <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/20 to-yellow-600/20 z-10" />
+            <img
+              src={instructor.image}
+              alt={instructor.name}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            />
+          </div>
+
+          {/* Expert Badge */}
+          <div className="absolute top-6 right-6">
+            <div className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black px-3 py-1.5 rounded-xl text-xs font-bold shadow-lg flex items-center gap-1.5">
+              <Star className="w-3.5 h-3.5 fill-current" />
+              Expert
+            </div>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="relative p-8 pt-0 space-y-6">
+          {/* Name & Specialty */}
+          <div className="text-center space-y-3">
+            <h3 className="text-xl font-bold text-neutral-900 dark:text-white group-hover:text-yellow-500 transition-colors duration-300">
+              {instructor.name}
+            </h3>
+            <Badge className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-semibold px-4 py-1 text-xs shadow-md">
+              {instructor.specialty}
+            </Badge>
+          </div>
+
+          {/* Bio */}
+          <p className="text-sm text-neutral-700 dark:text-gray-400 text-center leading-relaxed min-h-[60px]">
+            {instructor.bio}
+          </p>
+
+          {/* Experience Badge */}
+          <div className="flex items-center justify-center gap-2 p-3 bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-zinc-800/50 dark:to-zinc-800/30 rounded-xl border border-yellow-200/50 dark:border-zinc-700/50">
+            <Clock className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
+            <span className="text-sm font-bold text-neutral-900 dark:text-white">
+              {instructor.experience}
+            </span>
+            <span className="text-sm text-neutral-700 dark:text-gray-400">
+              experience
+            </span>
+          </div>
+
+          {/* Certifications */}
+          <div className="space-y-3">
+            <div className="text-xs font-bold text-neutral-900 dark:text-white uppercase tracking-wider">
+              Certifications
+            </div>
+            <div className="space-y-2">
+              {instructor.certifications.map((cert: string, idx: number) => (
+                <div
+                  key={idx}
+                  className="flex items-center gap-3 text-sm group/cert"
+                >
+                  <div className="w-5 h-5 rounded-lg bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center flex-shrink-0 shadow-sm">
+                    <CheckCircle className="w-3 h-3 text-black" />
+                  </div>
+                  <span className="text-neutral-700 dark:text-gray-400 group-hover/cert:text-neutral-900 dark:group-hover/cert:text-white transition-colors">
+                    {cert}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Decorative Glow */}
+        <motion.div
+          className="absolute -right-8 -bottom-8 w-32 h-32 bg-gradient-to-br from-yellow-400/30 to-yellow-600/30 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          animate={{ scale: [1, 1.2, 1] }}
+          transition={{ duration: 3, repeat: Infinity }}
+        />
+      </div>
+    </motion.div>
   );
 }

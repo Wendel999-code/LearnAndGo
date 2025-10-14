@@ -1,10 +1,11 @@
 "use client";
 
 import { GenericTable } from "@/components/GenericTable";
-import { useGetEnrollees } from "@/hooks/use-student";
-import { formatToMDYWithTime } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
+import EnrolleeAction from "../enrollee/components/EnrolleeAction";
+import { useGetEnrollees } from "@/hooks/use-student";
+import { formatToMDYWithTime } from "@/lib/utils/date";
 
 // table col header
 type Payment = {
@@ -21,22 +22,22 @@ type Payment = {
 
 export default function PaymentsPage() {
   const { data: enrollees, isLoading, error } = useGetEnrollees();
+  console.log("Enrollees payment data:", enrollees);
 
   const tableData: Payment[] = enrollees
-    ? enrollees?.flatMap(
-        (enrollee) =>
-          enrollee.invoices?.map((invoice) => ({
-            id: invoice.id,
-            name: `${enrollee.first_name} ${enrollee.last_name}`,
-            course: enrollee.course ?? "N/A",
-            amount: invoice.price ?? 0,
-            amountPaid: invoice.ammountPaid ?? 0,
-            payment_channel: invoice.payment_channel,
-            paidAt: invoice.paidAt ? formatToMDYWithTime(invoice.paidAt) : null,
-            reference_no: invoice.reference_id ?? "N/A",
-            status: invoice.status as string,
-          })) ?? []
-      )
+    ? enrollees?.map((enrollee) => ({
+        id: enrollee.invoices?.id as string,
+        name: `${enrollee.firstName} ${enrollee.lastName}`,
+        course: enrollee.course?.courseCode ?? "N/A",
+        amount: enrollee.invoices?.price ?? 0,
+        amountPaid: enrollee.invoices?.amountPaid ?? 0,
+        payment_channel: enrollee.invoices?.payment_channel ?? "N/A",
+        paidAt: enrollee.invoices?.createdAt
+          ? formatToMDYWithTime(enrollee.invoices?.createdAt)
+          : null,
+        reference_no: enrollee.invoices?.reference_id ?? "N/A",
+        status: enrollee.invoices?.status as string,
+      }))
     : [];
 
   const paymentColumns: ColumnDef<Payment>[] = [
@@ -45,7 +46,33 @@ export default function PaymentsPage() {
       cell: ({ row }) => <span>{row.index + 1}</span>,
     },
     { accessorKey: "name", header: " Name" },
-    { accessorKey: "course", header: "Course" },
+    {
+      accessorKey: "course",
+      header: "Course",
+      cell: ({ row }) => {
+        const course = row.getValue("course") as Payment["course"];
+        return (
+          <Badge
+            className={(() => {
+              switch (course) {
+                case "TDC":
+                  return "bg-green-600 w-20 p-1 text-white capitalize";
+                case "PDC":
+                  return "bg-sky-600 w-20 text-white capitalize";
+                default:
+                  return "bg-gray-500 w-20 text-white capitalize";
+              }
+            })()}
+          >
+            {course === "TDC"
+              ? "TDC"
+              : course === "PDC"
+              ? "PDC"
+              : course.toLowerCase().replace("_", " ")}
+          </Badge>
+        );
+      },
+    },
     {
       accessorKey: "amount",
       header: "Price",
@@ -63,7 +90,6 @@ export default function PaymentsPage() {
       },
     },
     { accessorKey: "payment_channel", header: "Payment Mode" },
-    { accessorKey: "paidAt", header: "Paid At" },
     { accessorKey: "reference_no", header: "Reference No." },
     {
       accessorKey: "status",
@@ -72,18 +98,41 @@ export default function PaymentsPage() {
         const status = row.getValue("status") as Payment["status"];
         return (
           <Badge
-            className={
-              status === "PAID"
-                ? "bg-green-700 w-16 text-white lowercase"
-                : status === "Pending"
-                ? "bg-yellow-500 w-16 text-black"
-                : "bg-red-600 w-16 text-white lowercase"
-            }
+            className={(() => {
+              switch (status) {
+                case "PAID":
+                case "PARTIAL":
+                  return "bg-indigo-900 w-20 p-1 text-white capitalize";
+                case "FULLY_PAID":
+                  return "bg-green-600 w-20 p-1 text-white capitalize";
+                case "PENDING":
+                  return "bg-red-900 w-20 p-1 text-white capitalize";
+                case "FAILED":
+                case "EXPIRED":
+                  return "bg-red-900 w-20 p-1 text-white capitalize";
+                default:
+                  return "bg-gray-500 w-20 p-1 text-white capitalize";
+              }
+            })()}
           >
-            {status}
+            {status === "PAID"
+              ? "partial"
+              : status === "FULLY_PAID"
+              ? "fully paid"
+              : status.toLowerCase().replace("_", " ")}
           </Badge>
         );
       },
+    },
+
+    { accessorKey: "paidAt", header: "Paid At" },
+
+    // TODO replace enrollee action to payment action
+    {
+      header: "Actions",
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => <EnrolleeAction enrollee_id={row.original.id} />,
     },
   ];
 

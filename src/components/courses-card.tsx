@@ -1,192 +1,163 @@
 "use client";
 
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { CheckCircle, ArrowRight, Star, Clock, Users } from "lucide-react";
 import { motion } from "framer-motion";
-import type { Variants } from "framer-motion";
-
-interface Course {
-  id: string;
-  level: string;
-  title: string;
-  desc: string;
-  rating: number;
-  features: string[];
-  price: number;
-}
+import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "./ui/button";
+import clsx from "clsx";
+import Link from "next/link";
 
 interface CourseCardProps {
-  course: Course;
-  isSelected?: boolean;
-  onSelect?: () => void;
-  onEnroll?: boolean;
-  index?: number;
+  course: any;
+  index: number;
+  isRegister?: boolean;
+  isLoading?: boolean;
+  selectedCourse?: string | null;
+  setSelectedCourse?: (courseId: string) => void;
 }
 
 function CoursesCard({
   course,
-  isSelected,
-  onSelect,
-  onEnroll,
-  index = 0,
+  index,
+  isRegister,
+  isLoading,
+  selectedCourse,
+  setSelectedCourse,
 }: CourseCardProps) {
-  const cardVariants: Variants = {
-    hidden: { opacity: 0, y: 50, scale: 0.9 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.6,
-        delay: index * 0.1,
-        ease: "easeOut",
-      },
-    },
+  const getLevelColor = (level: string) => {
+    const map: Record<string, string> = {
+      TDC: "from-emerald-400 to-emerald-600",
+      PDC: "from-yellow-400 to-yellow-600",
+    };
+    return map[level] ?? "from-blue-400 to-blue-600";
   };
 
-  const getLevelColor = (level: string) => {
-    switch (level) {
-      case "TDC":
-        return "bg-gradient-to-r from-emerald-400 to-emerald-600 text-white border-emerald-400";
-      case "PDC":
-        return "bg-gradient-to-r from-yellow-400 to-yellow-600 text-black border-yellow-400";
-      default:
-        return "bg-gradient-to-r from-blue-400 to-blue-600 text-white border-blue-400";
-    }
-  };
+  if (isLoading)
+    return (
+      <div className="rounded-2xl w-full border border-zinc-200 dark:border-zinc-800 bg-gray-100 dark:bg-zinc-950 p-7 space-y-6">
+        <Skeleton className="h-5 w-20 rounded-md bg-zinc-200 dark:bg-zinc-800" />
+        <Skeleton className="h-6 w-40 rounded-md bg-zinc-200 dark:bg-zinc-800" />
+        <Skeleton className="h-4 w-full rounded-md bg-zinc-200 dark:bg-zinc-800" />
+        <div className="flex justify-between items-center pt-4">
+          <Skeleton className="h-5 w-16 rounded-md bg-zinc-200 dark:bg-zinc-800" />
+          <Skeleton className="h-8 w-24 rounded-md bg-zinc-200 dark:bg-zinc-800" />
+        </div>
+      </div>
+    );
+
+  const isSelected = selectedCourse === course.id;
 
   return (
-    <motion.div
-      variants={cardVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-      whileHover={{
-        y: -10,
-        scale: 1.02,
-        transition: { type: "spring", stiffness: 300, damping: 20 },
-      }}
-      className="group w-full max-w-sm"
-    >
-      <Card
-        className={`relative border border-gray-200/50 dark:border-gray-700/50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 
-        bg-white/80 dark:bg-black/40 backdrop-blur-sm overflow-hidden
-        ${isSelected ? "ring-2 ring-yellow-400 shadow-xl" : ""}
-        group-hover:border-yellow-400/50`}
-        onClick={onSelect}
+    <>
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.6, delay: index * 0.15 }}
+        whileHover={{ y: -8, scale: 1.02 }}
+        className={clsx(setSelectedCourse && "group cursor-pointer")}
       >
-        {/* Gradient overlay on hover */}
-        <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/0 via-yellow-400/0 to-yellow-400/0 group-hover:from-yellow-400/5 group-hover:via-yellow-400/10 group-hover:to-yellow-400/5 transition-all duration-500" />
-
-        <CardHeader className="relative z-10 pb-4">
-          <div className="flex items-center justify-between mb-4">
-            <Badge
-              className={`px-3 py-1 text-xs font-semibold rounded-full shadow-md ${getLevelColor(
-                course.level
-              )}`}
-            >
-              {course.level}
-            </Badge>
-            <div className="flex items-center gap-1">
-              <Star className="w-4 h-4 text-yellow-400 fill-current" />
-              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                {course.rating}
-              </span>
-            </div>
-          </div>
-
-          <CardTitle className="text-xl font-bold text-black dark:text-white mb-3 group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">
-            {course.title}
-          </CardTitle>
-
-          <CardDescription className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
-            {course.desc}
-          </CardDescription>
-        </CardHeader>
-
-        <CardContent className="relative z-10">
-          <div className="space-y-3 text-sm text-gray-700 dark:text-gray-300 mb-6">
-            {course.features.slice(0, 3).map((feat, i) => (
-              <motion.div
-                key={i}
-                className="flex items-center gap-3"
-                initial={{ opacity: 0, x: -10 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 + i * 0.1 }}
+        <div
+          onClick={(e) => {
+            if (
+              setSelectedCourse &&
+              !(e.target as HTMLElement).closest("button")
+            ) {
+              setSelectedCourse(course.id);
+            }
+          }}
+          className={clsx(
+            "relative h-full rounded-2xl border bg-gradient-to-br shadow-lg overflow-hidden transition-all duration-300",
+            "border-gray-200 dark:border-zinc-800",
+            "from-gray-50 via-white to-gray-100 dark:from-zinc-950 dark:via-zinc-900 dark:to-black",
+            "hover:shadow-yellow-500/20",
+            isSelected &&
+              "border-yellow-500 ring-2 ring-yellow-400/40 shadow-yellow-500/30"
+          )}
+        >
+          <div className="relative p-7 space-y-6">
+            <div className="flex items-start justify-between">
+              <div
+                className={clsx(
+                  "px-3 py-1.5 rounded-lg bg-gradient-to-r text-black font-bold text-xs shadow-md uppercase tracking-wide",
+                  getLevelColor(course.courseCode)
+                )}
               >
-                <div className="w-5 h-5 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center flex-shrink-0">
-                  <CheckCircle className="w-3 h-3 text-black" />
-                </div>
-                <span>{feat}</span>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Course Stats */}
-          <div className="grid grid-cols-2 gap-4 mb-6 p-4 bg-gray-50/50 dark:bg-black/20 rounded-xl">
-            <div className="text-center">
-              <div className="flex justify-center mb-1">
-                <Clock className="w-4 h-4 text-yellow-500" />
-              </div>
-              <div className="text-xs text-gray-600 dark:text-gray-400">
-                Duration
-              </div>
-              <div className="text-sm font-semibold text-black dark:text-white">
-                4-6 weeks
+                {course.courseCode}
               </div>
             </div>
-            <div className="text-center">
-              <div className="flex justify-center mb-1">
-                <Users className="w-4 h-4 text-yellow-500" />
-              </div>
-              <div className="text-xs text-gray-600 dark:text-gray-400">
-                Max Students
-              </div>
-              <div className="text-sm font-semibold text-black dark:text-white">
-                8 per class
-              </div>
-            </div>
-          </div>
 
-          <div className="flex items-center justify-between pt-4 border-t border-gray-200/50 dark:border-gray-700/50">
-            <div>
-              <span className="text-xs text-gray-500 dark:text-gray-400 block">
-                Starting from
-              </span>
-              <p className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
-                ₱{course.price.toLocaleString()}
+            <div className="space-y-3 min-h-[130px]">
+              <h3 className="text-xl font-bold text-yellow-500 dark:text-yellow-400 group-hover:text-yellow-300 transition-colors">
+                {course.courseTitle}
+              </h3>
+              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed min-h-[48px]">
+                {course.description}
               </p>
             </div>
-            {!onEnroll && (
-              <Button
-                size="sm"
-                className="bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 
-                  text-black font-bold px-6 py-2 rounded-xl shadow-lg hover:shadow-xl 
-                  transition-all duration-300 hover:scale-105 border-0 group/btn"
-              >
-                <span className="flex items-center gap-2">
-                  Enroll Now
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-                </span>
-              </Button>
-            )}
-          </div>
-        </CardContent>
 
-        {/* Decorative elements */}
-        <div className="absolute -top-10 -right-10 w-20 h-20 bg-gradient-to-br from-yellow-400/20 to-yellow-600/20 rounded-full blur-xl" />
-        <div className="absolute -bottom-10 -left-10 w-16 h-16 bg-gradient-to-br from-yellow-500/20 to-yellow-700/20 rounded-full blur-xl" />
-      </Card>
-    </motion.div>
+            <div className="flex items-center justify-between mt-4 border-t border-gray-300 dark:border-zinc-800 pt-4">
+              <div className="space-y-0.5">
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  Price
+                </span>
+                <p className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+                  ₱{course.price.toLocaleString()}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <motion.div
+            className={clsx(
+              "absolute -right-10 -bottom-10 w-36 h-36 bg-yellow-500/20 rounded-full blur-3xl opacity-0 transition-opacity duration-700",
+              "group-hover:opacity-100",
+              isSelected && "opacity-100"
+            )}
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 4, repeat: Infinity }}
+          />
+        </div>
+        <div className="relative bg-green-500 w-full">
+          {!isRegister && (
+            <div className="absolute  right-6 -top-16">
+              {" "}
+              <Link href="/register">
+                <Button className="cursor-pointer bg-yellow-500 hover:bg-yellow-600 transition-colors">
+                  Enroll Now
+                </Button>
+              </Link>
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </>
   );
 }
 
 export default CoursesCard;
+
+/* Features */
+/* <div className="space-y-3">
+            {course.features.map((feature: string, idx: number) => (
+              <div key={idx} className="flex items-center gap-3 group/feat">
+                <div className="w-5 h-5 rounded-lg bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center flex-shrink-0 shadow-sm">
+                  <svg
+                    className="w-3 h-3 text-black"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={3}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
+                <span className="text-sm text-neutral-700 dark:text-gray-400 group-hover/feat:text-neutral-900 dark:group-hover/feat:text-white transition-colors">
+                  {feature}
+                </span>
+              </div>
+            ))}
+          </div> */

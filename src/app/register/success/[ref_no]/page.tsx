@@ -41,11 +41,10 @@ export default function RegisterSuccess({
     return <Loading />;
   }
 
-  const { reference_id, coursePrice, courseTitle, ammountPaid, student } =
-    result.data;
+  const { reference_id, student, amountPaid, payment_channel } = result.data;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-theme px-3">
+    <div className="min-h-screen p-2 flex items-center justify-center bg-theme px-3">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -82,24 +81,30 @@ export default function RegisterSuccess({
         >
           <InfoRow
             label="Enrollee's Name"
-            value={`${student.first_name} ${student.last_name}`}
+            value={`${student.firstName} ${student.lastName}`}
           />
-          <InfoRow label="Course Enrolled" value={courseTitle} />
-          <InfoRow label="Course Price" value={`₱${coursePrice}`} />
+          <InfoRow label="Course Enrolled" value={student.course.courseTitle} />
+          <InfoRow label="Course Price" value={`₱${student.course.price}`} />
           <InfoRow
             label="Amount Paid"
-            value={`₱${ammountPaid}`}
+            value={`₱${amountPaid}`}
             valueClass="text-green-600 dark:text-green-400 font-semibold"
           />
+
           <InfoRow
             label="Reference No."
             value={reference_id}
             valueClass="font-mono"
           />
+          <InfoRow
+            label="Payment Channel"
+            value={payment_channel || "N/A"}
+            valueClass="font-mono"
+          />
         </motion.div>
 
         {/* Note */}
-        <p className="text-xs text-gray-500 dark:text-gray-400 mb-8 italic">
+        <p className="text-[12px] md:text-xs text-gray-500 dark:text-gray-400 mb-8 italic">
           Note: Please take a screenshot of this page and keep this reference
           number for future transactions.
         </p>

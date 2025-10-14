@@ -12,27 +12,25 @@ type Enrollee = {
   name: string;
   course: string;
   price: number;
-  ammountPaid: number;
+  amountPaid: number;
   reference_no: string;
   status: string;
 };
 
 function EnrolleesPage() {
   const { data: enrollees, isLoading, error } = useGetEnrollees();
+  console.log("Enrollees data:", enrollees);
 
   const tableData: Enrollee[] = enrollees
-    ? enrollees.flatMap(
-        (enrollee) =>
-          enrollee.invoices?.map((invoice) => ({
-            id: enrollee.id,
-            name: `${enrollee.first_name} ${enrollee.last_name}`,
-            course: enrollee.course ?? "N/A",
-            price: invoice.price ?? 0,
-            ammountPaid: invoice.ammountPaid ?? 0,
-            reference_no: invoice.reference_id ?? "N/A",
-            status: enrollee.status as string,
-          })) ?? []
-      )
+    ? enrollees?.map((enrollee) => ({
+        id: enrollee.id,
+        name: `${enrollee.firstName} ${enrollee.lastName}`,
+        course: enrollee.course?.courseTitle ?? "N/A",
+        price: enrollee.course?.price ?? 0,
+        amountPaid: enrollee.invoices?.amountPaid ?? 0,
+        reference_no: enrollee.invoices?.reference_id ?? "N/A",
+        status: enrollee.status as string,
+      }))
     : [];
 
   const enrolleeColumns: ColumnDef<Enrollee>[] = [
@@ -51,10 +49,10 @@ function EnrolleesPage() {
       },
     },
     {
-      accessorKey: "ammountPaid",
+      accessorKey: "amountPaid",
       header: "Amount Paid",
       cell: ({ row }) => {
-        const value = row.getValue<number>("ammountPaid"); // fixed type
+        const value = row.getValue<number>("amountPaid"); // fixed type
         return <span>₱{value.toLocaleString()}</span>;
       },
     },

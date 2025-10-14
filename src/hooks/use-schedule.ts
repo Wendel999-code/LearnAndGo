@@ -3,11 +3,11 @@ import {
   getSchedules,
   getStudentWithoutSchedule,
 } from "@/actions/student/schedule";
-import { MySchedule, Schedules, StudentWithoutSchedule } from "@/constant/type";
+import { Enrollee, MySchedule, Schedule } from "@/constant/type";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetShedules = () =>
-  useQuery<Schedules[]>({
+  useQuery<Partial<Schedule>[]>({
     queryKey: ["get-schedules"],
     queryFn: async () => {
       const res = await getSchedules();
@@ -35,7 +35,7 @@ export const useGetMyShedule = (email: string) =>
   });
 
 export const useGetStudentWithoutSchedule = () =>
-  useQuery<StudentWithoutSchedule[]>({
+  useQuery<Partial<Enrollee>[]>({
     queryKey: ["students-without-schedule"],
     queryFn: async () => {
       const res = await getStudentWithoutSchedule();

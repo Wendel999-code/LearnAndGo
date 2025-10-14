@@ -5,11 +5,11 @@ import { Badge } from "@/components/ui/badge";
 import { GenericTable } from "@/components/GenericTable";
 import { useGetStudents } from "@/hooks/use-student";
 
+//save as  table col header
 type Student = {
   id: string;
   name: string;
   course: string;
-  course_key: string;
   status: string;
 };
 
@@ -17,12 +17,11 @@ function Students() {
   const { data: students, isLoading, error } = useGetStudents();
 
   const tableData: Student[] = students
-    ? students?.map((student) => ({
-        id: student.id,
-        name: `${student.first_name} ${student.last_name}`,
-        course: student.course,
-        course_key: student.course_key,
-        status: student.status,
+    ? students.map((student) => ({
+        id: student.id!,
+        name: `${student.firstName ?? ""} ${student.lastName ?? ""}`.trim(),
+        course: student.course?.courseTitle ?? "N/A",
+        status: student.status ?? "N/A",
       }))
     : [];
 

@@ -1,18 +1,18 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Upload, Info, LoaderCircle } from "lucide-react";
 import { motion } from "framer-motion";
-import { courses } from "@/lib/courses";
 import type { Variants } from "framer-motion";
 import CoursesCard from "@/components/courses-card";
 import toast from "react-hot-toast";
 import { registerStudentAndPayment } from "@/actions/student/student";
 import Header from "../landing/Header";
+import { useGetCourses } from "@/hooks/use-course";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0, y: 50, scale: 0.95 },
@@ -29,10 +29,14 @@ const containerVariants: Variants = {
   },
 };
 
-function CheckoutForm() {
+function RegisterForm() {
+  const { data: coursesData, isLoading } = useGetCourses();
+
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
   const [validIdPreview, setValidIdPreview] = useState<string | null>(null);
   const [selfiePreview, setSelfiePreview] = useState<string | null>(null);
+
+  console.log("Selected Course ID:", selectedCourse);
 
   const validIdRef = useRef<HTMLInputElement | null>(null);
   const selfieRef = useRef<HTMLInputElement | null>(null);
@@ -40,17 +44,15 @@ function CheckoutForm() {
   const [submitting, setSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     phone: "",
     age: 0,
     address: "",
     valid_id: null as File | null,
     selfie: null as File | null,
-    course: "",
-    course_key: "",
-    price: 0,
+    course_id: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,6 +67,7 @@ function CheckoutForm() {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       const url = URL.createObjectURL(file);
+      console.log("File selected:", url);
       setPreview(url);
       setFormData((prev) => ({ ...prev, [key]: e.target.files![0] }));
     }
@@ -90,8 +93,13 @@ function CheckoutForm() {
 
     try {
       const res = await registerStudentAndPayment(formData);
-      toast.success("Redirecting to payment...");
-      window.location.href = res.invoice_url;
+
+      if (res.success) {
+        toast.success("Redirecting to payment...");
+        window.location.href = res.data?.invoice_url;
+      } else if (!res.success) {
+        toast.error(res.message || "Registration failed. Please try again.");
+      }
     } catch (error) {
       console.log(error);
       toast.error("An error occurred. Please try again.");
@@ -99,6 +107,27 @@ function CheckoutForm() {
       setSubmitting(false);
     }
   };
+
+  //sync selected course id with form data
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      course_id: selectedCourse || "",
+    }));
+  }, [selectedCourse]);
+
+  const disabled =
+    !formData.selfie ||
+    !formData.valid_id ||
+    submitting ||
+    !formData.firstName ||
+    !formData.lastName ||
+    !formData.email ||
+    !formData.phone ||
+    !formData.age ||
+    !formData.address ||
+    !selectedCourse ||
+    submitting;
 
   return (
     <div className="flex flex-col">
@@ -121,33 +150,33 @@ function CheckoutForm() {
                 {/* Personal Info */}
                 <div>
                   <Label
-                    htmlFor="first_name"
+                    htmlFor="firstName"
                     className="mb-1 text-sm text-gray-600 dark:text-gray-500"
                   >
                     First Name
                   </Label>
                   <Input
                     type="text"
-                    value={formData.first_name}
+                    value={formData.firstName}
                     onChange={handleChange}
                     className="border !bg-transparent border-gray-400 dark:border-gray-800"
-                    id="first_name"
+                    id="firstName"
                     required
                   />
                 </div>
                 <div>
                   <Label
                     className="mb-1 text-sm text-gray-600 dark:text-gray-500"
-                    htmlFor="last_name"
+                    htmlFor="lastName"
                   >
                     Last Name
                   </Label>
                   <Input
                     type="text"
-                    value={formData.last_name}
+                    value={formData.lastName}
                     onChange={handleChange}
                     className="border !bg-transparent border-gray-400 dark:border-gray-800"
-                    id="last_name"
+                    id="lastName"
                     required
                   />
                 </div>
@@ -198,7 +227,7 @@ function CheckoutForm() {
                     id="age"
                     type="number"
                     min="1"
-                    max="100"
+                    max="70"
                   />
                 </div>
                 <div>
@@ -237,7 +266,7 @@ function CheckoutForm() {
                       type="button"
                       size={"icon"}
                       variant="outline"
-                      className="border-yellow-500/50 text-yellow-600 dark:text-yellow-400 hover:bg-yellow-500 hover:text-black"
+                      className="border-yellow-500/50 cursor-pointer text-yellow-600 dark:text-yellow-400 hover:bg-yellow-500 hover:text-black"
                       onClick={() => validIdRef.current?.click()}
                     >
                       <Upload className="w-5 h-5" />
@@ -271,7 +300,7 @@ function CheckoutForm() {
                       type="button"
                       variant="outline"
                       size={"icon"}
-                      className="border-yellow-500/50 text-yellow-600 dark:text-yellow-400 hover:bg-yellow-500 hover:text-black"
+                      className="border-yellow-500/50 cursor-pointer text-yellow-600 dark:text-yellow-400 hover:bg-yellow-500 hover:text-black"
                       onClick={() => selfieRef.current?.click()}
                     >
                       <Upload className="w-5 h-5" />
@@ -293,22 +322,16 @@ function CheckoutForm() {
                   <Label className="text-lg font-semibold">
                     Select Course *
                   </Label>
-                  <div className="flex flex-col md:flex-row items-center justify-center bg-gray-50 dark:bg-gray-950 p-6 gap-6">
-                    {courses.map((course) => (
+                  <div className="grid md:grid-cols-2  gap-8 max-w-3xl place-items-center mx-auto">
+                    {coursesData?.map((course, index) => (
                       <CoursesCard
                         key={course.id}
                         course={course}
-                        isSelected={selectedCourse === course.id}
-                        onEnroll={true}
-                        onSelect={() => {
-                          setSelectedCourse(course.id);
-                          setFormData((prev) => ({
-                            ...prev,
-                            course: course.title,
-                            course_key: course.id,
-                            price: course.price,
-                          }));
-                        }}
+                        index={index}
+                        isRegister={true}
+                        selectedCourse={selectedCourse}
+                        setSelectedCourse={setSelectedCourse}
+                        isLoading={isLoading}
                       />
                     ))}
                   </div>
@@ -321,8 +344,14 @@ function CheckoutForm() {
                       Selected Course:
                     </p>
                     <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
-                      {courses.find((c) => c.id === selectedCourse)?.title} - ₱
-                      {courses.find((c) => c.id === selectedCourse)?.price}
+                      {
+                        coursesData?.find((c) => c.id === selectedCourse)
+                          ?.courseTitle
+                      }{" "}
+                      - ₱
+                      {coursesData
+                        ?.find((c) => c.id === selectedCourse)
+                        ?.price.toLocaleString()}
                     </p>
                   </div>
                 )}
@@ -333,7 +362,7 @@ function CheckoutForm() {
                     <Info className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-1" />
                     <p className="text-sm text-yellow-700 dark:text-yellow-200 leading-relaxed">
                       <span className="font-semibold">Note:</span>
-                      <span className="font-bold text-gray-400 ">
+                      <span className=" text-[10px] md:text-[12px] text-gray-400 ">
                         {" "}
                         Partial payment of at least ₱500 is required for all
                         courses. You will be redirected to the secure payment
@@ -346,20 +375,11 @@ function CheckoutForm() {
                 {/* Submit Button */}
                 <div className="md:col-span-2">
                   <Button
-                    disabled={
-                      !selectedCourse ||
-                      !formData.selfie ||
-                      !formData.valid_id ||
-                      submitting ||
-                      !formData.first_name ||
-                      !formData.last_name ||
-                      !formData.email ||
-                      !formData.phone ||
-                      !formData.age ||
-                      !formData.address
-                    }
+                    disabled={disabled}
                     onClick={handleSubmit}
-                    className="w-full bg-yellow-500 cursor-pointer hover:bg-yellow-400 text-black font-bold py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                    className={`w-full bg-yellow-500 cursor-pointer  hover:bg-yellow-400 text-black font-bold py-3 rounded-xl disabled: ${
+                      disabled ? "opacity-50 cursor-not-allowed " : ""
+                    }`}
                   >
                     {submitting ? (
                       <>
@@ -380,4 +400,4 @@ function CheckoutForm() {
   );
 }
 
-export default CheckoutForm;
+export default RegisterForm;

@@ -116,8 +116,8 @@ function ApplicationModalComponent({
                     </h3>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <InfoCard label="Firstname" value={enrollee.first_name} />
-                    <InfoCard label="Lastname" value={enrollee.last_name} />
+                    <InfoCard label="Firstname" value={enrollee.firstName} />
+                    <InfoCard label="Lastname" value={enrollee.lastName} />
                     <InfoCard label="Email" value={enrollee.email} />
                     <InfoCard label="Phone" value={enrollee.phone} />
                     <InfoCard label="Address" value={enrollee.address} />
@@ -164,20 +164,16 @@ function ApplicationModalComponent({
                         Payment Invoice
                       </h3>
                     </div>
-                    {(enrollee.invoices ?? []).length > 0 && (
-                      <Badge
-                        variant="outline"
-                        className="bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800"
-                      >
-                        {(enrollee.invoices ?? []).length}{" "}
-                        {(enrollee.invoices ?? []).length === 1
-                          ? "Invoice"
-                          : "Invoices"}
-                      </Badge>
-                    )}
+
+                    <Badge
+                      variant="outline"
+                      className="bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800"
+                    >
+                      Invoice
+                    </Badge>
                   </div>
                   <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden shadow-sm">
-                    {enrollee.invoices?.length ? (
+                    {enrollee.invoices ? (
                       <div className="overflow-x-auto">
                         <table className="w-full text-sm">
                           <thead>
@@ -197,22 +193,22 @@ function ApplicationModalComponent({
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-                            {enrollee.invoices.map((inv) => (
-                              <tr key={inv.reference_id}>
-                                <td className="px-4 py-3">{inv.item}</td>
-                                <td className="px-4 py-3">
-                                  ₱{inv.price.toLocaleString()}
-                                </td>
-                                <td className="px-4 py-3">
-                                  ₱{inv.ammountPaid.toLocaleString()}
-                                </td>
-                                <td className="px-4 py-3">
-                                  <code className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded font-mono text-xs">
-                                    {inv.reference_id}
-                                  </code>
-                                </td>
-                              </tr>
-                            ))}
+                            <tr key={enrollee.invoices.reference_id}>
+                              <td className="px-4 py-3">
+                                {enrollee.course?.courseCode ?? "N/A"}
+                              </td>
+                              <td className="px-4 py-3">
+                                ₱{enrollee.invoices.price.toLocaleString()}
+                              </td>
+                              <td className="px-4 py-3">
+                                ₱{enrollee.invoices.amountPaid.toLocaleString()}
+                              </td>
+                              <td className="px-4 py-3">
+                                <code className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded font-mono text-xs">
+                                  {enrollee.invoices.reference_id}
+                                </code>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>

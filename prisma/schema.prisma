@@ -8,19 +8,21 @@ datasource db {
 }
 
 model User {
-  id        String   @id @unique
-  email     String?  @unique
-  role      Role     @default(STUDENT)
+  id        String  @id @default(uuid())
+  clerk_id  String  @unique
+  firstName String?
+  lastName  String?
+  email     String? @unique
+  role      Role    @default(STUDENT)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  // student Student? @relation("UserStudent")
 }
 
 model Student {
   id           String @id @default(uuid())
-  first_name   String
-  last_name    String
+  firstName    String
+  lastName     String
   age          Int
   email        String @unique
   phone        String
@@ -28,13 +30,27 @@ model Student {
   valid_id_URL String
   selfie_URL   String
 
-  course     String
-  course_key String
+  course_id String?
+  course    Course? @relation(fields: [course_id], references: [id])
 
   schedule Schedule?
 
   status   StudentStatus @default(PENDING)
-  invoices Invoice[]
+  //TODO FIX INVOICES TO INVOICE
+  invoices Invoice?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Course {
+  id          String     @id @default(uuid())
+  courseTitle String     @unique
+  courseCode  CourseCode @default(TDC)
+  description String
+  price       Int        @default(0)
+
+  students Student[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -53,40 +69,48 @@ model Schedule {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Prevent duplicate session for same student in one day
+  // Prevent duplicate session for same student in one day for pdc
   @@unique([student_id])
 }
 
 model Invoice {
   id              String  @id @default(uuid())
   reference_id    String  @unique
-  studentId       String
-  student         Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  ammountPaid     Int     @default(0)
+  student_id      String  @unique
+  amountPaid      Int     @default(0)
   payment_channel String?
   item            String
   price           Int
 
-  status InvoiceStatus @default(PENDING)
-
-  dueDate DateTime? @default(now())
-  paidAt  DateTime?
+  student Student       @relation(fields: [student_id], references: [id], onDelete: Cascade)
+  status  InvoiceStatus @default(PENDING)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-// enum SessionNo {
-//   FIRST
-//   SECOND
-//   THIRD
-// }
+model Instructor {
+  id        String  @id @default(uuid())
+  firstName String
+  lastName  String
+  email     String? @unique
+  phone     String?
+  address   String?
+  bio       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
 enum InvoiceStatus {
   PENDING
-  PAID
+  PAID //PAID IN INVOICE EVEN ITS PARTIAL
   FAILED
   EXPIRED
+
+  //MANUAL MANAGE IN PAYMENT
+  PARTIAL
+  FULLY_PAID
 }
 
 enum StudentStatus {
@@ -101,4 +125,10 @@ enum Role {
   ADMIN
   STUDENT
   INSTRUCTOR
+}
+
+enum CourseCode {
+  TDC
+  PDC
+  FULL_PACKAGE
 }

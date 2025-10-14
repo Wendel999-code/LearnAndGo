@@ -1,70 +1,68 @@
-import { InvoiceStatus, StudentStatus } from "@prisma/client";
+import { CourseCode, InvoiceStatus, StudentStatus } from "@prisma/client";
 
-export type Invoice = {
+export type EnrolleeInvoice = {
   id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  status: InvoiceStatus;
+  student_id: string;
+  price: number;
   reference_id: string;
-  studentId: string;
-  ammountPaid: number;
+  amountPaid: number;
   payment_channel: string | null;
   item: string;
-  price: number;
-  dueDate: Date | null;
-  paidAt: Date | null;
-};
-
-export type student = {
-  id: string;
-  email: string;
+  status: InvoiceStatus;
   createdAt: Date;
   updatedAt: Date;
-  first_name: string;
-  last_name: string;
+};
+
+export type Course = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  courseTitle: string;
+  courseCode: CourseCode;
+  description: string;
+  price: number;
+};
+
+export type EnrolleeCourse = {
+  courseTitle?: string;
+  courseCode?: CourseCode;
+  price?: number;
+};
+
+export type Enrollee = {
+  id: string;
+  firstName: string;
+  lastName: string;
   age: number;
+  email: string;
   phone: string;
   address: string;
   valid_id_URL: string;
   selfie_URL: string;
-  course: string;
-  course_key: string;
   status: StudentStatus;
-  invoices?: Invoice[];
+  course_id: string | null;
+  course?: EnrolleeCourse | null;
+  invoices?: EnrolleeInvoice | null;
+  schedule?: Schedule | null;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
-export type Schedules = {
+export type Schedule = {
   first_session: string | null;
   second_session: string | null;
   third_session: string | null;
-  student: {
-    first_name: string;
-    last_name: string;
-    course: string;
-    course_key: string;
+  student?: {
+    firstName: string;
+    lastName: string;
     selfie_URL: string;
+    course?: EnrolleeCourse | null;
   };
 };
 
 export interface MySchedule {
-  schedule: {
-    first_session: string | null;
-    second_session: string | null;
-    third_session: string | null;
-  } | null;
-  first_name: string;
-  last_name: string;
-  course: string;
-}
-
-export interface StudentWithoutSchedule {
-  id: string;
-  first_name: string;
-  last_name: string;
-  course_key: string;
-  schedule: {
-    first_session: string | null;
-    second_session: string | null;
-    third_session: string | null;
-  } | null;
+  firstName: string;
+  lastName: string;
+  course?: EnrolleeCourse | null;
+  schedule?: Schedule | null;
 }

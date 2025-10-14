@@ -1,19 +1,23 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
-const isPublicRoute = createRouteMatcher(["/", "/sign-in(.*)", "/sign-up(.*)"]);
+const isPrivateRoute = createRouteMatcher([
+  "/student(.*)",
+  "/admin(.*)",
+  "/instructor(.*)",
+]);
 
 const isOnboardingRoute = createRouteMatcher(["/onboarding"]);
 
 export default clerkMiddleware(async (auth, req: NextRequest) => {
   const { isAuthenticated, sessionClaims, redirectToSignIn } = await auth();
 
-  // Handle public routes (sign-in, sign-up, etc.)
-  if (!isAuthenticated && !isPublicRoute(req)) {
+  // Require auth only on private routes
+  if (!isAuthenticated && isPrivateRoute(req)) {
     return redirectToSignIn({ returnBackUrl: req.url });
   }
 
-  // If authenticated but onboarding not complete → force onboarding
+  // Force onboarding if incomplete
   if (
     isAuthenticated &&
     !sessionClaims?.metadata?.onboardingComplete &&
@@ -22,42 +26,37 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return NextResponse.redirect(new URL("/onboarding", req.url));
   }
 
-  // Role-based redirection
+  // Handle role-based access control
   if (isAuthenticated) {
     const role = sessionClaims?.metadata?.role;
+    const path = req.nextUrl.pathname;
 
-    if (role === "ADMIN" && req.nextUrl.pathname.startsWith("/admin")) {
-      return NextResponse.next(); // ✅ Allow admin dashboard
-    }
-
-    if (role === "STUDENT" && req.nextUrl.pathname.startsWith("/student")) {
-      return NextResponse.next(); // ✅ Allow student dashboard
-    }
-
+    // Allow access if role matches route
     if (
-      role === "INSTRUCTOR" &&
-      req.nextUrl.pathname.startsWith("/instructor")
+      (role === "ADMIN" && path.startsWith("/admin")) ||
+      (role === "STUDENT" && path.startsWith("/student")) ||
+      (role === "INSTRUCTOR" && path.startsWith("/instructor"))
     ) {
-      return NextResponse.next(); // ✅ Allow instructor dashboard
+      return NextResponse.next();
     }
 
-    //  If user role doesn’t match the route → redirect them
+    // Redirect to their dashboard if they visit a mismatched route
     if (role === "ADMIN") {
       return NextResponse.redirect(new URL("/admin", req.url));
     }
-
     if (role === "STUDENT") {
       return NextResponse.redirect(new URL("/student", req.url));
     }
-
     if (role === "INSTRUCTOR") {
       return NextResponse.redirect(new URL("/instructor", req.url));
     }
   }
 
+  // Public routes pass through
   return NextResponse.next();
 });
 
+// Apply middleware to everything except static assets
 export const config = {
   matcher: [
     "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",

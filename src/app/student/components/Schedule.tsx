@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/card";
 import { useDebounce } from "use-debounce";
 import { Skeleton } from "@/components/ui/skeleton";
-import { formattedDate } from "@/lib/date";
+import { formattedDate } from "@/lib/utils/date";
 
 function Page() {
   const [searchEmail, setSearchEmail] = useState("");

@@ -28,18 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider
-      appearance={{
-        baseTheme: shadcn,
-        variables: {
-          colorPrimary: "#facc15",
-        },
-        elements: {
-          button:
-            "bg-yellow-400 hover:bg-yellow-500 text-black font-semibold rounded-lg",
-        },
-      }}
-    >
+    <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}

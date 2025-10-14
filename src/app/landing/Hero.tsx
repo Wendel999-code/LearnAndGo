@@ -26,10 +26,10 @@ const carVariants: Variants = {
 
 function Hero() {
   return (
-    <section className="relative min-h-96  overflow-hidden bg-gradient-to-br from-white via-yellow-50 to-yellow-100 dark:from-black dark:via-zinc-900 dark:to-yellow-950">
+    <section className="relative min-h-96  md:min-h-screen overflow-hidden bg-gradient-to-br from-white via-yellow-50 to-yellow-100 dark:from-black dark:via-zinc-900 dark:to-yellow-950">
       {/* Subtle Background Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
-      
+
       <div className="container mx-auto mt-12  px-8 grid lg:grid-cols-2 gap-12 items-center  ">
         {/* Left Content */}
         <div className="space-y-6">
@@ -72,7 +72,7 @@ function Hero() {
           >
             <Link href="/register">
               <Button
-                className="relative group bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 
+                className="relative cursor-pointer group bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 
                   text-black font-bold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl 
                   transition-all duration-300 hover:scale-105"
               >
@@ -103,7 +103,7 @@ function Hero() {
           <Image
             src="/red.png"
             alt="Hero Car"
-            width={600}
+            width={500}
             height={300}
             className="relative object-contain mx-auto drop-shadow-2xl"
             priority

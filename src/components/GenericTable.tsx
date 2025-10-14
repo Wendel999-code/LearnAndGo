@@ -114,7 +114,7 @@ export function GenericTable<TData, TValue>({
                 className="hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell key={cell.id} className="capitalize">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

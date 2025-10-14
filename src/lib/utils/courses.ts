@@ -6,9 +6,9 @@ export const courses = [
     desc: "Perfect for complete beginners. Learn the fundamentals of safe driving.",
     rating: 4.9,
     features: [
-      "20 hours of practical lessons",
+      "15 hours of Thoery lessons",
       "Theory test preparation",
-      "Mock driving test",
+      "LTO-accredited curriculum",
     ],
     price: 800,
   },

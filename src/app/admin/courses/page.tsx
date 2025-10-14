@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import CoursesCard from "@/components/courses-card";
-import { courses as initialCourses } from "@/lib/courses";
+import { useState } from "react";
+import { courses as initialCourses } from "@/lib/utils/courses";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -60,7 +59,7 @@ export default function Courses() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: i * 0.1 }}
             >
-              <CoursesCard course={course} onEnroll={true} />
+              {/* <CoursesCard course={course}  /> */}
             </motion.div>
           ))}
         </motion.div>

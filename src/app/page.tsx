@@ -1,12 +1,12 @@
 "use client";
 
 import About from "./landing/About";
-import Courses from "./landing/Courses";
 import Footer from "./landing/Footer";
 import Hero from "./landing/Hero";
 import Header from "./landing/Header";
 import Instructor from "./landing/Instructor";
 import Gallery from "./landing/Gallery";
+import Courses from "./landing/Courses";
 
 export default function Home() {
   return (
@@ -16,7 +16,7 @@ export default function Home() {
       <About />
       <Instructor />
       <Courses />
-      <Gallery />
+      {/* <Gallery /> */}
       <Footer />
     </div>
   );

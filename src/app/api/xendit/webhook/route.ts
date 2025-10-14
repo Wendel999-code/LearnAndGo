@@ -13,6 +13,7 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
 
+    console.log("Webhook received:", body);
 
     const reference_id = body.external_id;
 
@@ -22,15 +23,12 @@ export async function POST(req: NextRequest) {
     else if (body.status === "FAILED") status = "FAILED";
     else if (body.status === "EXPIRED") status = "EXPIRED";
 
-
-    //TODO move db call in action
-    await prisma.invoice.updateMany({
+    await prisma.invoice.update({
       where: { reference_id },
       data: {
         status,
-        ammountPaid: body.amount,
-        paidAt: status === "PAID" ? new Date() : null,
-        payment_channel: body.payment_channel
+        amountPaid: body.paid_amount,
+        payment_channel: body.payment_channel,
       },
     });
 
