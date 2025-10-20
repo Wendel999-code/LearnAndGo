@@ -1,4 +1,4 @@
-import { CourseCode, InvoiceStatus, StudentStatus } from "@prisma/client";
+import { InvoiceStatus, StudentStatus } from "@prisma/client";
 
 export type EnrolleeInvoice = {
   id: string;
@@ -18,14 +18,14 @@ export type Course = {
   createdAt: Date;
   updatedAt: Date;
   courseTitle: string;
-  courseCode: CourseCode;
+  courseCode: string;
   description: string;
   price: number;
 };
 
 export type EnrolleeCourse = {
   courseTitle?: string;
-  courseCode?: CourseCode;
+  courseCode?: string;
   price?: number;
 };
 

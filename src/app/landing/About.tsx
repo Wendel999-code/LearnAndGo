@@ -50,10 +50,7 @@ function About() {
   ];
 
   return (
-    <section
-      id="about"
-      className="relative min-h-screen overflow-hidden bg-gradient-to-br from-white via-yellow-50 to-yellow-100 dark:from-black dark:via-zinc-900 dark:to-yellow-950"
-    >
+    <section id="about" className="relative min-h-screen overflow-hidden ">
       {/* Subtle Background Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
 
@@ -103,7 +100,7 @@ function About() {
         </motion.div>
 
         {/* Features Grid */}
-        <div className="grid sm:grid-cols-2 gap-6 lg:gap-8 max-w-6xl mx-auto">
+        <div className="grid sm:grid-cols-2 gap-6 lg:gap-8 max-w-3xl mx-auto">
           {features.map((feature, idx) => (
             <motion.div
               key={idx}

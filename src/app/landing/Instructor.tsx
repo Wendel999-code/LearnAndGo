@@ -2,7 +2,7 @@
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { Award, Star, Clock, CheckCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -14,7 +14,7 @@ const instructors = [
     bio: "10+ years of experience helping students drive safely and confidently.",
     image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg",
     experience: "12 years",
-    certifications: ["LTO Certified", "Defensive Driving", "First Aid"],
+    certifications: ["LTO Certified"],
   },
   {
     id: 2,
@@ -24,7 +24,7 @@ const instructors = [
     image:
       "https://www.yourtango.com/sites/default/files/image_blog/2024-09/traits-truly-good-woman.png",
     experience: "8 years",
-    certifications: ["LTO Certified", "Highway Safety", "Vehicle Maintenance"],
+    certifications: ["LTO Certified"],
   },
   {
     id: 3,
@@ -33,62 +33,56 @@ const instructors = [
     bio: "Passionate about teaching drivers with patience and clarity.",
     image: "https://images.pexels.com/photos/1073097/pexels-photo-1073097.jpeg",
     experience: "15 years",
-    certifications: ["LTO Certified", "Advanced Driving", "Traffic Law Expert"],
+    certifications: ["LTO Certified"],
   },
 ];
+
+// Animation presets
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  show: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.15, duration: 0.6, ease: "easeOut" },
+  }),
+};
 
 export default function InstructorsSection() {
   return (
     <section
       id="instructors"
-      className="relative min-h-screen overflow-hidden bg-gradient-to-br from-white via-yellow-50 to-yellow-100 dark:from-black dark:via-zinc-900 dark:to-yellow-950"
+      className="relative min-h-screen overflow-hidden "
     >
-      {/* Subtle Background Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:3rem_3rem]" />
 
-      <div className="container mx-auto px-8 py-20 lg:py-28 relative z-10">
+      <div className="container mx-auto px-6 py-20 lg:py-28 relative z-10">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          variants={{
+            hidden: { opacity: 0, y: 30 },
+            show: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+          }}
           className="text-center mb-16 space-y-6"
         >
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="inline-flex items-center gap-2 px-4 py-1 rounded-full shadow
-              bg-yellow-100 text-yellow-800
-              dark:bg-yellow-400/20 dark:text-yellow-300
-              font-medium tracking-wide"
-          >
+          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-400/20 dark:text-yellow-300 font-medium tracking-wide">
             <Award className="w-4 h-4" />
             <span className="text-sm">Our Team</span>
-          </motion.div>
+          </div>
 
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-4xl md:text-6xl font-extrabold leading-tight text-neutral-900 dark:text-white"
-          >
-            Meet Our Expert <span className="text-yellow-500">Instructors</span>
-          </motion.h2>
+          <h2 className="text-4xl md:text-6xl font-extrabold leading-tight text-neutral-900 dark:text-white">
+            Meet Our Expert{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-amber-400">
+              Instructors
+            </span>
+          </h2>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-sm md:text-lg text-neutral-700 dark:text-gray-400 max-w-2xl mx-auto"
-          >
+          <p className="text-sm md:text-lg text-neutral-700 dark:text-gray-400 max-w-2xl mx-auto">
             Learn from certified professionals dedicated to making you a
             confident and safe driver.
-          </motion.p>
+          </p>
         </motion.div>
 
         {/* Mobile Carousel */}
@@ -96,8 +90,8 @@ export default function InstructorsSection() {
           <Swiper
             spaceBetween={16}
             slidesPerView={1.1}
-            centeredSlides={true}
-            grabCursor={true}
+            centeredSlides
+            grabCursor
           >
             {instructors.map((instructor, idx) => (
               <SwiperSlide key={instructor.id}>
@@ -131,21 +125,21 @@ function InstructorCard({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={fadeUp}
+      custom={index}
+      initial="hidden"
+      whileInView="show"
       viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.6, delay: index * 0.15 }}
       whileHover={{ y: -8, scale: 1.02 }}
       className="group h-full"
     >
       <div className="relative h-full bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl border border-gray-200 dark:border-zinc-800 overflow-hidden transition-all duration-300">
-        {/* Gradient Overlay on Hover */}
-        <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/0 via-yellow-400/5 to-yellow-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        {/* Hover Glow */}
+        <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/0 via-yellow-400/10 to-amber-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-        {/* Header Section with Image */}
+        {/* Image */}
         <div className="relative p-8 pb-6">
-          <div className="relative mx-auto w-32 h-32 rounded-2xl overflow-hidden shadow-xl">
-            <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/20 to-yellow-600/20 z-10" />
+          <div className="relative mx-auto w-32 h-32 rounded-2xl overflow-hidden shadow-xl ring-2 ring-yellow-400/30 dark:ring-yellow-500/30">
             <img
               src={instructor.image}
               alt={instructor.name}
@@ -153,9 +147,9 @@ function InstructorCard({
             />
           </div>
 
-          {/* Expert Badge */}
+          {/* Expert Tag */}
           <div className="absolute top-6 right-6">
-            <div className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black px-3 py-1.5 rounded-xl text-xs font-bold shadow-lg flex items-center gap-1.5">
+            <div className="bg-gradient-to-r from-blue-700 to-blue-600 text-white px-3 py-1.5 rounded-xl text-xs font-semibold shadow-md flex items-center gap-1.5">
               <Star className="w-3.5 h-3.5 fill-current" />
               Expert
             </div>
@@ -164,23 +158,23 @@ function InstructorCard({
 
         {/* Content */}
         <div className="relative p-8 pt-0 space-y-6">
-          {/* Name & Specialty */}
           <div className="text-center space-y-3">
-            <h3 className="text-xl font-bold text-neutral-900 dark:text-white group-hover:text-yellow-500 transition-colors duration-300">
+            <h3 className="text-xl font-semibold text-neutral-900 dark:text-white group-hover:text-yellow-500 transition-colors">
               {instructor.name}
             </h3>
-            <Badge className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-semibold px-4 py-1 text-xs shadow-md">
+            <Badge className="bg-gradient-to-r from-yellow-400 to-amber-500 text-black font-semibold px-4 py-1 text-xs shadow-md">
               {instructor.specialty}
             </Badge>
           </div>
 
-          {/* Bio */}
           <p className="text-sm text-neutral-700 dark:text-gray-400 text-center leading-relaxed min-h-[60px]">
             {instructor.bio}
           </p>
 
-          {/* Experience Badge */}
-          <div className="flex items-center justify-center gap-2 p-3 bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-zinc-800/50 dark:to-zinc-800/30 rounded-xl border border-yellow-200/50 dark:border-zinc-700/50">
+          {/* <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="flex items-center justify-center gap-2 p-3 bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-zinc-800/50 dark:to-zinc-800/30 rounded-xl border border-yellow-200/50 dark:border-zinc-700/50"
+          >
             <Clock className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
             <span className="text-sm font-bold text-neutral-900 dark:text-white">
               {instructor.experience}
@@ -188,37 +182,30 @@ function InstructorCard({
             <span className="text-sm text-neutral-700 dark:text-gray-400">
               experience
             </span>
-          </div>
+          </motion.div> */}
 
-          {/* Certifications */}
           <div className="space-y-3">
             <div className="text-xs font-bold text-neutral-900 dark:text-white uppercase tracking-wider">
               Certifications
             </div>
             <div className="space-y-2">
               {instructor.certifications.map((cert: string, idx: number) => (
-                <div
+                <motion.div
                   key={idx}
-                  className="flex items-center gap-3 text-sm group/cert"
+                  whileHover={{ x: 4 }}
+                  className="flex items-center gap-3 text-sm"
                 >
-                  <div className="w-5 h-5 rounded-lg bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center flex-shrink-0 shadow-sm">
+                  <div className="w-5 h-5 rounded-lg bg-gradient-to-br from-yellow-400 to-amber-500 flex items-center justify-center flex-shrink-0 shadow-sm">
                     <CheckCircle className="w-3 h-3 text-black" />
                   </div>
-                  <span className="text-neutral-700 dark:text-gray-400 group-hover/cert:text-neutral-900 dark:group-hover/cert:text-white transition-colors">
+                  <span className="text-neutral-700 dark:text-gray-400 transition-colors group-hover:text-neutral-900 dark:group-hover:text-white">
                     {cert}
                   </span>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
         </div>
-
-        {/* Decorative Glow */}
-        <motion.div
-          className="absolute -right-8 -bottom-8 w-32 h-32 bg-gradient-to-br from-yellow-400/30 to-yellow-600/30 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 3, repeat: Infinity }}
-        />
       </div>
     </motion.div>
   );

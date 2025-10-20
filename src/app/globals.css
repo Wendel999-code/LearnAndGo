@@ -181,3 +181,150 @@
     background: transparent;
   }
 }
+
+/* Viewport for the scroller */
+.scroller {
+  width: 100%;
+  overflow: hidden;
+  /* Adds a subtle fade effect to the edges */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+}
+
+/* The track that holds and moves the items */
+.scrollerTrack {
+  display: flex;
+  width: max-content; /* Allows content to define width */
+  gap: 1.5rem; /* Space between cards */
+  padding-block: 1rem;
+
+  /* Animation: name, duration, timing, iteration */
+  animation: scroll 45s linear infinite;
+}
+
+/* Pause the animation on hover */
+.scrollerTrack:hover {
+  animation-play-state: paused;
+}
+
+/* The animation keyframes */
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    /* Moves the track left by 50% (the width of one full list) */
+    transform: translateX(-50%);
+  }
+}
+
+/* Individual Testimonial Card Styles */
+.card {
+  width: 380px; /* Fixed width for each card */
+  flex-shrink: 0; /* Prevents cards from shrinking */
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: transform 0.3s ease;
+}
+
+/* Apply dark mode styles */
+.dark .card {
+  background-color: #1a1a1a; /* A dark gray */
+  border: 1px solid #333;
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Subtle lift effect */
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.profileImage {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #eee;
+}
+
+.headerInfo {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Pushes rating to the right */
+}
+
+.name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.dark .name {
+  color: #f4f4f4;
+}
+
+.course {
+  font-size: 0.875rem;
+  color: #555;
+}
+
+.dark .course {
+  color: #aaa;
+}
+
+.rating {
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.journeyImage {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.text {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.6;
+  flex-grow: 1; /* Ensures footer stays at bottom */
+}
+
+.dark .text {
+  color: #ccc;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: #777;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 0.75rem;
+}
+
+.dark .cardFooter {
+  color: #888;
+  border-top-color: #333;
+}

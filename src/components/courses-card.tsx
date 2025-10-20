@@ -25,10 +25,10 @@ function CoursesCard({
 }: CourseCardProps) {
   const getLevelColor = (level: string) => {
     const map: Record<string, string> = {
-      TDC: "from-emerald-400 to-emerald-600",
-      PDC: "from-yellow-400 to-yellow-600",
+      TDC: "from-emerald-400 to-emerald-600  text-white",
+      PDC: "from-sky-400 to-sky-600 text-white",
     };
-    return map[level] ?? "from-blue-400 to-blue-600";
+    return map[level] ?? "from-yellow-400 to-yellow-600";
   };
 
   if (isLoading)
@@ -68,7 +68,6 @@ function CoursesCard({
           className={clsx(
             "relative h-full rounded-2xl border bg-gradient-to-br shadow-lg overflow-hidden transition-all duration-300",
             "border-gray-200 dark:border-zinc-800",
-            "from-gray-50 via-white to-gray-100 dark:from-zinc-950 dark:via-zinc-900 dark:to-black",
             "hover:shadow-yellow-500/20",
             isSelected &&
               "border-yellow-500 ring-2 ring-yellow-400/40 shadow-yellow-500/30"
@@ -85,16 +84,40 @@ function CoursesCard({
                 {course.courseCode}
               </div>
             </div>
-
             <div className="space-y-3 min-h-[130px]">
               <h3 className="text-xl font-bold text-yellow-500 dark:text-yellow-400 group-hover:text-yellow-300 transition-colors">
                 {course.courseTitle}
               </h3>
-              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed min-h-[48px]">
+              <p className="text-sm text-gray-700 dark:text-gray-400 leading-relaxed min-h-[48px]">
                 {course.description}
               </p>
             </div>
 
+            {/* Features  */}
+            <div className="space-y-3">
+              {course.features.map((feature: string, idx: number) => (
+                <div key={idx} className="flex items-center gap-3 group/feat">
+                  <div className="w-5 h-5 rounded-lg  flex items-center justify-center flex-shrink-0 shadow-sm">
+                    <svg
+                      className="w-3 h-3 text-green-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={3}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <span className="text-sm text-neutral-700 dark:text-gray-400 group-hover/feat:text-neutral-900 dark:group-hover/feat:text-white transition-colors">
+                    {feature}
+                  </span>
+                </div>
+              ))}
+            </div>
             <div className="flex items-center justify-between mt-4 border-t border-gray-300 dark:border-zinc-800 pt-4">
               <div className="space-y-0.5">
                 <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -135,29 +158,3 @@ function CoursesCard({
 }
 
 export default CoursesCard;
-
-/* Features */
-/* <div className="space-y-3">
-            {course.features.map((feature: string, idx: number) => (
-              <div key={idx} className="flex items-center gap-3 group/feat">
-                <div className="w-5 h-5 rounded-lg bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center flex-shrink-0 shadow-sm">
-                  <svg
-                    className="w-3 h-3 text-black"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={3}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </div>
-                <span className="text-sm text-neutral-700 dark:text-gray-400 group-hover/feat:text-neutral-900 dark:group-hover/feat:text-white transition-colors">
-                  {feature}
-                </span>
-              </div>
-            ))}
-          </div> */

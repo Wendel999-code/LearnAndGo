@@ -1,4 +1,5 @@
 "use client";
+
 import * as React from "react";
 import {
   Select,
@@ -34,6 +35,7 @@ interface AddScheduleProps {
 
 function AddSchedule({ open, setOpen, day, time }: AddScheduleProps) {
   const { data: students, isLoading } = useGetStudentWithoutSchedule();
+
   const queryClient = useQueryClient();
   const [isAdding, setIsAdding] = React.useState(false);
 
@@ -120,10 +122,10 @@ function AddSchedule({ open, setOpen, day, time }: AddScheduleProps) {
                 </SelectTrigger>
                 <SelectContent>
                   {students.map((student) => (
-                    <SelectItem key={student.id} value={student.id}>
-                      {student.first_name} {student.last_name}{" "}
+                    <SelectItem key={student.id} value={student.id!}>
+                      {student.firstName} {student.lastName}{" "}
                       <span className="text-green-500">
-                        ({student.course_key})
+                        ({student.course?.courseCode})
                       </span>
                     </SelectItem>
                   ))}

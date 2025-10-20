@@ -11,12 +11,9 @@ function Courses() {
   const { data: coursesData, isLoading } = useGetCourses();
 
   return (
-    <section
-      id="courses"
-      className="relative min-h-screen overflow-hidden bg-gradient-to-br from-white via-yellow-50 to-yellow-100 dark:from-black dark:via-zinc-900 dark:to-yellow-950"
-    >
+    <section id="courses" className="relative min-h-screen overflow-hidden ">
       {/* Subtle Background Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:3rem_3rem]" />
 
       <div className="container mx-auto px-8 py-20 lg:py-28 relative z-10">
         {/* Header */}
@@ -65,7 +62,7 @@ function Courses() {
         </motion.div>
 
         {/* Courses Grid */}
-        <div className="grid md:grid-cols-2  gap-8 max-w-3xl place-items-center mx-auto">
+        <div className="grid md:grid-cols-2  gap-8 max-w-3xl place-items-center mx-auto ">
           {coursesData?.map((course, idx) => (
             <CoursesCard
               key={course.id}

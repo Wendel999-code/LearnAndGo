@@ -163,6 +163,7 @@ function SchedulePage() {
                       const date = weekDates[i];
 
                       // Collect all matched sessions with their type
+                      //TODO ADD MODAL FOR MORE SESSION IN ONE TIME AND DAY
                       const sessions =
                         schedules?.flatMap((s) => {
                           const sessionsArray = [
@@ -188,7 +189,7 @@ function SchedulePage() {
                               if (sameDay && sameTime) {
                                 return {
                                   student: s.student,
-                                  course_key: s.student.course_key,
+                                  course_key: s.student?.course?.courseCode,
                                   sessionType: key,
                                 };
                               }
@@ -212,22 +213,22 @@ function SchedulePage() {
                               {sessions.map((session, idx) => {
                                 let badgeColor =
                                   session?.sessionType === "First Session"
-                                    ? "bg-blue-500 text-white"
+                                    ? "bg-blue-700 text-white"
                                     : session?.sessionType === "Second Session"
-                                    ? "bg-yellow-500 text-black"
-                                    : "bg-red-500 text-white";
+                                    ? "bg-yellow-700 text-white"
+                                    : "bg-red-700 text-white";
 
                                 return (
                                   <div
-                                    key={`${session?.student.first_name}-${idx}`}
+                                    key={`${session?.student?.firstName}-${idx}`}
                                     className="bg-gray-100 dark:bg-gray-800 border dark:border-gray-700 rounded-md p-2 flex flex-col items-center gap-1 text-center shadow-sm"
                                   >
                                     <div className="text-yellow-500 text-[11px] font-medium leading-tight">
                                       {session?.course_key}
                                     </div>
                                     <div className="text-[12px] font-semibold leading-tight">
-                                      {session?.student.first_name}{" "}
-                                      {session?.student.last_name}
+                                      {session?.student?.firstName}{" "}
+                                      {session?.student?.lastName}
                                     </div>
                                     <div>
                                       <span
