@@ -6,6 +6,7 @@ import axios from "axios";
 import { StudentFormData, StudentSchema } from "../zod/student";
 import { generateReferenceId } from "@/lib/utils/generate_id";
 import { Prisma } from "@prisma/client";
+import { baseURL } from "@/lib/utils/env";
 
 //helper 1: Upload file to Supabase
 async function uploadFile(folder: string, file: File) {
@@ -95,13 +96,8 @@ async function createXenditInvoice(
         surname: parsed.lastName,
         email: parsed.email,
         mobile_number: parsed.phone,
-        address: parsed.address,
       },
-      success_redirect_url: `${
-        process.env.NODE_ENV === "production"
-          ? `${process.env.NEXT_PUBLIC_PROD_SUCCESS_REDIRECT_URL}/${reference_id}`
-          : `${process.env.NEXT_PUBLIC_DEV_SUCCESS_REDIRECT_URL}/${reference_id}`
-      }`,
+      success_redirect_url: `${baseURL}/${reference_id}`,
       currency: "PHP",
       items: [
         {
@@ -112,7 +108,7 @@ async function createXenditInvoice(
           url: "https://learn-and-go.wndl.dev/#courses",
         },
       ],
-      metadata: { student },
+      metadata: { student, address: parsed.address },
       should_send_email: true,
     };
 
@@ -192,8 +188,22 @@ export async function registerStudentAndPayment(formData: StudentFormData) {
 
     return { success: true, data: invoice };
   } catch (error: any) {
-    console.error("Error in registerStudentAndPayment:", error.message);
-    return { success: false, message: error.message };
+    console.error("Error in registerStudentAndPayment:", error);
+
+    // Detect large file/body limit error
+    if (error.message?.includes("Body exceeded")) {
+      return {
+        success: false,
+        message:
+          "Upload failed: The total file size exceeds the 3 MB limit. Please upload smaller images.",
+      };
+    }
+
+    // Generic fallback
+    return {
+      success: false,
+      message: error.message || "An unexpected error occurred.",
+    };
   }
 }
 

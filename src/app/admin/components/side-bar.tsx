@@ -16,9 +16,6 @@ import {
   BookOpenCheck,
   Speech,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import toast from "react-hot-toast";
-// import { SeedStudents } from "../../../../script/seed";
 
 const navItems = [
   { label: "Home", href: "/admin", icon: Home },
@@ -26,19 +23,14 @@ const navItems = [
   { label: "Payments", href: "/admin/payments", icon: CreditCard },
   { label: "Students", href: "/admin/students", icon: GraduationCap },
   { label: "Schedule", href: "/admin/schedule", icon: Calendar },
+  { label: "Certificates", href: "/admin/certificates", icon: Award },
   { label: "Courses", href: "/admin/courses", icon: BookOpenCheck },
   { label: "Instructor", href: "/admin/instructor", icon: Speech },
-  { label: "Certificates", href: "/admin/certificates", icon: Award },
 ];
 
 function SideBar() {
   const [open, setOpen] = useState(true);
   const pathname = usePathname();
-
-  // const handleSeed = async () => {
-  //   const res = await SeedStudents();
-  //   if (res.success) toast.success("Seed schedule success");
-  // };
 
   return (
     <aside
@@ -97,8 +89,6 @@ function SideBar() {
           );
         })}
       </nav>
-
-      {/* <Button onClick={handleSeed}>Seed</Button> */}
 
       {/* Footer */}
       <div className="p-4 border-t border-gray-200 dark:border-gray-700">

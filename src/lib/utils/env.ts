@@ -1,6 +1,4 @@
-export const getBaseUrl = () => {
-  if (process.env.NODE_ENV === "development") {
-    return "http://localhost:3000";
-  }
-  return process.env.NEXT_PUBLIC_APP_URL!;
-};
+export const baseURL =
+  process.env.NODE_ENV === "production"
+    ? process.env.NEXT_PUBLIC_PROD_SUCCESS_REDIRECT_URL
+    : process.env.NEXT_PUBLIC_DEV_SUCCESS_REDIRECT_URL;

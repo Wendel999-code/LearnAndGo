@@ -125,21 +125,17 @@ function Footer() {
               Our Services
             </h3>
             <ul className="space-y-4">
-              {[
-                "Theoretical Driving Course",
-                "Practical Driving Course",
-                "Refresher Course",
-                "Defensive Driving",
-                "Highway Driving",
-              ].map((service, index) => (
-                <li
-                  key={index}
-                  className="text-gray-600 dark:text-gray-300 flex items-center"
-                >
-                  <div className="w-2 h-2 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full mr-3 flex-shrink-0" />
-                  {service}
-                </li>
-              ))}
+              {["Theoretical Driving Course", "Practical Driving Course"].map(
+                (service, index) => (
+                  <li
+                    key={index}
+                    className="text-gray-600 dark:text-gray-300 flex items-center"
+                  >
+                    <div className="w-2 h-2 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full mr-3 flex-shrink-0" />
+                    {service}
+                  </li>
+                )
+              )}
             </ul>
           </motion.div>
 
@@ -168,7 +164,7 @@ function Footer() {
                 <span>
                   123 Main Street,
                   <br />
-                  Quezon City, Philippines
+                  Northern Samar, Philippines
                 </span>
               </div>
             </div>

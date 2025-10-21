@@ -19,7 +19,6 @@ type Enrollee = {
 
 function EnrolleesPage() {
   const { data: enrollees, isLoading, error } = useGetEnrollees();
-  console.log("Enrollees data:", enrollees);
 
   const tableData: Enrollee[] = enrollees
     ? enrollees?.map((enrollee) => ({

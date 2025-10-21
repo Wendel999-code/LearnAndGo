@@ -5,7 +5,6 @@ import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import ReactQueryProvider from "@/provider/QueryClientProvider";
 import { ClerkProvider } from "@clerk/nextjs";
-import { shadcn } from "@clerk/themes";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

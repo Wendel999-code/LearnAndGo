@@ -10,9 +10,9 @@ import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import CoursesCard from "@/components/courses-card";
 import toast from "react-hot-toast";
-import { registerStudentAndPayment } from "@/actions/student/student";
 import Header from "../landing/Header";
 import { useGetCourses } from "@/hooks/use-course";
+import { registerStudentAndPayment } from "@/actions/student/student";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0, y: 50, scale: 0.95 },
@@ -29,6 +29,7 @@ const containerVariants: Variants = {
   },
 };
 
+//TODO fix if you register and not yet completed the payment the data was save in db
 function RegisterForm() {
   const { data: coursesData, isLoading } = useGetCourses();
 
@@ -55,6 +56,14 @@ function RegisterForm() {
     course_id: "",
   });
 
+  //sync selected course id with form data
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      course_id: selectedCourse || "",
+    }));
+  }, [selectedCourse]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
@@ -68,6 +77,7 @@ function RegisterForm() {
       const file = e.target.files[0];
       const url = URL.createObjectURL(file);
       console.log("File selected:", url);
+      console.log("File name:", file.name);
       setPreview(url);
       setFormData((prev) => ({ ...prev, [key]: e.target.files![0] }));
     }
@@ -76,49 +86,32 @@ function RegisterForm() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    if (!selectedCourse) {
-      toast.error("Please select a course");
-      return;
-    }
-    if (!formData.valid_id) {
-      toast.error("Please upload a valid ID");
-      return;
-    }
-    if (!formData.selfie) {
-      toast.error("Please upload a selfie");
-      return;
-    }
+    if (!selectedCourse) return toast.error("Please select a course");
+    if (!formData.valid_id) return toast.error("Please upload a valid ID");
+    if (!formData.selfie) return toast.error("Please upload a selfie");
 
     setSubmitting(true);
 
     try {
       const res = await registerStudentAndPayment(formData);
-
       if (res.success) {
         toast.success("Redirecting to payment...");
         window.location.href = res.data?.invoice_url;
-      } else if (!res.success) {
+      } else {
         toast.error(res.message || "Registration failed. Please try again.");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error("An error occurred. Please try again.");
     } finally {
       setSubmitting(false);
     }
   };
 
-  //sync selected course id with form data
-  useEffect(() => {
-    setFormData((prev) => ({
-      ...prev,
-      course_id: selectedCourse || "",
-    }));
-  }, [selectedCourse]);
-
   const disabled =
-    !formData.selfie ||
+    isLoading ||
     !formData.valid_id ||
+    !formData.selfie ||
     submitting ||
     !formData.firstName ||
     !formData.lastName ||
@@ -322,7 +315,7 @@ function RegisterForm() {
                   <Label className="text-lg font-semibold">
                     Select Course *
                   </Label>
-                  <div className="grid md:grid-cols-2  gap-8 max-w-3xl place-items-center mx-auto">
+                  <div className="grid md:grid-cols-2 mt-6  gap-8 max-w-3xl place-items-center mx-auto">
                     {coursesData?.map((course, index) => (
                       <CoursesCard
                         key={course.id}
@@ -331,7 +324,6 @@ function RegisterForm() {
                         isRegister={true}
                         selectedCourse={selectedCourse}
                         setSelectedCourse={setSelectedCourse}
-                        isLoading={isLoading}
                       />
                     ))}
                   </div>
