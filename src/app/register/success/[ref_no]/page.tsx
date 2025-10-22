@@ -89,6 +89,7 @@ export default function RegisterSuccess({
         >
           <InfoRow
             label="Enrollee's Name"
+            valueClass="font-mono capitalize"
             value={`${student.firstName} ${student.lastName}`}
           />
           <InfoRow label="Course Enrolled" value={student.course.courseTitle} />
