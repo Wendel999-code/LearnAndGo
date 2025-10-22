@@ -98,7 +98,7 @@ export default function Courses() {
 
   return (
     <div className="flex flex-col items-center  gap-8 p-3 min-h-screen bg-white dark:bg-black">
-      <div className="flex items-center justify-between w-full max-w-6xl">
+      <div className="flex items-center justify-between  w-full">
         <h1 className="text-4xl font-bold  ">Driving Courses</h1>
         <Button
           onClick={() => setOpen(true)}
@@ -109,7 +109,7 @@ export default function Courses() {
         </Button>
       </div>
 
-      <div className="w-full max-w-6xl">
+      <div className="w-full ">
         <motion.div
           layout
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"

@@ -66,3 +66,15 @@ export interface MySchedule {
   course?: EnrolleeCourse | null;
   schedule?: Schedule | null;
 }
+
+export type Instructor = {
+  firstName: string;
+  lastName: string;
+  email: string | null;
+  phone: string | null;
+  address: string | null;
+  bio: string | null;
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
