@@ -8,7 +8,6 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -17,37 +16,40 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useGetStudentWithoutSchedule } from "@/hooks/use-schedule";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { addSchedule } from "@/actions/student/schedule";
-import toast from "react-hot-toast";
-import { Loader, Loader2Icon } from "lucide-react";
+import { useGetStudentWithoutSchedule } from "@/hooks/use-schedule";
 import { useQueryClient } from "@tanstack/react-query";
+import { addSchedule } from "@/actions/student/schedule";
+import { Loader2Icon, LoaderCircle } from "lucide-react";
 import { formatTime } from "@/lib/utils/date";
+import toast from "react-hot-toast";
 
 interface AddScheduleProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   day: string;
   time: string;
+  schedules?: Record<string, any>;
 }
 
-function AddSchedule({ open, setOpen, day, time }: AddScheduleProps) {
+export default function AddSchedule({
+  open,
+  setOpen,
+  day,
+  time,
+  schedules,
+}: AddScheduleProps) {
   const { data: students, isLoading } = useGetStudentWithoutSchedule();
-
   const queryClient = useQueryClient();
+
+  console.log("schedules", schedules);
+
   const [isAdding, setIsAdding] = React.useState(false);
-
-  const [selectedStudent, setSelectedStudent] = React.useState<
-    Record<string, any>
-  >({
-    first_session: "",
-    second_session: "",
-    third_session: "",
-  });
-
+  const [selectedStudent, setSelectedStudent] = React.useState<any>(null);
   const [selectedSession, setSelectedSession] = React.useState<string>("");
+
   const formattedTime = formatTime(time);
 
   const handleConfirm = async (
@@ -56,26 +58,21 @@ function AddSchedule({ open, setOpen, day, time }: AddScheduleProps) {
     dayTime: string
   ) => {
     if (!id || !session || !dayTime) {
-      toast.error("Please select a student and schedule");
+      toast.error("Please select a student and session.");
       return;
     }
-
     try {
       setIsAdding(true);
-
       const res = await addSchedule(id, session, dayTime);
-
       if (res.success) {
         queryClient.invalidateQueries({ queryKey: ["get-schedules"] });
         queryClient.invalidateQueries({
           queryKey: ["students-without-schedule"],
         });
         toast.success(res.message);
-      } else {
-        toast.error(res.message);
-      }
+      } else toast.error(res.message);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsAdding(false);
       setOpen(false);
@@ -84,112 +81,222 @@ function AddSchedule({ open, setOpen, day, time }: AddScheduleProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle className="">Schedule </DialogTitle>
-          <DialogDescription className="text-center mb-4 mt-6 text-2xl">
-            Add schedule for <br />
-            <strong className="text-yellow-600">
-              {day} at {formattedTime}{" "}
-            </strong>
+      <DialogContent className="max-w-lg md:max-w-2xl rounded-2xl border border-gray-200 dark:border-zinc-800  backdrop-blur-sm">
+        <DialogHeader className="space-y-3">
+          <DialogTitle className="text-2xl font-bold text-center text-neutral-900 dark:text-white">
+            Schedule a Session
+          </DialogTitle>
+          <DialogDescription className="text-center text-base text-neutral-700 dark:text-gray-400">
+            For{" "}
+            <span className="text-amber-600 dark:text-amber-500 font-semibold">
+              {day}
+            </span>{" "}
+            at{" "}
+            <span className="text-amber-600 dark:text-amber-500 font-semibold">
+              {formattedTime}
+            </span>
           </DialogDescription>
         </DialogHeader>
-        <div>
-          {isLoading ? (
-            <div className="grid grid-cols-2 gap-4">
-              <Skeleton className="w-56 h-10" />
-              <Skeleton className="w-56 h-10" />
-            </div>
-          ) : students && students.length > 0 ? (
-            <div className="grid grid-cols-2 gap-4">
-              {/* Student select */}
-              <Select
-                value={selectedStudent.id ?? ""}
-                onValueChange={(id) => {
-                  const student = students?.find((s) => s.id === id);
-                  if (student) {
-                    setSelectedStudent({
-                      id: student.id,
-                      first_session: student.schedule?.first_session ?? "",
-                      second_session: student.schedule?.second_session ?? "",
-                      third_session: student.schedule?.third_session ?? "",
-                    });
-                  }
-                }}
-              >
-                <SelectTrigger className="w-56">
-                  <SelectValue placeholder="Select Student" />
-                </SelectTrigger>
-                <SelectContent>
-                  {students.map((student) => (
-                    <SelectItem key={student.id} value={student.id!}>
-                      {student.firstName} {student.lastName}{" "}
-                      <span className="text-green-500">
-                        ({student.course?.courseCode})
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
 
-              {/* Only show session select if a student is selected */}
-              {selectedStudent.id && (
+        {/* Step 1 & 2: Select Section */}
+        <div className="mt-6 space-y-4">
+          {isLoading ? (
+            <>
+              <Skeleton className="bg-gray-200 dark:bg-zinc-800 animate-pulse h-10  w-40" />
+              <Skeleton className="bg-gray-200 dark:bg-zinc-800 animate-pulse h-10 w-40" />
+            </>
+          ) : students && students.length > 0 ? (
+            <>
+              {" "}
+              w-40
+              {/* Step 1: Student Select */}
+              <div>
+                <label className="text-sm font-medium text-neutral-800 dark:text-neutral-200 mb-2 block">
+                  Step 1: Select Student
+                </label>
                 <Select
-                  onValueChange={(value) => {
-                    setSelectedSession(value);
+                  value={selectedStudent?.id ?? ""}
+                  onValueChange={(id) => {
+                    const student = students.find((s) => s.id === id);
+                    if (student) setSelectedStudent(student);
                   }}
                 >
-                  <SelectTrigger className="w-56">
+                  <SelectTrigger className=" h-10">
+                    <SelectValue placeholder="Select Student" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {students.map((student) => (
+                      <SelectItem key={student.id} value={student.id ?? ""}>
+                        <span className="font-medium">
+                          {student.firstName} {student.lastName}
+                        </span>
+                        <span className="text-xs text-amber-600 dark:text-amber-500 ml-2">
+                          ({student.course?.courseCode})
+                        </span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              {/* Step 2: Session Select */}
+              <div
+                className={`transition-opacity duration-300 ${
+                  selectedStudent ? "opacity-100" : "opacity-50"
+                }`}
+              >
+                <label className="text-sm font-medium text-neutral-800 dark:text-neutral-200 mb-2 block">
+                  Step 2: Select Session
+                </label>
+                <Select
+                  onValueChange={(val) => setSelectedSession(val)}
+                  value={selectedSession}
+                  disabled={!selectedStudent}
+                >
+                  <SelectTrigger className=" h-10">
                     <SelectValue placeholder="Select Session" />
                   </SelectTrigger>
-
                   <SelectContent>
-                    <SelectItem
-                      value="first"
-                      className="flex items-center justify-between"
-                    >
-                      <Badge className="bg-blue-700 text-white text-xs">
-                        1st Session
-                      </Badge>
-                      <span className="ml-2">
-                        {selectedStudent.first_session}
-                      </span>
+                    <SelectItem value="first">
+                      <div className="flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-blue-600" />
+                        <span className="text-sm">1st Session</span>
+                      </div>
                     </SelectItem>
-
-                    <SelectItem
-                      value="second"
-                      className="flex items-center justify-between"
-                    >
-                      <Badge className="bg-yellow-600 text-white">
-                        2nd Session
-                      </Badge>
-                      <span className="ml-2">
-                        {selectedStudent.second_session}
-                      </span>
+                    <SelectItem value="second">
+                      <div className="flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-amber-600" />
+                        <span className="text-sm">2nd Session</span>
+                      </div>
                     </SelectItem>
-
-                    <SelectItem
-                      value="third"
-                      className="flex items-center justify-between"
-                    >
-                      <Badge className="bg-red-700 text-white">
-                        3rd Session
-                      </Badge>
-                      <span className="ml-2">
-                        {selectedStudent.third_session}
-                      </span>
+                    <SelectItem value="third">
+                      <div className="flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-red-600" />
+                        <span className="text-sm">3rd Session</span>
+                      </div>
                     </SelectItem>
                   </SelectContent>
                 </Select>
-              )}
-            </div>
+              </div>
+            </>
           ) : (
-            <p className="text-center text-gray-500">No available students</p>
+            <p className="col-span-2 text-center text-gray-500 dark:text-gray-400 py-4">
+              No available students
+            </p>
           )}
         </div>
+
+        {/* Existing Schedules Table */}
+        <div className="mt-8">
+          <h3 className="text-base font-semibold text-neutral-800 dark:text-neutral-200 mb-3">
+            Already Scheduled for this Time
+          </h3>
+
+          {schedules?.some(
+            (s: any) =>
+              s.first_session === `${day} ${formattedTime}` ||
+              s.second_session === `${day} ${formattedTime}` ||
+              s.third_session === `${day} ${formattedTime}`
+          ) ? (
+            <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-zinc-700 shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-max text-sm text-left">
+                  <thead className="bg-gray-50 dark:bg-zinc-800 text-gray-600 dark:text-gray-300 text-xs font-semibold">
+                    <tr>
+                      <th className="px-4 py-3">Student</th>
+                      <th className="px-4 py-3">Course</th>
+                      <th className="px-4 py-3">Session</th>
+                      <th className="px-4 py-3">Instructor</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 dark:divide-zinc-700">
+                    {schedules
+                      .filter(
+                        (s: any) =>
+                          s.first_session === `${day} ${formattedTime}` ||
+                          s.second_session === `${day} ${formattedTime}` ||
+                          s.third_session === `${day} ${formattedTime}`
+                      )
+                      .map((schedule: any, idx: number) => {
+                        const { student } = schedule;
+                        const sessions = [
+                          {
+                            key: "First Session",
+                            value: schedule.first_session,
+                          },
+                          {
+                            key: "Second Session",
+                            value: schedule.second_session,
+                          },
+                          {
+                            key: "Third Session",
+                            value: schedule.third_session,
+                          },
+                        ].filter((s) => s.value === `${day} ${formattedTime}`);
+
+                        return sessions.map((session, i) => (
+                          <tr
+                            key={`${idx}-${i}`}
+                            className="hover:bg-amber-50/40 dark:hover:bg-zinc-800/50 transition-colors"
+                          >
+                            <td className="px-4 py-3 font-medium text-neutral-900 dark:text-white whitespace-nowrap">
+                              <div className="flex items-center gap-2">
+                                <img
+                                  src={student.selfie_URL}
+                                  alt={student.firstName}
+                                  className="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-zinc-600"
+                                />
+                                <span>
+                                  {student.firstName} {student.lastName}
+                                </span>
+                              </div>
+                            </td>
+
+                            <td className="px-4 py-3 text-neutral-700 dark:text-gray-400">
+                              {student.course?.courseCode ?? "N/A"}
+                            </td>
+
+                            <td className="px-4 py-3">
+                              {session.key === "First Session" && (
+                                <div className="flex items-center gap-2">
+                                  <span className="h-2 w-2 rounded-full bg-blue-600" />
+                                  <span className="text-sm">1st Session</span>
+                                </div>
+                              )}
+                              {session.key === "Second Session" && (
+                                <div className="flex items-center gap-2">
+                                  <span className="h-2 w-2 rounded-full bg-amber-600" />
+                                  <span className="text-sm">2nd Session</span>
+                                </div>
+                              )}
+                              {session.key === "Third Session" && (
+                                <div className="flex items-center gap-2">
+                                  <span className="h-2 w-2 rounded-full bg-red-600" />
+                                  <span className="text-sm">3rd Session</span>
+                                </div>
+                              )}
+                            </td>
+
+                            <td className="px-4 py-3 text-neutral-700 dark:text-gray-400">
+                              John Instructor
+                            </td>
+                          </tr>
+                        ));
+                      })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ) : (
+            <p className="text-center text-gray-500 dark:text-gray-400 py-4">
+              No sessions found for this time slot.
+            </p>
+          )}
+        </div>
+
+        {/* Footer */}
         <DialogFooter className="mt-6">
           <Button
-            disabled={isAdding || !selectedStudent.id || !selectedSession}
+            disabled={isAdding || !selectedStudent?.id || !selectedSession}
             onClick={() =>
               handleConfirm(
                 selectedStudent.id,
@@ -197,16 +304,15 @@ function AddSchedule({ open, setOpen, day, time }: AddScheduleProps) {
                 `${day} ${formattedTime}`
               )
             }
-            className="w-full md:w-auto text-black cursor-pointer disabled:bg-gray-400 bg-yellow-500 hover:bg-yellow-600 transition-colors"
+            className="h-10 px-6 font-semibold text-black bg-amber-500 hover:bg-amber-600 transition-all duration-300 disabled:opacity-50"
           >
             {isAdding ? (
               <>
-                {" "}
-                <Loader2Icon className=" animate-spin " />{" "}
-                <span>Confirming Schedule </span>
+                <LoaderCircle className="animate-spin mr-2 h-4 w-4" />
+                Confirming...
               </>
             ) : (
-              " Confirm Schedule"
+              "Confirm Schedule"
             )}
           </Button>
         </DialogFooter>
@@ -214,5 +320,3 @@ function AddSchedule({ open, setOpen, day, time }: AddScheduleProps) {
     </Dialog>
   );
 }
-
-export default AddSchedule;

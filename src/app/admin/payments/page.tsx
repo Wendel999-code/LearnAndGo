@@ -22,7 +22,6 @@ type Payment = {
 
 export default function PaymentsPage() {
   const { data: enrollees, isLoading, error } = useGetEnrollees();
-  console.log("Enrollees payment data:", enrollees);
 
   const tableData: Payment[] = enrollees
     ? enrollees?.map((enrollee) => ({

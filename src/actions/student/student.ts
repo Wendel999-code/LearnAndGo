@@ -293,7 +293,18 @@ export async function getEnrollee(enrollee_id: string) {
         id: enrollee_id,
       },
       include: {
-        invoices: true,
+        invoices: {
+          select: {
+            price: true,
+            amountPaid: true,
+            reference_id: true,
+          },
+        },
+        course: {
+          select: {
+            courseTitle: true,
+          },
+        },
       },
     });
 

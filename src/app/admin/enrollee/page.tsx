@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { GenericTable } from "@/components/GenericTable";
 import { useGetEnrollees } from "@/hooks/use-student";
 import EnrolleeAction from "./components/EnrolleeAction";
+import { formatToMDYWithTime } from "@/lib/utils/date";
 
 //serve as table header
 type Enrollee = {
@@ -15,6 +16,7 @@ type Enrollee = {
   amountPaid: number;
   reference_no: string;
   status: string;
+  createdAt: string | null;
 };
 
 function EnrolleesPage() {
@@ -29,6 +31,9 @@ function EnrolleesPage() {
         amountPaid: enrollee.invoices?.amountPaid ?? 0,
         reference_no: enrollee.invoices?.reference_id ?? "N/A",
         status: enrollee.status as string,
+        createdAt: enrollee.createdAt
+          ? formatToMDYWithTime(enrollee.createdAt)
+          : null,
       }))
     : [];
 
@@ -64,8 +69,8 @@ function EnrolleesPage() {
         return (
           <Badge
             className={
-              status === "Paid"
-                ? "bg-green-700 w-16 text-white"
+              status === "PENDING"
+                ? "bg-yellow-800 w-16 text-white lowercase"
                 : status === "Pending"
                 ? "bg-yellow-500 w-16 text-black"
                 : "bg-yellow-600 w-16 text-white lowercase"
@@ -76,6 +81,7 @@ function EnrolleesPage() {
         );
       },
     },
+    { accessorKey: "createdAt", header: "Enroll on" },
     {
       header: "Actions",
       id: "actions",

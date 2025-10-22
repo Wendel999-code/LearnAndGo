@@ -4,7 +4,7 @@ import {
   getStudents,
   verifyEnrollee,
 } from "@/actions/student/student";
-import { Enrollee } from "@/constant/type";
+import { Enrollee, EnrolleeInvoice } from "@/constant/type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useGetEnrollees = () =>
@@ -15,14 +15,21 @@ export const useGetEnrollees = () =>
       if (!res.success) throw new Error(res.message);
       return res.data!;
     },
-    staleTime: 60 * 60 * 1000, // 1h was staleTime
+    staleTime: 60 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
     retry: 1,
     refetchOnWindowFocus: true,
   });
 
+type EnrolleeWithInvoice = Omit<Enrollee, "invoices"> & {
+  invoices?: Pick<
+    EnrolleeInvoice,
+    "reference_id" | "amountPaid" | "price"
+  > | null;
+};
+
 export const useGetEnrollee = (enrollee_id: string, open: boolean) =>
-  useQuery<Enrollee>({
+  useQuery<EnrolleeWithInvoice>({
     queryKey: ["get-enrollee", enrollee_id],
     queryFn: async () => {
       const res = await getEnrollee(enrollee_id);

@@ -5,10 +5,9 @@ import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { useGetShedules } from "@/hooks/use-schedule";
 import Loading from "@/app/loading";
 import { format } from "date-fns";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import AddSchedule from "./AddSchedule";
 import { formatTime } from "@/lib/utils/date";
+import { Badge } from "@/components/ui/badge";
 
 const daysOfWeek = [
   "Monday",
@@ -29,17 +28,6 @@ function SchedulePage() {
     day: "",
     time: "",
   });
-
-  if (isLoading) {
-    return <Loading />;
-  }
-  if (error instanceof Error) {
-    return (
-      <div className="flex justify-center items-center min-h-screen text-red-500">
-        Error: {error.message}
-      </div>
-    );
-  }
 
   // working hours
   const generateTimeSlots = () => {
@@ -81,8 +69,20 @@ function SchedulePage() {
     setOpenAddDialog(true);
   };
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (error instanceof Error) {
+    return (
+      <div className="flex justify-center items-center min-h-screen text-red-500">
+        Error: {error.message}
+      </div>
+    );
+  }
+
   return (
-    <div className="p-3 bg-theme min-h-screen">
+    <div className="p-3  min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex flex-col gap-3">
@@ -143,111 +143,121 @@ function SchedulePage() {
             </thead>
 
             <tbody>
-              {allTimes.map((time) => {
-                return (
-                  <tr
-                    key={time}
-                    className="border-t border-gray-200 dark:border-gray-700"
+              {allTimes.map((time) => (
+                <tr
+                  key={time}
+                  className="border-t border-gray-200 dark:border-gray-700"
+                >
+                  {/* Time column */}
+                  <td
+                    className={`px-2 ${
+                      formatTime(time).includes("PM")
+                        ? "text-red-600"
+                        : "text-sky-500"
+                    }`}
                   >
-                    <td
-                      className={`px-2  ${
-                        formatTime(time).includes("PM")
-                          ? "text-red-600"
-                          : "text-sky-500"
-                      } `}
-                    >
-                      {formatTime(time)}
-                    </td>
+                    {formatTime(time)}
+                  </td>
 
-                    {daysOfWeek.map((day, i) => {
-                      const date = weekDates[i];
+                  {/* Days columns */}
+                  {daysOfWeek.map((day, i) => {
+                    const date = weekDates[i];
 
-                      // Collect all matched sessions with their type
-                      //TODO ADD MODAL FOR MORE SESSION IN ONE TIME AND DAY
-                      const sessions =
-                        schedules?.flatMap((s) => {
-                          const sessionsArray = [
-                            { key: "First Session", value: s.first_session },
-                            { key: "Second Session", value: s.second_session },
-                            { key: "Third Session", value: s.third_session },
-                          ];
+                    const sessions =
+                      schedules?.flatMap((s) => {
+                        const sessionArray = [
+                          { key: "1st Session", value: s.first_session },
+                          { key: "2nd Session", value: s.second_session },
+                          { key: "3rd Session", value: s.third_session },
+                        ];
 
-                          return sessionsArray
-                            .map(({ key, value }) => {
-                              if (!value) return null;
+                        return sessionArray
+                          .map(({ key, value }) => {
+                            if (!value) return null;
 
-                              const parts = value.split(" ");
-                              const datePart = parts.slice(0, 3).join(" ");
-                              const timePart = parts.slice(3).join(" ");
-                              const sessionDate = new Date(datePart);
+                            const parts = value.split(" ");
+                            const datePart = parts.slice(0, 3).join(" ");
+                            const timePart = parts.slice(3).join(" ");
+                            const sessionDate = new Date(datePart);
 
-                              const sameDay =
-                                sessionDate.toDateString() ===
-                                date.toDateString();
-                              const sameTime = formatTime(time) === timePart;
+                            const sameDay =
+                              sessionDate.toDateString() ===
+                              date.toDateString();
+                            const sameTime = formatTime(time) === timePart;
 
-                              if (sameDay && sameTime) {
-                                return {
-                                  student: s.student,
-                                  course_key: s.student?.course?.courseCode,
-                                  sessionType: key,
-                                };
-                              }
-                              return null;
-                            })
-                            .filter(Boolean);
-                        }) ?? [];
+                            if (sameDay && sameTime) {
+                              return {
+                                student: s.student,
+                                course_key: s.student?.course?.courseCode,
+                                sessionType: key,
+                              };
+                            }
+                            return null;
+                          })
+                          .filter(Boolean);
+                      }) ?? [];
 
-                      return (
-                        <td
-                          key={day}
-                          className="px-6 py-3 cursor-pointer"
-                          onClick={() => handleCellClick(date, time)}
-                        >
-                          {sessions.length === 0 ? (
-                            <span className="px-4 py-1 rounded-full text-xs font-semibold bg-green-900 text-gray-300">
-                              Available
-                            </span>
-                          ) : (
-                            <div className="space-y-2">
-                              {sessions.map((session, idx) => {
-                                let badgeColor =
-                                  session?.sessionType === "First Session"
-                                    ? "bg-blue-700 text-white"
-                                    : session?.sessionType === "Second Session"
-                                    ? "bg-yellow-700 text-white"
-                                    : "bg-red-700 text-white";
+                    return (
+                      <td
+                        key={day}
+                        className="px-6 py-4 cursor-pointer "
+                        onClick={() => handleCellClick(date, time)}
+                      >
+                        {/* If no sessions → Available */}
+                        {sessions.length === 0 ? (
+                          <span className="px-4 py-1 rounded-full text-xs font-semibold bg-green-700 text-gray-300">
+                            Available
+                          </span>
+                        ) : (
+                          <div className="space-y-2 relative">
+                            {/* Display only the first session */}
+                            {sessions.slice(0, 1).map((session, idx) => {
+                              const badgeColor =
+                                session?.sessionType === "1st Session"
+                                  ? "bg-blue-700 text-white"
+                                  : session?.sessionType === "2nd Session"
+                                  ? "bg-yellow-700 text-white"
+                                  : "bg-red-700 text-white";
 
-                                return (
-                                  <div
-                                    key={`${session?.student?.firstName}-${idx}`}
-                                    className="bg-gray-100 dark:bg-gray-800 border dark:border-gray-700 rounded-md p-2 flex flex-col items-center gap-1 text-center shadow-sm"
-                                  >
-                                    <div className="text-yellow-500 text-[11px] font-medium leading-tight">
-                                      {session?.course_key}
-                                    </div>
-                                    <div className="text-[12px] font-semibold leading-tight">
-                                      {session?.student?.firstName}{" "}
-                                      {session?.student?.lastName}
-                                    </div>
-                                    <div>
-                                      <span
-                                        className={`${badgeColor} text-[9px] px-2 py-0.5 rounded-full`}
-                                      >
-                                        {session?.sessionType}
-                                      </span>
-                                    </div>
+                              return (
+                                <div
+                                  key={`${session?.student?.firstName}-${idx}`}
+                                  className="bg-gray-100 dark:bg-gray-800 border dark:border-gray-700 rounded-md p-2 flex flex-col items-center gap-1 text-center shadow-sm"
+                                >
+                                  <div className="text-yellow-500 text-[11px] font-medium leading-tight">
+                                    {session?.course_key}
                                   </div>
-                                );
-                              })}
-                            </div>
-                          )}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
+                                  <div className="text-[12px] font-semibold leading-tight">
+                                    {session?.student?.firstName}{" "}
+                                    {session?.student?.lastName}
+                                  </div>
+                                  <div>
+                                    <span
+                                      className={`${badgeColor} text-[9px] px-2 py-0.5 rounded-full`}
+                                    >
+                                      {session?.sessionType}
+                                    </span>
+                                  </div>
+                                </div>
+                              );
+                            })}
+
+                            {/* If multiple sessions → show +X more indicator */}
+                            {sessions.length > 1 && (
+                              <Badge
+                                variant={"outline"}
+                                className="text-[10px] top-18 left-16 absolute transition-all duration-300 bg-yellow-500 text-black hover:scale-105 hover:shadow-lg"
+                              >
+                                +{sessions.length - 1} more
+                              </Badge>
+                            )}
+                          </div>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -260,6 +270,7 @@ function SchedulePage() {
           setOpen={setOpenAddDialog}
           day={selectedDayTime.day}
           time={selectedDayTime.time}
+          schedules={schedules}
         />
       )}
     </div>
