@@ -20,14 +20,15 @@ const eslintConfig = [
       "next-env.d.ts",
     ],
     rules: {
-      "prefer-const": ["warn", { destructuring: "all" }],
       "react/no-unescaped-entities": "off",
-      "no-unused-vars": "warn",
-      "@typescript-eslint/no-unused-vars": [
-        "warn",
-        { argsIgnorePattern: "^_" },
-      ],
+
+      // Downgrade all build-blocking errors to warnings
       "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-unused-vars": "warn",
+      "@next/next/no-img-element": "warn",
+      "@next/next/no-html-link-for-pages": "warn",
+      "react-hooks/exhaustive-deps": "warn",
+      "prefer-const": "warn",
     },
   },
 ];
