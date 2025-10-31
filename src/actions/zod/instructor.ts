@@ -9,6 +9,9 @@ export const InstructorSchema = z.object({
     .min(11, { message: "Phone number must be at least 11 digits" }),
   address: z.string(),
   bio: z.string().max(500, { message: "Bio must not exceed 500 characters" }),
+  image_URL: z
+    .instanceof(File, { message: "Image file is required" })
+    .nullable(),
 });
 
 export type InstructorFormData = z.infer<typeof InstructorSchema>;

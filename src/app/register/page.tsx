@@ -76,8 +76,6 @@ function RegisterForm() {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       const url = URL.createObjectURL(file);
-      console.log("File selected:", url);
-      console.log("File name:", file.name);
       setPreview(url);
       setFormData((prev) => ({ ...prev, [key]: e.target.files![0] }));
     }

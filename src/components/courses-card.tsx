@@ -5,6 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "./ui/button";
 import clsx from "clsx";
 import Link from "next/link";
+import { Ellipsis } from "lucide-react";
 
 interface CourseCardProps {
   course: any;
@@ -13,6 +14,7 @@ interface CourseCardProps {
   isLoading?: boolean;
   selectedCourse?: string | null;
   setSelectedCourse?: (courseId: string) => void;
+  isInAdmin?: boolean;
 }
 
 function CoursesCard({
@@ -22,6 +24,7 @@ function CoursesCard({
   isLoading,
   selectedCourse,
   setSelectedCourse,
+  isInAdmin,
 }: CourseCardProps) {
   const getLevelColor = (level: string) => {
     const map: Record<string, string> = {
@@ -73,7 +76,7 @@ function CoursesCard({
               "border-yellow-500 ring-2 ring-yellow-400/40 shadow-yellow-500/30"
           )}
         >
-          <div className="relative p-7 space-y-6">
+          <div className="relative p-7 space-y-6 h-full">
             <div className="flex items-start justify-between">
               <div
                 className={clsx(
@@ -84,20 +87,32 @@ function CoursesCard({
                 {course.courseCode}
               </div>
             </div>
+
+            {isInAdmin && (
+              <div className="absolute right-2 top-2">
+                <button
+                  type="button"
+                  className="p-2 rounded-full bg-transparent cursor-pointer hover:bg-yellow-500/20 text-gray-500 dark:text-gray-400 hover:text-yellow-600 dark:hover:text-yellow-400 transition-all duration-300 ease-out"
+                >
+                  <Ellipsis className="w-5 h-5" />
+                </button>
+              </div>
+            )}
+
             <div className="space-y-3 min-h-[130px]">
               <h3 className="text-xl font-bold text-yellow-500 dark:text-yellow-400 group-hover:text-yellow-300 transition-colors">
                 {course.courseTitle}
               </h3>
-              <p className="text-sm text-gray-700 dark:text-gray-400 leading-relaxed min-h-[48px]">
+              <p className="text-sm text-gray-700 dark:text-gray-400 leading-relaxed ">
                 {course.description}
               </p>
             </div>
 
             {/* Features  */}
-            <div className="space-y-3">
+            <div className="space-y-3 h-[150px]">
               {course.features.map((feature: string, idx: number) => (
                 <div key={idx} className="flex items-center gap-3 group/feat">
-                  <div className="w-5 h-5 rounded-lg  flex items-center justify-center flex-shrink-0 shadow-sm">
+                  <div className="w-5 h-5 rounded-lg  flex items-center justify-center shadow-sm">
                     <svg
                       className="w-3 h-3 text-green-500"
                       fill="none"

@@ -18,17 +18,28 @@ function Courses() {
       <div className="container mx-auto px-8 py-20 lg:py-28 relative z-10">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: false, amount: 0.3 }}
+          variants={{
+            hidden: { opacity: 0, y: 40 },
+            show: {
+              opacity: 1,
+              y: 0,
+              transition: {
+                duration: 0.6,
+                staggerChildren: 0.15,
+                ease: "easeOut",
+              },
+            },
+          }}
           className="text-center mb-16 space-y-6"
         >
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              show: { opacity: 1, y: 0 },
+            }}
             className="inline-flex items-center gap-2 px-4 py-1 rounded-full shadow
               bg-yellow-100 text-yellow-800
               dark:bg-yellow-400/20 dark:text-yellow-300
@@ -39,20 +50,20 @@ function Courses() {
           </motion.div>
 
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              show: { opacity: 1, y: 0 },
+            }}
             className="text-4xl md:text-6xl font-extrabold leading-tight text-neutral-900 dark:text-white"
           >
             Our <span className="text-yellow-500">Courses</span>
           </motion.h2>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              show: { opacity: 1, y: 0 },
+            }}
             className="text-sm md:text-lg text-neutral-700 dark:text-gray-400 max-w-2xl mx-auto"
           >
             Choose from our comprehensive range of LTO-accredited driving
@@ -62,7 +73,13 @@ function Courses() {
         </motion.div>
 
         {/* Courses Grid */}
-        <div className="grid md:grid-cols-2  gap-8 max-w-3xl place-items-center mx-auto ">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="grid md:grid-cols-2 gap-8 max-w-3xl backdrop-blur-3xl place-items-center mx-auto"
+        >
           {coursesData?.map((course, idx) => (
             <CoursesCard
               key={course.id}
@@ -72,7 +89,7 @@ function Courses() {
               isRegister={false}
             />
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

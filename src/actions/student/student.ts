@@ -9,7 +9,7 @@ import { Prisma } from "@prisma/client";
 import { baseURL } from "@/lib/utils/env";
 
 //helper 1: Upload file to Supabase
-async function uploadFile(folder: string, file: File) {
+export async function uploadFile(folder: string, file: File) {
   const path = `${folder}/${Date.now()}-${file.name}`;
   const { error } = await supabase.storage
     .from("learn_and_go")
@@ -22,7 +22,7 @@ async function uploadFile(folder: string, file: File) {
 }
 
 // Helper 2: Get public URL
-function getPublicUrl(path: string) {
+export async function getPublicUrl(path: string) {
   const { data } = supabase.storage.from("learn_and_go").getPublicUrl(path);
   if (!data) throw new Error(`Failed to get public URL for ${path}`);
   return data.publicUrl;

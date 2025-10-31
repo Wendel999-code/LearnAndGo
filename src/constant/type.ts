@@ -75,6 +75,7 @@ export type Instructor = {
   address: string | null;
   bio: string | null;
   id: string;
+  image_URL: string | null;
   createdAt: Date;
   updatedAt: Date;
 };

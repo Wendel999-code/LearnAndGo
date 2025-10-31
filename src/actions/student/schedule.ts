@@ -45,7 +45,7 @@ export async function getMySchedule(email: string) {
   }
 
   try {
-    const res = await prisma.student.findUnique({
+    const res = await prisma.student.findFirst({
       where: { email },
       select: {
         firstName: true,

@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { LoaderCircle, Plus } from "lucide-react";
-
+import { LoaderCircle, Plus, Upload } from "lucide-react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -30,6 +30,7 @@ const initialState = {
   phone: "",
   address: "",
   bio: "",
+  image_URL: null as File | null,
 };
 
 export default function Instructor() {
@@ -38,6 +39,9 @@ export default function Instructor() {
   const [open, setOpen] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState(initialState);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const imageRef = useRef<HTMLInputElement | null>(null);
+
   const queryClient = useQueryClient();
 
   const handleFormChange = (
@@ -45,6 +49,15 @@ export default function Instructor() {
   ) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const file = e.target.files;
+      const url = URL.createObjectURL(file[0]);
+      setImagePreview(url);
+      setFormData((prev) => ({ ...prev, image_URL: file[0] }));
+    }
   };
 
   const handleAddInstructor = async (e: React.FormEvent) => {
@@ -73,7 +86,7 @@ export default function Instructor() {
   return (
     <div className="p-2  space-y-4">
       {/* Header */}
-      <div className="flex justify-between items-center border-b pb-4">
+      <div className="flex justify-between items-center  pb-4">
         <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-white">
           Instructors
         </h2>
@@ -87,9 +100,9 @@ export default function Instructor() {
               Add Instructor
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg md:max-w-2xl bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md rounded-2xl shadow-xl border border-gray-200 dark:border-zinc-800">
-            <DialogHeader>
-              <DialogTitle className="text-2xl font-bold text-neutral-900 dark:text-white">
+          <DialogContent className="max-w-lg md:max-w-3xl bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md rounded-2xl shadow-xl border border-gray-200 dark:border-zinc-800 overflow-x-auto h-[90vh]">
+            <DialogHeader className="text-center items-center">
+              <DialogTitle className="text-2xl font-bold text-yellow-500">
                 Add New Instructor
               </DialogTitle>
               <DialogDescription className="text-neutral-600 dark:text-gray-400">
@@ -166,6 +179,39 @@ export default function Instructor() {
                   placeholder="123 Main St, Anytown"
                   className="focus-visible:ring-2 focus-visible:ring-yellow-400"
                 />
+              </div>
+              {/* File Uploads */}
+              <div>
+                <Label className="mb-1 text-sm text-gray-600 dark:text-gray-500">
+                  Upload Valid ID *
+                </Label>
+                <div className="mt-2 flex items-center gap-3">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={imageRef}
+                    className="hidden"
+                    onChange={(e) => handleFileChange(e)}
+                  />
+                  <Button
+                    type="button"
+                    size={"icon"}
+                    variant="outline"
+                    className="border-yellow-500/50 cursor-pointer text-yellow-600 dark:text-yellow-400 hover:bg-yellow-500 hover:text-black"
+                    onClick={() => imageRef.current?.click()}
+                  >
+                    <Upload className="w-5 h-5" />
+                  </Button>
+                  {imagePreview && (
+                    <motion.img
+                      src={imagePreview}
+                      alt="Valid ID"
+                      className="w-56 h-36 rounded-sm border object-cover"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                    />
+                  )}
+                </div>
               </div>
 
               {/* Bio */}
