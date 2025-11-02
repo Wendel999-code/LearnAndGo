@@ -55,11 +55,11 @@ export default function PaymentsPage() {
             className={(() => {
               switch (course) {
                 case "TDC":
-                  return "bg-green-600 w-20 p-1 text-white capitalize";
+                  return "bg-yellow-700 w-10 p-1 text-white capitalize";
                 case "PDC":
-                  return "bg-sky-600 w-20 text-white capitalize";
+                  return "bg-sky-600 w-10 text-white capitalize";
                 default:
-                  return "bg-gray-500 w-20 text-white capitalize";
+                  return "bg-gray-500 w-10 text-white capitalize";
               }
             })()}
           >
@@ -96,30 +96,7 @@ export default function PaymentsPage() {
       cell: ({ row }) => {
         const status = row.getValue("status") as Payment["status"];
         return (
-          <Badge
-            className={(() => {
-              switch (status) {
-                case "PAID":
-                case "PARTIAL":
-                  return "bg-indigo-900 w-20 p-1 text-white capitalize";
-                case "FULLY_PAID":
-                  return "bg-green-600 w-20 p-1 text-white capitalize";
-                case "PENDING":
-                  return "bg-red-900 w-20 p-1 text-white capitalize";
-                case "FAILED":
-                case "EXPIRED":
-                  return "bg-red-900 w-20 p-1 text-white capitalize";
-                default:
-                  return "bg-gray-500 w-20 p-1 text-white capitalize";
-              }
-            })()}
-          >
-            {status === "PAID"
-              ? "partial"
-              : status === "FULLY_PAID"
-              ? "fully paid"
-              : status.toLowerCase().replace("_", " ")}
-          </Badge>
+          <Badge className="bg-emerald-600 ">{status.toLowerCase()}</Badge>
         );
       },
     },
@@ -131,7 +108,7 @@ export default function PaymentsPage() {
       header: "Actions",
       id: "actions",
       enableHiding: false,
-      cell: ({ row }) => <EnrolleeAction enrollee_id={row.original.id} />,
+      // cell: ({ row }) => <EnrolleeAction enrollee_id={row.original.id} />,
     },
   ];
 

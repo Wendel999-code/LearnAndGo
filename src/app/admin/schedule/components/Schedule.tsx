@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { useGetShedules } from "@/hooks/use-schedule";
 import Loading from "@/app/loading";

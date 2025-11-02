@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button"; // <-- Import Button
 import { motion, AnimatePresence } from "framer-motion";
 
 export function ModeToggle() {
@@ -16,17 +16,18 @@ export function ModeToggle() {
 
   const isDark = resolvedTheme === "dark";
 
-  function handleToggle(value: boolean) {
-    setTheme(value ? "dark" : "light");
-  }
-
   if (!mounted) {
-    // Prevent mismatch: render a placeholder until client knows theme
-    return <div className="w-8 h-8" />;
+    // Render a placeholder matching the button size
+    return <div className="w-10 h-10" />;
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      className="cursor-pointer"
+    >
       <AnimatePresence mode="wait" initial={false}>
         {isDark ? (
           <motion.div
@@ -50,7 +51,6 @@ export function ModeToggle() {
           </motion.div>
         )}
       </AnimatePresence>
-      <Switch checked={isDark} onCheckedChange={handleToggle} />
-    </div>
+    </Button>
   );
 }

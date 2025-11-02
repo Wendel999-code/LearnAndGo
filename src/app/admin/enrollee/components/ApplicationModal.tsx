@@ -316,6 +316,5 @@ const ErrorState = ({ onRetry }: { onRetry: () => void }) => (
   </div>
 );
 
-// Memoized export remains the same
 const ApplicationModal = memo(ApplicationModalComponent);
 export default ApplicationModal;

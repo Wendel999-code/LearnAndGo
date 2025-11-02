@@ -104,6 +104,7 @@ export const getStudentWithoutSchedule = async () => {
         id: true,
         firstName: true,
         lastName: true,
+        selfie_URL: true,
         course: {
           select: {
             courseCode: true,
@@ -139,9 +140,10 @@ export const getStudentWithoutSchedule = async () => {
 };
 
 export const addSchedule = async (
-  id: string,
+  student_id: string,
   session: string,
-  dayTime: string
+  dayTime: string,
+  instructor_id: string
 ) => {
   try {
     const updateData: Record<string, any> = {};
@@ -156,10 +158,11 @@ export const addSchedule = async (
     }
 
     await prisma.schedule.upsert({
-      where: { student_id: id },
+      where: { student_id },
       update: updateData,
       create: {
-        student_id: id,
+        student_id,
+        instructor_id,
         ...updateData,
       },
     });

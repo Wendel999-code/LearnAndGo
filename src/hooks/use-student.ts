@@ -57,6 +57,9 @@ export const useVerifyEnrollee = () => {
       queryClient.invalidateQueries({ queryKey: ["get-enrollees"] });
       queryClient.invalidateQueries({ queryKey: ["get-enrollee"] });
       queryClient.invalidateQueries({ queryKey: ["get-students"] });
+      queryClient.invalidateQueries({
+        queryKey: ["students-without-schedule"],
+      });
     },
   });
 };

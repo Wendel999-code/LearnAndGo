@@ -24,6 +24,8 @@ import { addSchedule } from "@/actions/student/schedule";
 import { LoaderCircle } from "lucide-react";
 import { formatTime } from "@/lib/utils/date";
 import toast from "react-hot-toast";
+import { useGetInstructors } from "@/hooks/use-instructor";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface AddScheduleProps {
   open: boolean;
@@ -41,28 +43,34 @@ export default function AddSchedule({
   schedules,
 }: AddScheduleProps) {
   const { data: students, isLoading } = useGetStudentWithoutSchedule();
-  const queryClient = useQueryClient();
+  const { data: instructors, isLoading: isLoadingInstructors } =
+    useGetInstructors();
 
-  console.log("schedules", schedules);
+  const queryClient = useQueryClient();
 
   const [isAdding, setIsAdding] = React.useState(false);
   const [selectedStudent, setSelectedStudent] = React.useState<any>(null);
+  const [selectedInstructor, setSelectedInstructor] = React.useState<any>(null);
   const [selectedSession, setSelectedSession] = React.useState<string>("");
 
   const formattedTime = formatTime(time);
 
+  console.log("instructor", selectedInstructor);
+  console.log("student", selectedStudent);
+
   const handleConfirm = async (
     id: string,
     session: string,
-    dayTime: string
+    dayTime: string,
+    instructor_id: string
   ) => {
-    if (!id || !session || !dayTime) {
-      toast.error("Please select a student and session.");
+    if (!id || !session || !dayTime || !instructor_id) {
+      toast.error("Please select a student, session and instructor.");
       return;
     }
     try {
       setIsAdding(true);
-      const res = await addSchedule(id, session, dayTime);
+      const res = await addSchedule(id, session, dayTime, instructor_id);
       if (res.success) {
         queryClient.invalidateQueries({ queryKey: ["get-schedules"] });
         queryClient.invalidateQueries({
@@ -105,11 +113,10 @@ export default function AddSchedule({
               <Skeleton className="bg-gray-200 dark:bg-zinc-800 animate-pulse h-10 w-40" />
             </>
           ) : students && students.length > 0 ? (
-            <>
-              {" "}
+            <div className="flex gap-4 mt-6 w-full ">
               {/* Step 1: Student Select */}
               <div>
-                <label className="text-sm font-medium text-neutral-800 dark:text-neutral-200 mb-2 block">
+                <label className="text-xs text-gray-400 mb-2 block">
                   Step 1: Select Student
                 </label>
                 <Select
@@ -119,16 +126,33 @@ export default function AddSchedule({
                     if (student) setSelectedStudent(student);
                   }}
                 >
-                  <SelectTrigger className=" h-10">
+                  <SelectTrigger className="h-9 w-[200px]">
                     <SelectValue placeholder="Select Student" />
                   </SelectTrigger>
                   <SelectContent>
                     {students.map((student) => (
-                      <SelectItem key={student.id} value={student.id ?? ""}>
-                        <span className="font-medium">
+                      <SelectItem
+                        key={student.id}
+                        value={student.id ?? ""}
+                        // I added focus:text-white for better contrast
+                        className="cursor-pointer focus:bg-gray-700 focus:text-white rounded-lg transition-colors ease-in-out duration-300"
+                      >
+                        <Avatar className="h-6 w-6">
+                          {" "}
+                          {/* Made avatar smaller */}
+                          <AvatarImage src={student.selfie_URL!} />
+                          <AvatarFallback className="text-xs font-semibold">
+                            {" "}
+                            {/* Made fallback text smaller */}
+                            {`${student.firstName?.[0] ?? ""}${
+                              student.lastName?.[0] ?? ""
+                            }`}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="font-medium capitalize">
                           {student.firstName} {student.lastName}
                         </span>
-                        <span className="text-xs text-amber-600 dark:text-amber-500 ml-2">
+                        <span className="text-xs text-amber-600 font-semibold dark:text-amber-500 ml-2">
                           ({student.course?.courseCode})
                         </span>
                       </SelectItem>
@@ -136,13 +160,16 @@ export default function AddSchedule({
                   </SelectContent>
                 </Select>
               </div>
+
               {/* Step 2: Session Select */}
               <div
                 className={`transition-opacity duration-300 ${
-                  selectedStudent ? "opacity-100" : "opacity-50"
+                  selectedStudent
+                    ? "opacity-100"
+                    : "opacity-50 pointer-events-none" // Added pointer-events-none
                 }`}
               >
-                <label className="text-sm font-medium text-neutral-800 dark:text-neutral-200 mb-2 block">
+                <label className="text-xs text-gray-400 mb-2 block">
                   Step 2: Select Session
                 </label>
                 <Select
@@ -150,23 +177,33 @@ export default function AddSchedule({
                   value={selectedSession}
                   disabled={!selectedStudent}
                 >
-                  <SelectTrigger className=" h-10">
+                  <SelectTrigger className="h-9 w-[200px]">
                     <SelectValue placeholder="Select Session" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="first">
+                    {/* Note: I'm overriding padding with p-2 to remove the default indent */}
+                    <SelectItem
+                      value="first"
+                      className="p-2 cursor-pointer focus:bg-gray-700 focus:text-white rounded-lg transition-colors ease-in-out duration-300"
+                    >
                       <div className="flex items-center gap-2">
                         <span className="h-2 w-2 rounded-full bg-blue-600" />
                         <span className="text-sm">1st Session</span>
                       </div>
                     </SelectItem>
-                    <SelectItem value="second">
+                    <SelectItem
+                      value="second"
+                      className="p-2 cursor-pointer focus:bg-gray-700 focus:text-white rounded-lg transition-colors ease-in-out duration-300"
+                    >
                       <div className="flex items-center gap-2">
                         <span className="h-2 w-2 rounded-full bg-amber-600" />
                         <span className="text-sm">2nd Session</span>
                       </div>
                     </SelectItem>
-                    <SelectItem value="third">
+                    <SelectItem
+                      value="third"
+                      className="p-2 cursor-pointer focus:bg-gray-700 focus:text-white rounded-lg transition-colors ease-in-out duration-300"
+                    >
                       <div className="flex items-center gap-2">
                         <span className="h-2 w-2 rounded-full bg-red-600" />
                         <span className="text-sm">3rd Session</span>
@@ -175,41 +212,58 @@ export default function AddSchedule({
                   </SelectContent>
                 </Select>
               </div>
-              {/* Step 3:  Select instructor */}
+
+              {/* Step 3: Select instructor */}
               <div
                 className={`transition-opacity duration-300 ${
-                  selectedStudent ? "opacity-100" : "opacity-50"
+                  selectedStudent
+                    ? "opacity-100"
+                    : "opacity-50 pointer-events-none" // Added pointer-events-none
                 }`}
               >
-                <label className="text-sm font-medium text-neutral-800 dark:text-neutral-200 mb-2 block">
+                <label className="text-xs text-gray-400 mb-2 block">
                   Step 3: Select instructor
                 </label>
                 <Select
-                  onValueChange={(val) => setSelectedSession(val)}
-                  value={selectedSession}
+                  onValueChange={(val) => setSelectedInstructor(val)}
+                  value={selectedInstructor}
                   disabled={!selectedStudent}
                 >
-                  <SelectTrigger className=" h-10">
+                  <SelectTrigger className="h-9 w-[200px]">
                     <SelectValue placeholder="Select instructor" />
                   </SelectTrigger>
                   <SelectContent>
-                    {schedules?.map((instructor: any) => (
+                    {instructors?.map((instructor) => (
                       <SelectItem
                         key={instructor.id}
                         value={instructor.id ?? ""}
+                        // Override padding, add focus styles for consistency
+                        className="p-2 cursor-pointer focus:bg-gray-700 focus:text-white rounded-lg transition-colors ease-in-out duration-300"
                       >
-                        <span className="font-medium">
-                          {instructor.firstName} {instructor.lastName}
-                        </span>
-                        {/* <span className="text-xs text-amber-600 dark:text-amber-500 ml-2">
-                          ({student.course?.courseCode})
-                        </span> */}
+                        {/* Added a flex wrapper to align avatar and name */}
+                        <div className="flex items-center gap-2">
+                          <Avatar className="h-6 w-6">
+                            {" "}
+                            {/* Made avatar smaller */}
+                            <AvatarImage src={instructor.image_URL!} />
+                            <AvatarFallback className="text-xs font-semibold">
+                              {" "}
+                              {/* Made fallback text smaller */}
+                              {`${instructor.firstName?.[0] ?? ""}${
+                                instructor.lastName?.[0] ?? ""
+                              }`}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="font-medium">
+                            {instructor.firstName} {instructor.lastName}
+                          </span>
+                        </div>
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
-            </>
+            </div>
           ) : (
             <p className="col-span-2 text-center text-gray-500 dark:text-gray-400 py-4">
               No available students
@@ -271,12 +325,19 @@ export default function AddSchedule({
                             className="hover:bg-amber-50/40 dark:hover:bg-zinc-800/50 transition-colors"
                           >
                             <td className="px-4 py-3 font-medium text-neutral-900 dark:text-white whitespace-nowrap">
-                              <div className="flex items-center gap-2">
-                                <img
-                                  src={student.selfie_URL}
-                                  alt={student.firstName}
-                                  className="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-zinc-600"
-                                />
+                              <div className="flex items-center gap-2 text-neutral-700 dark:text-gray-400">
+                                <Avatar className="h-6 w-6">
+                                  {" "}
+                                  {/* Made avatar smaller */}
+                                  <AvatarImage src={student.selfie_URL} />
+                                  <AvatarFallback className="text-xs font-semibold">
+                                    {" "}
+                                    {/* Made fallback text smaller */}
+                                    {`${student.firstName?.[0] ?? ""}${
+                                      student.lastName?.[0] ?? ""
+                                    }`}
+                                  </AvatarFallback>
+                                </Avatar>
                                 <span>
                                   {student.firstName} {student.lastName}
                                 </span>
@@ -287,7 +348,7 @@ export default function AddSchedule({
                               {student.course?.courseCode ?? "N/A"}
                             </td>
 
-                            <td className="px-4 py-3">
+                            <td className="px-4 py-3 text-neutral-700 dark:text-gray-400">
                               {session.key === "First Session" && (
                                 <div className="flex items-center gap-2">
                                   <span className="h-2 w-2 rounded-full bg-blue-600" />
@@ -309,7 +370,23 @@ export default function AddSchedule({
                             </td>
 
                             <td className="px-4 py-3 text-neutral-700 dark:text-gray-400">
-                              {instructor?.firstName} {instructor?.lastName}
+                              <div className="flex items-center gap-2">
+                                <Avatar className="h-6 w-6">
+                                  {" "}
+                                  {/* Made avatar smaller */}
+                                  <AvatarImage src={instructor.image_URL!} />
+                                  <AvatarFallback className="text-xs font-semibold">
+                                    {" "}
+                                    {/* Made fallback text smaller */}
+                                    {`${instructor.firstName?.[0] ?? ""}${
+                                      instructor.lastName?.[0] ?? ""
+                                    }`}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <span className="font-medium">
+                                  {instructor.firstName} {instructor.lastName}
+                                </span>
+                              </div>
                             </td>
                           </tr>
                         ));
@@ -329,15 +406,21 @@ export default function AddSchedule({
         <DialogFooter className="mt-6">
           <Button
             size={"sm"}
-            disabled={isAdding || !selectedStudent?.id || !selectedSession}
+            disabled={
+              isAdding ||
+              !selectedStudent?.id ||
+              !selectedSession ||
+              !selectedInstructor
+            }
             onClick={() =>
               handleConfirm(
                 selectedStudent.id,
                 selectedSession,
-                `${day} ${formattedTime}`
+                `${day} ${formattedTime}`,
+                selectedInstructor
               )
             }
-            className="h-10 px-6 font-semibold text-black bg-amber-500 hover:bg-amber-600 transition-all duration-300 disabled:opacity-50"
+            className="h-10 px-6 font-semibold cursor-pointer text-black bg-amber-500 hover:bg-amber-600 transition-all duration-300 disabled:opacity-50"
           >
             {isAdding ? (
               <>

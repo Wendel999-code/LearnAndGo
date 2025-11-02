@@ -22,7 +22,6 @@ import { addInstructor } from "@/actions/instructor";
 import { useGetInstructors } from "@/hooks/use-instructor";
 import { InstructorCard } from "@/components/InstructorCard";
 
-// A more robust initial state for easy resetting
 const initialState = {
   firstName: "",
   lastName: "",

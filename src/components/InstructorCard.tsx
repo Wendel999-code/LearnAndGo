@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { motion, Variants } from "framer-motion";
 import { Star, CheckCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
