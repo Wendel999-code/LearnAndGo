@@ -16,13 +16,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetStudentWithoutSchedule } from "@/hooks/use-schedule";
 import { useQueryClient } from "@tanstack/react-query";
 import { addSchedule } from "@/actions/student/schedule";
-import { Loader2Icon, LoaderCircle } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { formatTime } from "@/lib/utils/date";
 import toast from "react-hot-toast";
 
@@ -98,7 +97,7 @@ export default function AddSchedule({
           </DialogDescription>
         </DialogHeader>
 
-        {/* Step 1 & 2: Select Section */}
+        {/* Step 1 & 2, 3: Select Section */}
         <div className="mt-6 space-y-4">
           {isLoading ? (
             <>
@@ -108,7 +107,6 @@ export default function AddSchedule({
           ) : students && students.length > 0 ? (
             <>
               {" "}
-              w-40
               {/* Step 1: Student Select */}
               <div>
                 <label className="text-sm font-medium text-neutral-800 dark:text-neutral-200 mb-2 block">
@@ -177,6 +175,40 @@ export default function AddSchedule({
                   </SelectContent>
                 </Select>
               </div>
+              {/* Step 3:  Select instructor */}
+              <div
+                className={`transition-opacity duration-300 ${
+                  selectedStudent ? "opacity-100" : "opacity-50"
+                }`}
+              >
+                <label className="text-sm font-medium text-neutral-800 dark:text-neutral-200 mb-2 block">
+                  Step 3: Select instructor
+                </label>
+                <Select
+                  onValueChange={(val) => setSelectedSession(val)}
+                  value={selectedSession}
+                  disabled={!selectedStudent}
+                >
+                  <SelectTrigger className=" h-10">
+                    <SelectValue placeholder="Select instructor" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {schedules?.map((instructor: any) => (
+                      <SelectItem
+                        key={instructor.id}
+                        value={instructor.id ?? ""}
+                      >
+                        <span className="font-medium">
+                          {instructor.firstName} {instructor.lastName}
+                        </span>
+                        {/* <span className="text-xs text-amber-600 dark:text-amber-500 ml-2">
+                          ({student.course?.courseCode})
+                        </span> */}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </>
           ) : (
             <p className="col-span-2 text-center text-gray-500 dark:text-gray-400 py-4">
@@ -217,7 +249,7 @@ export default function AddSchedule({
                           s.third_session === `${day} ${formattedTime}`
                       )
                       .map((schedule: any, idx: number) => {
-                        const { student } = schedule;
+                        const { student, instructor } = schedule;
                         const sessions = [
                           {
                             key: "First Session",
@@ -277,7 +309,7 @@ export default function AddSchedule({
                             </td>
 
                             <td className="px-4 py-3 text-neutral-700 dark:text-gray-400">
-                              John Instructor
+                              {instructor?.firstName} {instructor?.lastName}
                             </td>
                           </tr>
                         ));
@@ -296,6 +328,7 @@ export default function AddSchedule({
         {/* Footer */}
         <DialogFooter className="mt-6">
           <Button
+            size={"sm"}
             disabled={isAdding || !selectedStudent?.id || !selectedSession}
             onClick={() =>
               handleConfirm(
@@ -312,7 +345,7 @@ export default function AddSchedule({
                 Confirming...
               </>
             ) : (
-              "Confirm Schedule"
+              "Confirm "
             )}
           </Button>
         </DialogFooter>

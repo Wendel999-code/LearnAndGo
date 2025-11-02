@@ -9,6 +9,13 @@ export async function getSchedules() {
         first_session: true,
         second_session: true,
         third_session: true,
+        instructor: {
+          select: {
+            firstName: true,
+            lastName: true,
+            image_URL: true,
+          },
+        },
         student: {
           select: {
             firstName: true,

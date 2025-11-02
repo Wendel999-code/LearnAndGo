@@ -6,8 +6,16 @@ import {
 import { Enrollee, MySchedule, Schedule } from "@/constant/type";
 import { useQuery } from "@tanstack/react-query";
 
+type ScheduleWithInstructor = Schedule & {
+  instructor: {
+    firstName: string;
+    lastName: string;
+    image_URL: string | null;
+  } | null;
+};
+
 export const useGetShedules = () =>
-  useQuery<Partial<Schedule>[]>({
+  useQuery<Partial<ScheduleWithInstructor>[]>({
     queryKey: ["get-schedules"],
     queryFn: async () => {
       const res = await getSchedules();

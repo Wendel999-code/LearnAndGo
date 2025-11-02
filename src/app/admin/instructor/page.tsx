@@ -163,7 +163,6 @@ export default function Instructor() {
                   name="phone"
                   value={formData.phone}
                   onChange={handleFormChange}
-                  placeholder="(123) 456-7890"
                   className="focus-visible:ring-2 focus-visible:ring-yellow-400"
                 />
               </div>
@@ -176,7 +175,6 @@ export default function Instructor() {
                   name="address"
                   value={formData.address}
                   onChange={handleFormChange}
-                  placeholder="123 Main St, Anytown"
                   className="focus-visible:ring-2 focus-visible:ring-yellow-400"
                 />
               </div>
@@ -222,7 +220,6 @@ export default function Instructor() {
                   name="bio"
                   value={formData.bio}
                   onChange={handleFormChange}
-                  placeholder="Experienced in defensive driving and advanced techniques..."
                   className="min-h-[100px] focus-visible:ring-2 focus-visible:ring-yellow-400"
                 />
               </div>
