@@ -26,6 +26,7 @@ import { formatTime } from "@/lib/utils/date";
 import toast from "react-hot-toast";
 import { useGetInstructors } from "@/hooks/use-instructor";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import ScheduleAction from "./ScheduleAction";
 
 interface AddScheduleProps {
   open: boolean;
@@ -43,8 +44,8 @@ export default function AddSchedule({
   schedules,
 }: AddScheduleProps) {
   const { data: students, isLoading } = useGetStudentWithoutSchedule();
-  const { data: instructors, isLoading: isLoadingInstructors } =
-    useGetInstructors();
+  console.log("student here", students);
+  const { data: instructors } = useGetInstructors();
 
   const queryClient = useQueryClient();
 
@@ -54,9 +55,6 @@ export default function AddSchedule({
   const [selectedSession, setSelectedSession] = React.useState<string>("");
 
   const formattedTime = formatTime(time);
-
-  console.log("instructor", selectedInstructor);
-  console.log("student", selectedStudent);
 
   const handleConfirm = async (
     id: string,
@@ -85,6 +83,30 @@ export default function AddSchedule({
       setOpen(false);
     }
   };
+
+  const sessions = [
+    {
+      value: "first",
+      label: "1st Session",
+      color: "bg-blue-600",
+      key: "first_session",
+    },
+    {
+      value: "second",
+      label: "2nd Session",
+      color: "bg-amber-600",
+      key: "second_session",
+    },
+    {
+      value: "third",
+      label: "3rd Session",
+      color: "bg-red-600",
+      key: "third_session",
+    },
+  ];
+
+  console.log("schedule", schedules);
+  console.log("selected student", selectedStudent);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -172,6 +194,7 @@ export default function AddSchedule({
                 <label className="text-xs text-gray-400 mb-2 block">
                   Step 2: Select Session
                 </label>
+
                 <Select
                   onValueChange={(val) => setSelectedSession(val)}
                   value={selectedSession}
@@ -181,34 +204,31 @@ export default function AddSchedule({
                     <SelectValue placeholder="Select Session" />
                   </SelectTrigger>
                   <SelectContent>
-                    {/* Note: I'm overriding padding with p-2 to remove the default indent */}
-                    <SelectItem
-                      value="first"
-                      className="p-2 cursor-pointer focus:bg-gray-700 focus:text-white rounded-lg transition-colors ease-in-out duration-300"
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="h-2 w-2 rounded-full bg-blue-600" />
-                        <span className="text-sm">1st Session</span>
-                      </div>
-                    </SelectItem>
-                    <SelectItem
-                      value="second"
-                      className="p-2 cursor-pointer focus:bg-gray-700 focus:text-white rounded-lg transition-colors ease-in-out duration-300"
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="h-2 w-2 rounded-full bg-amber-600" />
-                        <span className="text-sm">2nd Session</span>
-                      </div>
-                    </SelectItem>
-                    <SelectItem
-                      value="third"
-                      className="p-2 cursor-pointer focus:bg-gray-700 focus:text-white rounded-lg transition-colors ease-in-out duration-300"
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="h-2 w-2 rounded-full bg-red-600" />
-                        <span className="text-sm">3rd Session</span>
-                      </div>
-                    </SelectItem>
+                    {(() => {
+                      // find schedule matching the selected student's ID
+                      const schedule = schedules?.find(
+                        (sch: any) => sch.student?.id === selectedStudent?.id
+                      );
+
+                      console.log("found schedule with student", schedule);
+
+                      return sessions
+                        .filter((s) => !schedule?.[s.key]) // show only null sessions
+                        .map((session) => (
+                          <SelectItem
+                            key={session.value}
+                            value={session.value}
+                            className="p-2 cursor-pointer focus:bg-gray-700 focus:text-white rounded-lg transition-colors ease-in-out duration-300"
+                          >
+                            <div className="flex items-center gap-2">
+                              <span
+                                className={`h-2 w-2 rounded-full ${session.color}`}
+                              />
+                              <span className="text-sm">{session.label}</span>
+                            </div>
+                          </SelectItem>
+                        ));
+                    })()}
                   </SelectContent>
                 </Select>
               </div>
@@ -292,6 +312,7 @@ export default function AddSchedule({
                       <th className="px-4 py-3">Course</th>
                       <th className="px-4 py-3">Session</th>
                       <th className="px-4 py-3">Instructor</th>
+                      <th className="px-4 py-3">Action</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 dark:divide-zinc-700">
@@ -303,22 +324,24 @@ export default function AddSchedule({
                           s.third_session === `${day} ${formattedTime}`
                       )
                       .map((schedule: any, idx: number) => {
-                        const { student, instructor } = schedule;
+                        const { student } = schedule;
                         const sessions = [
                           {
                             key: "First Session",
                             value: schedule.first_session,
+                            instructor: schedule.first_instructor,
                           },
                           {
                             key: "Second Session",
                             value: schedule.second_session,
+                            instructor: schedule.second_instructor,
                           },
                           {
                             key: "Third Session",
                             value: schedule.third_session,
+                            instructor: schedule.third_instructor,
                           },
                         ].filter((s) => s.value === `${day} ${formattedTime}`);
-
                         return sessions.map((session, i) => (
                           <tr
                             key={`${idx}-${i}`}
@@ -338,7 +361,7 @@ export default function AddSchedule({
                                     }`}
                                   </AvatarFallback>
                                 </Avatar>
-                                <span>
+                                <span className="capitalize">
                                   {student.firstName} {student.lastName}
                                 </span>
                               </div>
@@ -370,23 +393,37 @@ export default function AddSchedule({
                             </td>
 
                             <td className="px-4 py-3 text-neutral-700 dark:text-gray-400">
-                              <div className="flex items-center gap-2">
-                                <Avatar className="h-6 w-6">
-                                  {" "}
-                                  {/* Made avatar smaller */}
-                                  <AvatarImage src={instructor.image_URL!} />
-                                  <AvatarFallback className="text-xs font-semibold">
-                                    {" "}
-                                    {/* Made fallback text smaller */}
-                                    {`${instructor.firstName?.[0] ?? ""}${
-                                      instructor.lastName?.[0] ?? ""
-                                    }`}
-                                  </AvatarFallback>
-                                </Avatar>
-                                <span className="font-medium">
-                                  {instructor.firstName} {instructor.lastName}
+                              {session.instructor ? (
+                                <div className="flex items-center gap-2">
+                                  <Avatar className="h-6 w-6">
+                                    <AvatarImage
+                                      src={session.instructor.image_URL!}
+                                    />
+                                    <AvatarFallback className="text-xs font-semibold">
+                                      {`${
+                                        session.instructor.firstName?.[0] ?? ""
+                                      }${
+                                        session.instructor.lastName?.[0] ?? ""
+                                      }`}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                  <span className="font-medium">
+                                    {session.instructor.firstName}{" "}
+                                    {session.instructor.lastName}
+                                  </span>
+                                </div>
+                              ) : (
+                                <span className="text-sm text-gray-400">
+                                  N/A
                                 </span>
-                              </div>
+                              )}
+                            </td>
+                            <td>
+                              {/* TODO ADD DELETE SESSION */}
+                              <ScheduleAction
+                                id={schedule.id}
+                                session={session.key}
+                              />
                             </td>
                           </tr>
                         ));

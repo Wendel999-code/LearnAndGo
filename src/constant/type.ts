@@ -49,6 +49,7 @@ export type Enrollee = {
 };
 
 export type Schedule = {
+  id: string;
   first_session: string | null;
   second_session: string | null;
   third_session: string | null;

@@ -227,7 +227,7 @@ function SchedulePage() {
                                   <div className="text-yellow-500 text-[11px] font-medium leading-tight">
                                     {session?.course_key}
                                   </div>
-                                  <div className="text-[12px] font-semibold leading-tight">
+                                  <div className="text-[12px] font-semibold leading-tight capitalize">
                                     {session?.student?.firstName}{" "}
                                     {session?.student?.lastName}
                                   </div>

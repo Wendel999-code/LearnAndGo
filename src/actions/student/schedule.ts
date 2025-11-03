@@ -6,10 +6,25 @@ export async function getSchedules() {
   try {
     const res = await prisma.schedule.findMany({
       select: {
+        id: true,
         first_session: true,
         second_session: true,
         third_session: true,
-        instructor: {
+        first_instructor: {
+          select: {
+            firstName: true,
+            lastName: true,
+            image_URL: true,
+          },
+        },
+        second_instructor: {
+          select: {
+            firstName: true,
+            lastName: true,
+            image_URL: true,
+          },
+        },
+        third_instructor: {
           select: {
             firstName: true,
             lastName: true,
@@ -18,6 +33,7 @@ export async function getSchedules() {
         },
         student: {
           select: {
+            id: true,
             firstName: true,
             lastName: true,
             selfie_URL: true,
@@ -35,9 +51,13 @@ export async function getSchedules() {
       return { success: true, message: "No schedule found", data: [] };
     }
 
-    return { success: true, message: "Fetch Schedule successfully", data: res };
+    return {
+      success: true,
+      message: "Fetched schedules successfully",
+      data: res,
+    };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return {
       success: false,
       message: error instanceof Error ? error.message : "Unknown error",
@@ -148,13 +168,16 @@ export const addSchedule = async (
   try {
     const updateData: Record<string, any> = {};
 
-    //match newly added session
+    // match session to correct fields
     if (session === "first") {
       updateData.first_session = dayTime;
+      updateData.first_instructor_id = instructor_id;
     } else if (session === "second") {
       updateData.second_session = dayTime;
+      updateData.second_instructor_id = instructor_id;
     } else if (session === "third") {
       updateData.third_session = dayTime;
+      updateData.third_instructor_id = instructor_id;
     }
 
     await prisma.schedule.upsert({
@@ -162,7 +185,6 @@ export const addSchedule = async (
       update: updateData,
       create: {
         student_id,
-        instructor_id,
         ...updateData,
       },
     });
@@ -173,6 +195,37 @@ export const addSchedule = async (
     return {
       success: false,
       message: error instanceof Error ? error.message : "Unknown error",
+      data: null,
+    };
+  }
+};
+
+export const deleteSession = async (id: string, session: string) => {
+  try {
+    const deleteData: Record<string, any> = {};
+
+    if (session === "First Session") {
+      deleteData.first_session = null;
+      deleteData.first_instructor_id = null;
+    } else if (session === "Second Session") {
+      deleteData.second_session = null;
+      deleteData.second_instructor_id = null;
+    } else if (session === "Third Session") {
+      deleteData.third_session = null;
+      deleteData.third_instructor_id = null;
+    }
+
+    await prisma.schedule.update({
+      where: { id },
+      data: deleteData,
+    });
+
+    return { success: true, message: "Successfully deleted session" };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Server error",
       data: null,
     };
   }

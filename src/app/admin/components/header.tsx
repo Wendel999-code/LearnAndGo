@@ -3,9 +3,10 @@
 import { ModeToggle } from "@/components/mode-toggle";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { dark, shadcn } from "@clerk/themes";
-import { CarIcon } from "lucide-react";
+import { Bell, CarIcon } from "lucide-react";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 
 function Header() {
   const { isLoaded } = useUser();
@@ -34,6 +35,19 @@ function Header() {
 
         {/* Actions */}
         <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative cursor-pointer"
+          >
+            <Bell className="size-5" />
+
+            <span className="absolute top-1 right-0 flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+            </span>
+          </Button>
+
           <ModeToggle />
           {isLoaded ? (
             <UserButton appearance={{ baseTheme: dark, theme: shadcn }} />
