@@ -59,9 +59,7 @@ export function GenericTable<TData, TValue>({
     <div className=" border  bg-theme p-2  shadow-sm ">
       <div className="flex items-center justify-between mb-4">
         {title && (
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-            {title}
-          </h2>
+          <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
         )}
         {searchKey && (
           <Input

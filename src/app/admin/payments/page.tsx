@@ -4,8 +4,10 @@ import { GenericTable } from "@/components/GenericTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import EnrolleeAction from "../enrollee/components/EnrolleeAction";
-import { useGetEnrollees } from "@/hooks/use-student";
 import { formatToMDYWithTime } from "@/lib/utils/date";
+import { useGetInvoices } from "@/hooks/use-invoice";
+import toast from "react-hot-toast";
+import PaymentAction from "./components/PaymentAction";
 
 // table col header
 type Payment = {
@@ -21,7 +23,12 @@ type Payment = {
 };
 
 export default function PaymentsPage() {
-  const { data: enrollees, isLoading, error } = useGetEnrollees();
+  const { data: enrollees, isLoading, error } = useGetInvoices();
+
+  const handleCopy = (ref: string) => {
+    navigator.clipboard.writeText(ref);
+    toast.success("Reference number copied to clipboard.");
+  };
 
   const tableData: Payment[] = enrollees
     ? enrollees?.map((enrollee) => ({
@@ -88,8 +95,46 @@ export default function PaymentsPage() {
         return <span>₱{value.toLocaleString()}</span>;
       },
     },
-    { accessorKey: "payment_channel", header: "Payment Mode" },
-    { accessorKey: "reference_no", header: "Reference No." },
+    {
+      accessorKey: "payment_channel",
+      header: "Payment Mode",
+      cell: ({ row }) => {
+        const val = row.getValue(
+          "payment_channel"
+        ) as Payment["payment_channel"];
+        const isGcash = val?.toUpperCase() === "GCASH";
+
+        return (
+          <Badge
+            className={
+              isGcash
+                ? " bg-[#007AFF]  text-white border-none"
+                : "bg-gray-200 text-gray-800"
+            }
+          >
+            {val ?? "N/A"}
+          </Badge>
+        );
+      },
+    },
+    {
+      accessorKey: "reference_no",
+      header: "Reference No.",
+      cell: ({ row }) => {
+        const ref = row.getValue("reference_no") as string;
+
+        return (
+          <button
+            onClick={() => handleCopy(ref)}
+            className="text-sm text-yellow-600 hover:underline  cursor-pointer"
+            title="Click to copy"
+          >
+            {ref}
+          </button>
+        );
+      },
+    },
+
     {
       accessorKey: "status",
       header: "Payment Status",
@@ -108,7 +153,7 @@ export default function PaymentsPage() {
       header: "Actions",
       id: "actions",
       enableHiding: false,
-      // cell: ({ row }) => <EnrolleeAction enrollee_id={row.original.id} />,
+      cell: ({ row }) => <PaymentAction enrollee_id={row.original.id} />,
     },
   ];
 
