@@ -362,19 +362,6 @@ export async function getStudents() {
             courseTitle: true,
           },
         },
-        schedule: {
-          select: {
-            first_session: true,
-            second_session: true,
-            third_session: true,
-            instructor: {
-              select: {
-                firstName: true,
-                lastName: true,
-              },
-            },
-          },
-        },
       },
     });
 
