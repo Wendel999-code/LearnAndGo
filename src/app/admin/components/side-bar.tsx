@@ -61,11 +61,12 @@ function SideBar() {
       <nav className="flex-1 overflow-y-auto px-2 py-4 space-y-1">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
+          const isEnrollee = item.label === "Enrollees";
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-300
+              className={`flex items-center relative gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-300
           ${
             isActive
               ? "bg-gradient-to-r font-sans from-yellow-400 via-yellow-500 to-yellow-600 text-black  shadow-md"
@@ -85,6 +86,15 @@ function SideBar() {
               >
                 {item.label}
               </span>
+
+              {isEnrollee && (
+                <span className="absolute top-1.5 right-1 flex items-center justify-center">
+                  <span className="absolute inline-flex size-5.5 rounded-full bg-red-400 opacity-75 animate-ping"></span>
+                  <span className="relative inline-flex items-center justify-center size-5 rounded-full bg-red-600 text-[10px] font-semibold text-white shadow-sm">
+                    1
+                  </span>
+                </span>
+              )}
             </Link>
           );
         })}

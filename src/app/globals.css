@@ -333,3 +333,13 @@
   color: #888;
   border-top-color: #333;
 }
+.clip-triangle-tl {
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+.clip-triangle-br {
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+
+.bg-global {
+  background-color: #282a2c;
+}

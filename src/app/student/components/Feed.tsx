@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Clapperboard, Ellipsis, Images, Video } from "lucide-react";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 function Feed() {
   return (
@@ -90,7 +91,9 @@ function Feed() {
             </div>
 
             <div className="rounded-full ">
-              <Ellipsis className="mb-6 dark:text-gray-400 w-6 h-6 cursor-pointer rounded-full  hover:bg-gray-800 " />
+              <Button className="rounded-full  hover:bg-gray-800">
+                <Ellipsis className="mb-6 dark:text-gray-400 w-6 h-6  " />
+              </Button>
             </div>
           </div>
           <p className="text-gray-700 dark:text-gray-300">

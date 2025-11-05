@@ -124,6 +124,17 @@ const certificateData = [
   },
 ];
 
+const wendelTDCData = {
+  recipientName: "SABAYO, WENDEL PARAY",
+  courseName: "Theoretical Driving Course (TDC)",
+  courseHours: 15,
+  issuerName: "Learn and Go Driving School",
+  issuerLocation: "Brgy. Sabang I, Allen, Northern Samar, Philippines, 6405",
+  issueDate: "1st of February 2022",
+  controlNumber: "DS-LAGS0803-A-2021-00000051",
+  administratorName: "Wendel clark dawson",
+};
+
 // Main Component
 function Certificates() {
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -305,6 +316,7 @@ function Certificates() {
         <Generate
           isGenerating={isGenerating}
           setIsGenerating={setIsGenerating}
+          certificateData={wendelTDCData}
         />
       )}
     </>

@@ -6,147 +6,118 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
-  DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+
+// Certificate data structure
+type CertificateData = {
+  recipientName: string;
+  courseName: string;
+  courseHours: number;
+  issuerName: string;
+  issuerLocation: string;
+  issueDate: string;
+  controlNumber: string;
+  administratorName: string;
+};
 
 type GenerateProps = {
   isGenerating: boolean;
   setIsGenerating: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-type CertificateData = {
-  studentName: string;
-  licenseNumber: string;
-  dob: string;
-  issueDate: string;
+  certificateData: CertificateData | null;
 };
 
 export default function Generate({
   isGenerating,
   setIsGenerating,
+  certificateData,
 }: GenerateProps) {
-  const [certificateData, setCertificateData] =
-    useState<CertificateData | null>(null);
+  if (!certificateData) return null;
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const data = Object.fromEntries(formData.entries()) as CertificateData;
-
-    setCertificateData(data);
-    console.log("Generating certificate:", data);
-  };
+  const {
+    recipientName,
+    courseName,
+    courseHours,
+    issuerName,
+    issuerLocation,
+    issueDate,
+    controlNumber,
+    administratorName,
+  } = certificateData;
 
   return (
     <Dialog open={isGenerating} onOpenChange={setIsGenerating}>
-      {!certificateData ? (
-        <form onSubmit={handleSubmit}>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Generate Driving Certificate</DialogTitle>
-              <DialogDescription>
-                Confirm the student’s details before generating the certificate.
-              </DialogDescription>
-            </DialogHeader>
+      <DialogTitle hidden>Certificate</DialogTitle>
+      <DialogContent className="!max-w-3xl bg-[#282a2c]">
+        <div
+          className="relative bg-white mt-4 border-4 border-yellow-400 p-0 rounded-none shadow-xl overflow-hidden"
+          style={{
+            backgroundImage: `url('/bg.jpg')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          {/* Background overlay to control opacity */}
+          <div className="absolute inset-0 bg-white opacity-90"></div>
+          {/* Background with corner accents */}
+          <div className="absolute top-0 left-0 w-32 h-32 bg-yellow-400 clip-triangle-tl"></div>
+          <div className="absolute bottom-0 right-0 w-32 h-32 bg-yellow-400 clip-triangle-br"></div>
 
-            <div className="grid gap-4 py-4">
-              {[
-                ["studentName", "Student Name", "Jane Doe"],
-                ["licenseNumber", "License Number", "C-98765-43210"],
-                ["dob", "Date of Birth", "1998-03-15"],
-                [
-                  "issueDate",
-                  "Issuing Date",
-                  new Date().toISOString().split("T")[0],
-                ],
-              ].map(([id, label, def]) => (
-                <div key={id} className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor={id} className="text-right">
-                    {label}
-                  </Label>
-                  <Input
-                    id={id}
-                    name={id}
-                    defaultValue={def}
-                    className="col-span-3"
-                    type={id.includes("date") ? "date" : "text"}
-                  />
-                </div>
-              ))}
+          {/* Content container */}
+          <div className="relative z-10  px-16 py-12 text-center font-serif">
+            {/* Header */}
+            <div className="flex flex-col items-center mb-6">
+              <h1 className="text-3xl font-extrabold uppercase tracking-wide text-gray-800">
+                Certificate of Completion
+              </h1>
             </div>
 
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
-              </DialogClose>
-              <Button type="submit">Generate</Button>
-            </DialogFooter>
-          </DialogContent>
-        </form>
-      ) : (
-        <DialogContent className="sm:max-w-[700px] bg-white border p-10 rounded-xl shadow-md">
-          <div className="text-center border-b pb-6 mb-6">
-            <h1 className="text-3xl font-bold tracking-wide text-gray-800">
-              Official Certificate of Driving Competence
-            </h1>
-            <p className="text-gray-500 mt-2">
-              Issued by: National Driving Authority
+            {/* Recipient and details */}
+            <p className="mt-6 text-lg text-gray-700">
+              This certificate is given to
             </p>
-          </div>
-
-          <div className="text-lg leading-relaxed text-gray-700 space-y-4">
-            <p>
-              This is to certify that{" "}
-              <strong>{certificateData.studentName}</strong> has successfully
-              completed the required training and assessments to qualify as a
-              competent and responsible driver.
+            <h2 className="text-2xl font-bold uppercase mt-2 mb-4 text-gray-900">
+              {recipientName}
+            </h2>
+            <p className="text-base text-gray-700 leading-relaxed max-w-2xl mx-auto">
+              for successfully completing the {courseHours} Hours of{" "}
+              {courseName}.
             </p>
 
-            <div className="mt-6 border-t border-b py-4 space-y-2">
+            {/* Info section */}
+            <div className="mt-8 border-y border-gray-300 text-black py-4 space-y-2 text-base">
               <p>
-                <strong>License Number:</strong> {certificateData.licenseNumber}
+                <strong>Given this:</strong> {issueDate}
               </p>
               <p>
-                <strong>Date of Birth:</strong> {certificateData.dob}
+                <strong>At:</strong> {issuerLocation}
               </p>
               <p>
-                <strong>Date of Issue:</strong> {certificateData.issueDate}
+                <strong>Certificate Control No:</strong> {controlNumber}
               </p>
             </div>
 
-            <p className="mt-6">
-              This certificate is issued in recognition of the individual’s
-              adherence to driving laws, safety standards, and professional
-              ethics.
-            </p>
-          </div>
-
-          <div className="mt-10 flex justify-between items-center">
-            <div>
-              <p className="font-semibold">__________________________</p>
-              <p className="text-sm text-gray-500">Authorized Officer</p>
-            </div>
-            <div>
-              <p className="font-semibold">__________________________</p>
-              <p className="text-sm text-gray-500">
-                Registrar, Driving Authority
-              </p>
+            {/* Signature */}
+            <div className="mt-10 text-right pr-10">
+              <p className="font-semibold text-gray-800">{administratorName}</p>
+              <p className="text-sm text-gray-500">School Administrator</p>
             </div>
           </div>
-
-          <DialogFooter className="mt-8">
-            <DialogClose asChild>
-              <Button variant="outline">Close</Button>
-            </DialogClose>
-            <Button onClick={() => window.print()}>Print / Save as PDF</Button>
-          </DialogFooter>
-        </DialogContent>
-      )}
+        </div>
+        {/* Footer buttons */}
+        <DialogFooter className="p-4 flex justify-end space-x-3">
+          <DialogClose asChild>
+            <Button variant="outline">Close</Button>
+          </DialogClose>
+          <Button
+            onClick={() => window.print()}
+            className="bg-yellow-500 text-white hover:bg-yellow-600"
+          >
+            Print
+          </Button>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   );
 }
