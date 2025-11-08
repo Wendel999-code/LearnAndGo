@@ -16,6 +16,7 @@ import {
   BookOpenCheck,
   Speech,
 } from "lucide-react";
+import { useGetEnrollees } from "@/hooks/use-student";
 
 const navItems = [
   { label: "Home", href: "/admin", icon: Home },
@@ -31,6 +32,10 @@ const navItems = [
 function SideBar() {
   const [open, setOpen] = useState(true);
   const pathname = usePathname();
+
+  const { data: enrollee, isLoading } = useGetEnrollees();
+
+  if (isLoading) return null;
 
   return (
     <aside
@@ -91,7 +96,7 @@ function SideBar() {
                 <span className="absolute top-1.5 right-1 flex items-center justify-center">
                   <span className="absolute inline-flex size-5.5 rounded-full bg-red-400 opacity-75 animate-ping"></span>
                   <span className="relative inline-flex items-center justify-center size-5 rounded-full bg-red-600 text-[10px] font-semibold text-white shadow-sm">
-                    1
+                    {enrollee?.length}
                   </span>
                 </span>
               )}

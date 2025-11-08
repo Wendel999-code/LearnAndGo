@@ -1,7 +1,7 @@
 import {
   getEnrollee,
   getEnrollees,
-  getStudents,
+  getEnrolledStudents,
   verifyEnrollee,
 } from "@/actions/student/student";
 import { Enrollee, EnrolleeInvoice } from "@/constant/type";
@@ -68,7 +68,7 @@ export const useGetStudents = () =>
   useQuery<Partial<Enrollee>[]>({
     queryKey: ["get-students"],
     queryFn: async () => {
-      const res = await getStudents();
+      const res = await getEnrolledStudents();
       if (!res.success) throw new Error(res.message);
       return res.data!;
     },

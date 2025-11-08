@@ -211,9 +211,7 @@ export async function getEnrollees() {
   try {
     const enrollees = await prisma.student.findMany({
       where: {
-        NOT: {
-          OR: [{ status: "ENROLLED" }, { status: "GRADUATED" }],
-        },
+        status: "PENDING",
       },
       include: {
         invoices: true,
@@ -350,18 +348,19 @@ export async function verifyEnrollee(enrolle_id: string) {
   }
 }
 
-export async function getStudents() {
+export async function getEnrolledStudents() {
   try {
     const student = await prisma.student.findMany({
-      where: {
-        OR: [{ status: "ENROLLED" }, { status: "GRADUATED" }],
-      },
+      where: { status: "ENROLLED" },
       include: {
         course: {
           select: {
-            courseTitle: true,
+            courseCode: true,
           },
         },
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
 
