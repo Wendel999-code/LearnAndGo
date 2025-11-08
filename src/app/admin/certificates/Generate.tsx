@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,6 +9,8 @@ import {
   DialogFooter,
   DialogTitle,
 } from "@/components/ui/dialog";
+import toast from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 
 // Certificate data structure
 type CertificateData = {
@@ -33,13 +35,55 @@ export default function Generate({
   setIsGenerating,
   certificateData,
 }: GenerateProps) {
+  const [isCapturing, setIsCapturing] = useState(false);
+  const certRef = useRef<HTMLDivElement>(null);
+
+  const handleDownload = async () => {
+    if (!certRef.current) return;
+    setIsCapturing(true);
+
+    try {
+      const { toPng } = await import("html-to-image");
+      const node = certRef.current;
+
+      // Optional cleanup before capture
+      node.classList.add("capture-clean");
+
+      const dataUrl = await toPng(node, {
+        backgroundColor: "#ffffff",
+        pixelRatio: 2, // higher resolution, prevents aliasing seams
+        cacheBust: true,
+        style: {
+          boxShadow: "none",
+          border: "none",
+          outline: "none",
+          transform: "scale(1)",
+          transformOrigin: "top left",
+        },
+      });
+
+      node.classList.remove("capture-clean");
+
+      const link = document.createElement("a");
+      link.download = `${certificateData?.recipientName}_PDC_Certificate.png`;
+      link.href = dataUrl;
+      link.click();
+
+      setIsGenerating(false);
+      toast.success("Sent email to recipient.");
+    } catch (error) {
+      console.error("Download error:", error);
+    } finally {
+      setIsCapturing(false);
+    }
+  };
+
   if (!certificateData) return null;
 
   const {
     recipientName,
     courseName,
     courseHours,
-    issuerName,
     issuerLocation,
     issueDate,
     controlNumber,
@@ -49,9 +93,10 @@ export default function Generate({
   return (
     <Dialog open={isGenerating} onOpenChange={setIsGenerating}>
       <DialogTitle hidden>Certificate</DialogTitle>
-      <DialogContent className="!max-w-3xl bg-[#282a2c]">
+      <DialogContent className="!max-w-3xl bg-[#282a2c] h-[90vh]">
         <div
-          className="relative bg-white mt-4 border-4 border-yellow-400 p-0 rounded-none shadow-xl overflow-hidden"
+          ref={certRef}
+          className="relative bg-white mt-2 border-4 border-yellow-400 p-0 rounded-none shadow-xl overflow-hidden"
           style={{
             backgroundImage: `url('/bg.jpg')`,
             backgroundSize: "cover",
@@ -59,16 +104,26 @@ export default function Generate({
           }}
         >
           {/* Background overlay to control opacity */}
-          <div className="absolute inset-0 bg-white opacity-90"></div>
+          <div
+            className="absolute inset-0"
+            style={{ backgroundColor: "rgba(255,255,255,0.9)" }}
+          />
           {/* Background with corner accents */}
           <div className="absolute top-0 left-0 w-32 h-32 bg-yellow-400 clip-triangle-tl"></div>
           <div className="absolute bottom-0 right-0 w-32 h-32 bg-yellow-400 clip-triangle-br"></div>
 
           {/* Content container */}
-          <div className="relative z-10  px-16 py-12 text-center font-serif">
+          <div className="relative z-10   text-center font-serif">
             {/* Header */}
             <div className="flex flex-col items-center mb-6">
-              <h1 className="text-3xl font-extrabold uppercase tracking-wide text-gray-800">
+              <h3 className="text-xl font-semibold uppercase tracking-wide text-yellow-500">
+                Learn and Go <br />{" "}
+                <span className="text-sm font-light uppercase tracking-wide text-yellow-500">
+                  Professional Driving School
+                </span>
+              </h3>
+
+              <h1 className="text-3xl mt-2 font-extrabold uppercase tracking-wide text-gray-800">
                 Certificate of Completion
               </h1>
             </div>
@@ -99,9 +154,25 @@ export default function Generate({
             </div>
 
             {/* Signature */}
-            <div className="mt-10 text-right pr-10">
-              <p className="font-semibold text-gray-800">{administratorName}</p>
-              <p className="text-sm text-gray-500">School Administrator</p>
+            <div className=" text-center flex justify-evenly mt-6 items-center  ">
+              <div className="size-12">
+                <img
+                  src="/lto.jpg"
+                  width={100}
+                  height={100}
+                  alt="LTO"
+                  className={"rounded-full  object-contain opacity-100"}
+                />
+              </div>
+              <div>
+                {" "}
+                <p className="font-semibold text-gray-800">
+                  {administratorName}
+                </p>
+                <p className="text-[10px] text-gray-500">
+                  School Administrator
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -111,10 +182,17 @@ export default function Generate({
             <Button variant="outline">Close</Button>
           </DialogClose>
           <Button
-            onClick={() => window.print()}
-            className="bg-yellow-500 text-white hover:bg-yellow-600"
+            onClick={handleDownload}
+            disabled={isCapturing}
+            className="bg-yellow-700 text-white hover:bg-yellow-600"
           >
-            Print
+            {isCapturing ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" /> Preparing...
+              </>
+            ) : (
+              "Download Certificate"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

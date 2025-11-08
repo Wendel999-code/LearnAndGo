@@ -115,6 +115,8 @@ function Students() {
         );
       },
     },
+
+    //TODO MAKE A DB FOR SESSIONS ATTENDANCE
     {
       accessorKey: "firstSession",
       header: "1st Session",

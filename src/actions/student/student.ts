@@ -377,3 +377,40 @@ export async function getEnrolledStudents() {
     return { success: false, message: error.message, data: [] };
   }
 }
+
+export async function getGraduatedStudents() {
+  try {
+    const student = await prisma.student.findMany({
+      where: { status: "GRADUATED" },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        updatedAt: true,
+        //TODO ADD CERTIFICATE STATUS AND SCHEMA
+
+        course: {
+          select: {
+            courseTitle: true,
+          },
+        },
+      },
+
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    if (student.length === 0)
+      return {
+        success: true,
+        message: "No student found.",
+        data: [],
+      };
+
+    return { success: true, message: "Fetched students.", data: student };
+  } catch (error: any) {
+    console.log(error.message);
+    return { success: false, message: error.message, data: [] };
+  }
+}

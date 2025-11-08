@@ -3,6 +3,7 @@ import {
   getEnrollees,
   getEnrolledStudents,
   verifyEnrollee,
+  getGraduatedStudents,
 } from "@/actions/student/student";
 import { Enrollee, EnrolleeInvoice } from "@/constant/type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -77,3 +78,19 @@ export const useGetStudents = () =>
     retry: 1,
     refetchOnWindowFocus: true,
   });
+
+export const useGetGraduatedStudents = () =>
+  useQuery<Partial<Enrollee>[]>({
+    queryKey: ["get-graduated-students"],
+    queryFn: async () => {
+      const res = await getGraduatedStudents();
+      if (!res.success) throw new Error(res.message);
+      return res.data!;
+    },
+    staleTime: 60 * 60 * 1000, // 1 hour
+    gcTime: 30 * 60 * 1000, // 30 minutes
+    retry: 1,
+    refetchOnWindowFocus: true,
+  });
+
+getGraduatedStudents;
