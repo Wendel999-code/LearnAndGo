@@ -17,6 +17,7 @@ import {
   Speech,
 } from "lucide-react";
 import { useGetEnrollees } from "@/hooks/use-student";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const navItems = [
   { label: "Home", href: "/admin", icon: Home },
@@ -34,8 +35,6 @@ function SideBar() {
   const pathname = usePathname();
 
   const { data: enrollee, isLoading } = useGetEnrollees();
-
-  if (isLoading) return null;
 
   return (
     <aside
@@ -94,10 +93,21 @@ function SideBar() {
 
               {isEnrollee && (
                 <span className="absolute top-1.5 right-1 flex items-center justify-center">
-                  <span className="absolute inline-flex size-5.5 rounded-full bg-red-400 opacity-75 animate-ping"></span>
-                  <span className="relative inline-flex items-center justify-center size-5 rounded-full bg-red-600 text-[10px] font-semibold text-white shadow-sm">
-                    {enrollee?.length}
-                  </span>
+                  {isLoading ? (
+                    <>
+                      <Skeleton
+                        className="w-4 h-4 rounded-full animate-pulse bg-gradient-to-r 
+             from-red-400 via-red-500 to-red-400"
+                      />
+                    </>
+                  ) : (enrollee?.length ?? 0) > 0 ? (
+                    <>
+                      <span className="absolute inline-flex w-5.5 h-5.5 rounded-full bg-red-400 opacity-75 animate-ping"></span>
+                      <span className="relative inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-600 text-[10px] font-semibold text-white shadow-sm">
+                        {enrollee?.length}
+                      </span>
+                    </>
+                  ) : null}
                 </span>
               )}
             </Link>

@@ -49,6 +49,7 @@ function Header() {
           </Button>
 
           <ModeToggle />
+
           {isLoaded ? (
             <UserButton appearance={{ baseTheme: dark, theme: shadcn }} />
           ) : (
