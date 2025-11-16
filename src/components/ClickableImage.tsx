@@ -31,8 +31,12 @@ export const ClickableImage: React.FC<ClickableImageProps> = ({
         alt={alt}
         width={width}
         height={height}
-        className={cn("transition-opacity group-hover:opacity-90", className)}
+        className={cn(
+          "rounded-lg transition-opacity group-hover:opacity-90 object-cover w-full aspect-video",
+          className
+        )}
       />
+
       {showExpandIcon && (
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
           <div className="bg-black/50 backdrop-blur-sm rounded-full p-2">

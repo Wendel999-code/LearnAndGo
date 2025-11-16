@@ -18,6 +18,14 @@ import {
 } from "lucide-react";
 import { useGetEnrollees } from "@/hooks/use-student";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useGetStudentWithoutSchedule } from "@/hooks/use-schedule";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 const navItems = [
   { label: "Home", href: "/admin", icon: Home },
@@ -31,10 +39,14 @@ const navItems = [
 ];
 
 function SideBar() {
+  const { data: enrollee, isLoading } = useGetEnrollees();
+  const { data: students, isLoading: isLoadingStudents } =
+    useGetStudentWithoutSchedule();
+
+  console.log("Students without schedule:", students);
+
   const [open, setOpen] = useState(true);
   const pathname = usePathname();
-
-  const { data: enrollee, isLoading } = useGetEnrollees();
 
   return (
     <aside
@@ -66,6 +78,7 @@ function SideBar() {
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           const isEnrollee = item.label === "Enrollees";
+          const isSchedule = item.label === "Schedule";
           return (
             <Link
               key={item.href}
@@ -109,6 +122,72 @@ function SideBar() {
                     </>
                   ) : null}
                 </span>
+              )}
+
+              {isSchedule && (
+                <>
+                  {" "}
+                  <span className="absolute top-1.5 right-1 flex items-center justify-center">
+                    {isLoadingStudents ? (
+                      <>
+                        <Skeleton
+                          className="w-4 h-4 rounded-full animate-pulse bg-gradient-to-r 
+             from-red-400 via-red-500 to-red-400"
+                        />
+                      </>
+                    ) : (students?.length ?? 0) > 0 ? (
+                      <>
+                        <span className="relative inline-flex w-5 h-5">
+                          {/* Ping background */}
+                          <span className="absolute inline-flex h-full w-full rounded-full bg-yellow-500 opacity-75 animate-ping"></span>
+
+                          {/* Foreground + Hover Trigger */}
+                          <HoverCard>
+                            <HoverCardTrigger asChild>
+                              <span className="relative inline-flex items-center justify-center w-5 h-5 rounded-full bg-yellow-600 text-[10px] font-semibold text-white shadow-sm cursor-pointer">
+                                {students?.length}
+                              </span>
+                            </HoverCardTrigger>
+
+                            <HoverCardContent className="w-40 rounded-md shadow-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-3">
+                              <div className="flex flex-col gap-1.5">
+                                <p className="text-xs font-semibold text-gray-500 dark:text-gray-400">
+                                  {students?.length} Student
+                                  {students?.length !== 1 ? "s" : ""} without a
+                                  session
+                                </p>
+
+                                <div className="flex flex-col gap-1 max-h-32 overflow-y-auto">
+                                  {students?.map((student) => (
+                                    <div
+                                      key={student.id}
+                                      className="flex items-center gap-2 p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                    >
+                                      <img
+                                        src={student.selfie_URL}
+                                        alt={`${student.firstName} ${student.lastName}`}
+                                        className="w-6 h-6 rounded-full object-cover border border-gray-300 dark:border-gray-600"
+                                      />
+                                      <div className="flex flex-col text-xs">
+                                        <span className="font-medium text-gray-900 dark:text-gray-100">
+                                          {student.firstName} {student.lastName}
+                                        </span>
+                                        <span className="text-gray-500 dark:text-gray-400">
+                                          {student.course?.courseCode ||
+                                            "No course info"}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            </HoverCardContent>
+                          </HoverCard>
+                        </span>
+                      </>
+                    ) : null}
+                  </span>
+                </>
               )}
             </Link>
           );

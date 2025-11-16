@@ -24,6 +24,8 @@ import toast from "react-hot-toast";
 import { ClickableImage } from "@/components/ClickableImage";
 import { useImageViewer } from "@/hooks/use-image";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import Image from "next/image";
 
 type ApplicationModalProps = {
   isPreview: boolean;
@@ -63,8 +65,7 @@ function ApplicationModalComponent({
   return (
     <>
       <Dialog open={isPreview} onOpenChange={setIsPreview}>
-        <DialogContent className="!max-w-4xl max-h-[90vh] flex flex-col p-0 bg-white dark:bg-slate-900 border-0 shadow-2xl">
-          {/* 1. Modern Header */}
+        <DialogContent className="!max-w-4xl max-h-[100vh] flex flex-col p-0 bg-white dark:bg-slate-900 border-0 shadow-2xl">
           <DialogHeader className="p-6 pb-4">
             <DialogTitle className="text-xl font-bold text-slate-900 dark:text-slate-100">
               Enrollment Application
@@ -77,17 +78,15 @@ function ApplicationModalComponent({
 
           <Separator />
 
-          {/* 2. Scrollable Content Area */}
           <div className="flex-1 overflow-y-auto p-6">
             {isLoading && <ApplicationSkeleton />}
 
             {error && <ErrorState onRetry={refetch} />}
 
             {!isLoading && enrollee && (
-              /* 3. New Two-Column Layout */
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-8 gap-y-6">
+              <div className="flex flex-col  gap-x-8 gap-y-6">
                 {/* Left (Sticky) Column */}
-                <section className="lg:col-span-5 lg:sticky lg:top-0 space-y-4">
+                <section className="lg:col-span-5  space-y-4">
                   <div className="flex items-center gap-2">
                     <User className="h-4 w-4 text-amber-500" />
                     <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200">
@@ -105,7 +104,7 @@ function ApplicationModalComponent({
                 </section>
 
                 {/* Right (Scrollable) Column */}
-                <section className="lg:col-span-7 space-y-6">
+                <section className="lg:col-span-7 space-y-6 overflow-hidden">
                   {/* Documents Section */}
                   <div className="space-y-4">
                     <div className="flex items-center gap-2">
@@ -118,17 +117,16 @@ function ApplicationModalComponent({
                       <ClickableImage
                         src={enrollee.valid_id_URL}
                         alt="Valid ID"
-                        width={300}
-                        height={300}
-                        className="rounded-lg object-cover w-full aspect-video border border-slate-200 dark:border-slate-700"
+                        width={600}
+                        height={400}
                         onClick={() => openViewer(images, 0)}
                       />
+
                       <ClickableImage
                         src={enrollee.selfie_URL}
                         alt="Selfie"
-                        width={300}
-                        height={300}
-                        className="rounded-lg object-cover w-full aspect-video border border-slate-200 dark:border-slate-700"
+                        width={600}
+                        height={400}
                         onClick={() => openViewer(images, 1)}
                       />
                     </div>
@@ -208,7 +206,7 @@ function ApplicationModalComponent({
                   <div className="pt-2">
                     <Button
                       disabled={isVerifying}
-                      onClick={handleVerify} // Use onClick, onClickCapture is rare
+                      onClick={handleVerify}
                       size="lg"
                       className="w-full cursor-pointer h-11 text-base font-semibold rounded-lg shadow-md bg-yellow-600 text-white hover:bg-yellow-700 "
                     >
@@ -227,16 +225,19 @@ function ApplicationModalComponent({
         </DialogContent>
       </Dialog>
 
-      {/* Image Viewer Dialog (Unchanged) */}
+      {/* Image Viewer Dialog  */}
       {viewerState.isOpen && (
         <Dialog open={viewerState.isOpen} onOpenChange={closeViewer}>
-          <DialogTitle></DialogTitle>
-          <DialogContent className="max-w-5xl p-0 bg-black/90 border-0 shadow-2xl">
-            <img
-              src={viewerState.images[viewerState.initialIndex]}
-              alt="Preview"
-              className="w-full max-h-[80vh] object-contain rounded-lg"
-            />
+          <DialogTitle />
+          <DialogContent className="!max-w-5xl p-0">
+            <div className="relative  h-[80vh] p-2 rounded-lg">
+              <Image
+                src={viewerState.images[viewerState.initialIndex]}
+                alt="Preview"
+                fill
+                className="object-contain"
+              />
+            </div>
           </DialogContent>
         </Dialog>
       )}

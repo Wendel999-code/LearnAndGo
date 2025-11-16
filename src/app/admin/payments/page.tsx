@@ -3,7 +3,6 @@
 import { GenericTable } from "@/components/GenericTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import EnrolleeAction from "../enrollee/components/EnrolleeAction";
 import { formatToMDYWithTime } from "@/lib/utils/date";
 import { useGetInvoices } from "@/hooks/use-invoice";
 import toast from "react-hot-toast";

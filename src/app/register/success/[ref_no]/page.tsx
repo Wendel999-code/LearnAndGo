@@ -9,6 +9,8 @@ import { registerSuccessfully } from "@/actions/student/student";
 import { useRouter } from "next/navigation";
 import Loading from "@/app/loading";
 
+//TODO ADD DOWNLOAD PDF RECEIPT FUNCTIONALITY
+
 export default function RegisterSuccess({
   params,
 }: {

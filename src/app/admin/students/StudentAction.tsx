@@ -38,13 +38,15 @@ import { useState } from "react";
 const SESSIONS = ["firstSession", "secondSession", "thirdSession"] as const;
 
 interface StudentActionProps {
-  enrollee_id: string;
+  student_id: string;
+  student: Record<string, string>;
   currentAttendance: Record<string, string>;
   onAttendanceChange: (sessionKey: string, value: string) => void;
 }
 
 function StudentAction({
-  enrollee_id,
+  student_id,
+  student,
   currentAttendance,
   onAttendanceChange,
 }: StudentActionProps) {
@@ -156,39 +158,44 @@ function StudentAction({
 
       {/* //Dialog to mark complete */}
       <Dialog open={isCompleteOpen} onOpenChange={setIsCompleteOpen}>
-        <DialogContent className="sm:max-w-md dark:bg-gray-800">
-          <DialogHeader className="pt-4">
-            {/* --- Polished: Added Icon --- */}
-            <div className="flex justify-center pb-2">
-              <CheckCircle2 className="h-12 w-12 text-green-500" />
+        <DialogContent className="sm:max-w-md dark:bg-gray-800 rounded-xl shadow-lg p-0">
+          <DialogHeader className="pt-8 pb-4 px-6 space-y-4">
+            {/* Icon */}
+            <div className="flex justify-center">
+              <CheckCircle2 className="h-14 w-14 text-green-500" />
             </div>
-            {/* --- --- */}
-            <DialogTitle className="text-center text-xl">
+
+            <DialogTitle className="text-center text-2xl font-semibold tracking-tight">
               Confirm Course Completion
             </DialogTitle>
-            <DialogDescription className="text-muted-foreground text-center">
-              This will mark the student as complete with the practical driving
-              course and ready for certificate generation. Are you sure?
+
+            <DialogDescription className="text-center text-muted-foreground leading-relaxed px-2">
+              This action will mark
+              <span className="font-semibold text-foreground text-lg mx-1">
+                {student.name}
+              </span>
+              as complete for
+              <span className="font-semibold text-foreground text-lg mx-1">
+                {student.course}
+              </span>
+              and prepare their certificate. Are you sure you want to proceed?
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="pt-4 sm:justify-center">
-            {/* Polished: Changed to "ghost" for a cleaner, secondary action */}
+
+          <DialogFooter className="pb-6 sm:justify-center gap-2 px-6">
             <Button
               type="button"
-              variant="ghost" // Changed from outline
+              variant="ghost"
+              className="px-6"
               onClick={() => setIsCompleteOpen(false)}
             >
               Cancel
             </Button>
-            {/* Polished: Added green "success" button for the primary action */}
+
             <Button
               type="button"
-              className="bg-green-600 hover:bg-green-700 text-white" // Success color
-              onClick={() => {
-                // Add your logic to mark as complete here
-                console.log("Marking student as complete...");
-                setIsCompleteOpen(false); // Close dialog on confirm
-              }}
+              className="px-6 bg-green-600 hover:bg-green-700 text-white font-medium"
+              onClick={() => {}}
             >
               Confirm & Mark Complete
             </Button>

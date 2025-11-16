@@ -28,7 +28,7 @@ export default function Courses() {
         <h1 className="text-4xl font-bold  ">Driving Courses</h1>
         <Button
           onClick={() => setIsAddCourse(true)}
-          className="bg-yellow-400 hover:bg-yellow-500 text-zinc-900 font-semibold cursor-pointer shadow-md transition-transform transform hover:scale-105"
+          className="bg-yellow-400 hover:bg-yellow-500 text-zinc-900 font-semibold cursor-pointer shadow-md transition-transform transform "
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Course

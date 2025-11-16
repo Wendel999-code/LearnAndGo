@@ -190,6 +190,7 @@ function Students() {
       enableHiding: false,
       cell: ({ row }) => {
         const studentId = row.original.id;
+
         const studentAttendance = attendance[studentId] || {};
 
         // Create a handler specific to this student
@@ -202,7 +203,8 @@ function Students() {
 
         return (
           <StudentAction
-            enrollee_id={studentId}
+            student_id={studentId}
+            student={row.original}
             currentAttendance={studentAttendance}
             onAttendanceChange={handleStudentAttendanceChange}
           />
