@@ -35,7 +35,7 @@ function Header() {
 
         {/* Actions */}
         <div className="flex items-center gap-3">
-          <Button
+          {/* <Button
             variant="ghost"
             size="icon"
             className="relative cursor-pointer"
@@ -46,7 +46,7 @@ function Header() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
             </span>
-          </Button>
+          </Button> */}
 
           <ModeToggle />
 

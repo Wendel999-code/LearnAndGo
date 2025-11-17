@@ -177,21 +177,33 @@ export default function Generate({
           </div>
         </div>
         {/* Footer buttons */}
-        <DialogFooter className="p-4 flex justify-end space-x-3">
+        <DialogFooter className="p-4 flex justify-end gap-3">
           <DialogClose asChild>
-            <Button variant="outline">Close</Button>
+            <Button variant="outline" className="h-10">
+              Close
+            </Button>
           </DialogClose>
+
           <Button
             onClick={handleDownload}
             disabled={isCapturing}
-            className="bg-yellow-700 text-white hover:bg-yellow-600"
+            className="
+      h-10 
+      bg-yellow-600 
+      text-white 
+      hover:bg-yellow-500 
+      disabled:opacity-70 
+      flex items-center gap-2
+      px-4
+    "
           >
             {isCapturing ? (
               <>
-                <Loader2 className="h-4 w-4 animate-spin" /> Preparing...
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Preparing…
               </>
             ) : (
-              "Download Certificate"
+              "Print Certificate"
             )}
           </Button>
         </DialogFooter>

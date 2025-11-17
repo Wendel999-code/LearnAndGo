@@ -1,4 +1,8 @@
-import { InvoiceStatus, StudentStatus } from "@prisma/client";
+import {
+  CertificateStatus,
+  InvoiceStatus,
+  StudentStatus,
+} from "@prisma/client";
 
 export type EnrolleeInvoice = {
   id: string;
@@ -40,6 +44,7 @@ export type Enrollee = {
   valid_id_URL: string;
   selfie_URL: string;
   status: StudentStatus;
+  certificateStatus: CertificateStatus;
   course_id: string | null;
   course?: EnrolleeCourse | null;
   invoices?: EnrolleeInvoice | null;

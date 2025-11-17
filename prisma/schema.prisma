@@ -19,22 +19,24 @@ model User {
 }
 
 model Student {
-  id           String        @id @default(uuid())
-  firstName    String
-  lastName     String
-  age          Int
-  email        String        @unique
-  phone        String
-  address      String
-  valid_id_URL String
-  selfie_URL   String
-  course_id    String?
-  status       StudentStatus @default(PENDING)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  invoices     Invoice?
-  schedule     Schedule?
-  course       Course?       @relation(fields: [course_id], references: [id])
+  id                String            @id @default(uuid())
+  firstName         String
+  lastName          String
+  age               Int
+  email             String            @unique
+  phone             String
+  address           String
+  valid_id_URL      String
+  selfie_URL        String
+  course_id         String?
+  status            StudentStatus     @default(PENDING)
+  certificateStatus CertificateStatus @default(PENDING)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  invoices          Invoice?
+  schedule          Schedule?
+  course            Course?           @relation(fields: [course_id], references: [id])
+  certificate       Certicate?        @relation("StudentCertificate")
 }
 
 model Course {
@@ -47,6 +49,18 @@ model Course {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   students    Student[]
+}
+
+model Certicate {
+  id                 String  @id @default(uuid())
+  student_id         String  @unique
+  cert_control_no    String  @unique
+  school_admintrator String?
+
+  student Student @relation("StudentCertificate", fields: [student_id], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Schedule {
@@ -129,4 +143,9 @@ enum CourseCode {
   TDC
   PDC
   FULL_PACKAGE
+}
+
+enum CertificateStatus {
+  PENDING
+  GENERATED
 }

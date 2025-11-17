@@ -39,6 +39,7 @@ import { useGetGraduatedStudents } from "@/hooks/use-student";
 import { formatToMDY } from "@/lib/utils/date";
 import { Skeleton } from "@/components/ui/skeleton";
 
+//TODO ADD REAL DATA HERE
 const wendelTDCData = {
   recipientName: "SABAYO, WENDEL PARAY",
   courseName: "Theoretical Driving Course (TDC)",
@@ -54,29 +55,36 @@ const wendelTDCData = {
 function Certificates() {
   const { data: graduatedStudents, isLoading } = useGetGraduatedStudents();
 
-  const [searchTerm, setSearchTerm] = React.useState("");
+  const [searchName, setSearchName] = React.useState("");
   const [courseFilter, setCourseFilter] = React.useState("all");
+  const [statusFilter, setStatusFilter] = React.useState("PENDING");
 
   const [isGenerating, setIsGenerating] = React.useState(false);
 
   // Memoized filter logic for performance
   const filteredData = React.useMemo(() => {
     const data = graduatedStudents
-      ?.filter((item: any) => {
-        const fullName = `${item.firstName ?? ""} ${
-          item.lastName ?? ""
+
+      ?.filter((student: any) => {
+        const fullName = `${student.firstName ?? ""} ${
+          student.lastName ?? ""
         }`.trim();
 
-        return fullName.toLowerCase().includes(searchTerm.toLowerCase());
+        return fullName.toLowerCase().includes(searchName.toLowerCase());
       })
-      .filter((item: any) =>
+      .filter((student: any) =>
         courseFilter === "all"
           ? true
-          : item.course?.courseTitle === courseFilter
+          : student.course?.courseTitle === courseFilter
+      )
+      .filter((student) =>
+        student.certificateStatus === statusFilter
+          ? true
+          : student.certificateStatus === statusFilter
       );
 
     return data;
-  }, [graduatedStudents, searchTerm, courseFilter]);
+  }, [graduatedStudents, searchName, courseFilter, statusFilter]);
 
   // Framer Motion variants for animations
   const containerVariants: Variants = {
@@ -121,12 +129,12 @@ function Certificates() {
                 <Input
                   placeholder="Search by student name..."
                   className="pl-10 h-10"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  value={searchName}
+                  onChange={(e) => setSearchName(e.target.value)}
                 />
               </div>
               <Select value={courseFilter} onValueChange={setCourseFilter}>
-                <SelectTrigger className="w-full md:w-[240px] h-10">
+                <SelectTrigger className="w-full md:w-[140px] h-10">
                   <SelectValue placeholder="Filter by course" />
                 </SelectTrigger>
                 <SelectContent>
@@ -137,6 +145,17 @@ function Certificates() {
                   <SelectItem value="Practical Driving Course">
                     Practical Driving
                   </SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-full md:w-[140px] h-10">
+                  <SelectValue placeholder="Filter by certificate status" />
+                </SelectTrigger>
+
+                <SelectContent>
+                  <SelectItem value="PENDING">Pending</SelectItem>
+                  <SelectItem value="GENERATED">Generated</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -155,7 +174,7 @@ function Certificates() {
                       Completion Date
                     </TableHead>
                     <TableHead className="text-gray-400">Status</TableHead>
-                    <TableHead className="text-right text-gray-400">
+                    <TableHead className="text-center text-gray-400">
                       Action
                     </TableHead>
                   </TableRow>
@@ -235,19 +254,19 @@ function Certificates() {
                             </TableCell>
                             <TableCell>
                               {/* //TODO ADD CERTIFICATE STATUS */}
-                              {"Generated" !== "Generated" ? (
+                              {student.certificateStatus === "GENERATED" ? (
                                 <span className="flex items-center gap-2 text-green-600 dark:text-green-400">
                                   <CheckCircle2 className="h-4 w-4" /> Generated
                                 </span>
                               ) : (
                                 <span className="flex items-center gap-2 text-yellow-600 dark:text-yellow-400">
-                                  <RefreshCw className="h-4 w-4 animate-spin" />{" "}
+                                  <RefreshCw className="h-4 w-4 animate-spin" />
                                   Pending
                                 </span>
                               )}
                             </TableCell>
-                            <TableCell className="text-right">
-                              {"Generated" !== "Generated" ? (
+                            <TableCell className="text-center">
+                              {student.certificateStatus === "GENERATED" ? (
                                 <Button variant="ghost" size="icon">
                                   <Download className="h-4 w-4" />
                                   <span className="sr-only">Download</span>
@@ -255,8 +274,8 @@ function Certificates() {
                               ) : (
                                 <Button
                                   onClick={() => setIsGenerating(true)}
-                                  variant="outline"
                                   size="sm"
+                                  className="bg-green-600  hover:bg-green-700 text-white font-medium"
                                 >
                                   <FileText className="h-4 w-4 mr-2" />
                                   Generate

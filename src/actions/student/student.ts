@@ -388,6 +388,7 @@ export async function getGraduatedStudents() {
         lastName: true,
         updatedAt: true,
         //TODO ADD CERTIFICATE STATUS AND SCHEMA
+        certificateStatus: true,
 
         course: {
           select: {
