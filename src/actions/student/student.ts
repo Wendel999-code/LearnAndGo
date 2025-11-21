@@ -348,6 +348,32 @@ export async function verifyEnrollee(enrolle_id: string) {
   }
 }
 
+export async function graduateStudent(student_id: string) {
+  if (!student_id) throw new Error("student_id is required");
+  try {
+    const res = await prisma.student.update({
+      where: {
+        id: student_id,
+      },
+      data: {
+        status: "GRADUATED",
+      },
+      select: { id: true },
+    });
+
+    if (!res)
+      return {
+        success: false,
+        message: "Unable to mark graduate this student.",
+      };
+
+    return { success: true, message: "Student graduated." };
+  } catch (error: any) {
+    console.log(error.message);
+    return { success: false, message: error.message };
+  }
+}
+
 export async function getEnrolledStudents() {
   try {
     const student = await prisma.student.findMany({
@@ -398,7 +424,7 @@ export async function getGraduatedStudents() {
       },
 
       orderBy: {
-        createdAt: "desc",
+        updatedAt: "desc",
       },
     });
 

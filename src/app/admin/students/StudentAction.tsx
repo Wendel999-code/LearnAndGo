@@ -1,5 +1,6 @@
 "use client";
 
+import { graduateStudent } from "@/actions/student/student";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -25,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   MoreHorizontal,
   Trash2,
@@ -34,6 +36,8 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { set } from "zod";
 
 const SESSIONS = ["firstSession", "secondSession", "thirdSession"] as const;
 
@@ -52,7 +56,28 @@ function StudentAction({
 }: StudentActionProps) {
   const [isAttendanceOpen, setIsAttendanceOpen] = useState(false);
   const [isCompleteOpen, setIsCompleteOpen] = useState(false);
+  const [isGraduatingLoading, setIsGraduatingLoading] = useState(false);
 
+  const queryClient = useQueryClient();
+
+  const handleGraduate = async () => {
+    setIsGraduatingLoading(true);
+
+    try {
+      const res = await graduateStudent(student_id);
+
+      if (!res.success) {
+        toast.error(res.message || "Failed to mark student as complete.");
+      }
+      queryClient.invalidateQueries({ queryKey: ["get-students"] });
+      toast.success(res.message);
+    } catch (error) {
+      console.error("Error marking student as complete:", error);
+    } finally {
+      setIsGraduatingLoading(false);
+      setIsCompleteOpen(false);
+    }
+  };
   return (
     <>
       <DropdownMenu>
@@ -77,7 +102,6 @@ function StudentAction({
 
           <DropdownMenuSeparator />
 
-          {/* --- Group 1: Status Actions --- */}
           <DropdownMenuItem
             className="flex items-center gap-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
             onClick={() => setIsAttendanceOpen(true)}
@@ -96,7 +120,6 @@ function StudentAction({
 
           <DropdownMenuSeparator />
 
-          {/* --- Group 2: Management Actions --- */}
           <DropdownMenuItem className="flex items-center gap-2 text-yellow-600 dark:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900 rounded-md transition-colors">
             <Edit className="h-4 w-4" />
             Update
@@ -194,8 +217,9 @@ function StudentAction({
 
             <Button
               type="button"
+              disabled={isGraduatingLoading}
               className="px-6 bg-green-600 hover:bg-green-700 text-white font-medium"
-              onClick={() => {}}
+              onClick={handleGraduate}
             >
               Confirm & Mark Complete
             </Button>

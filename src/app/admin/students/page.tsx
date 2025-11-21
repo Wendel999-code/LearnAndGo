@@ -193,7 +193,7 @@ function Students() {
 
         const studentAttendance = attendance[studentId] || {};
 
-        // Create a handler specific to this student
+        // handler for specific  student
         const handleStudentAttendanceChange = (
           sessionKey: string,
           value: string
