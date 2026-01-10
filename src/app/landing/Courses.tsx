@@ -78,7 +78,7 @@ function Courses() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.2 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="grid md:grid-cols-2 gap-8 max-w-3xl backdrop-blur-3xl place-items-center mx-auto"
+          className="grid md:grid-cols-3 gap-8 max-w-5xl backdrop-blur-3xl  mx-auto"
         >
           {coursesData?.map((course, idx) => (
             <CoursesCard

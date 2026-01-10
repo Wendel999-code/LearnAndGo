@@ -6,11 +6,12 @@ import Loading from "../loading";
 
 export default function OnboardingPage() {
   useEffect(() => {
+    
     const doOnboarding = async () => {
       try {
         const res = await completeOnboarding();
 
-        if (!res.success) {
+        if (!res?.success) {
           window.location.href = "/";
           return;
         }

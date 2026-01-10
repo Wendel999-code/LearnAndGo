@@ -55,6 +55,8 @@ const wendelTDCData = {
 function Certificates() {
   const { data: graduatedStudents, isLoading } = useGetGraduatedStudents();
 
+  console.log("Graduated Students:", graduatedStudents);
+
   const [searchName, setSearchName] = React.useState("");
   const [courseFilter, setCourseFilter] = React.useState("all");
   const [statusFilter, setStatusFilter] = React.useState("PENDING");
@@ -165,7 +167,7 @@ function Certificates() {
               <Table>
                 <TableHeader className="bg-muted/50">
                   <TableRow>
-                    <TableHead className="w-[10px] text-gray-400">#</TableHead>
+                    <TableHead className="w-2.5 text-gray-400">#</TableHead>
                     <TableHead className="w-[200px] text-gray-400">
                       Student Name
                     </TableHead>

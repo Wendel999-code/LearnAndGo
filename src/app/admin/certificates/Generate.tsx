@@ -93,7 +93,7 @@ export default function Generate({
   return (
     <Dialog open={isGenerating} onOpenChange={setIsGenerating}>
       <DialogTitle hidden>Certificate</DialogTitle>
-      <DialogContent className="!max-w-3xl bg-[#282a2c] h-[90vh]">
+      <DialogContent className="max-w-3xl! bg-[#282a2c] h-[90vh]">
         <div
           ref={certRef}
           className="relative bg-white mt-2 border-4 border-yellow-400 p-0 rounded-none shadow-xl overflow-hidden"

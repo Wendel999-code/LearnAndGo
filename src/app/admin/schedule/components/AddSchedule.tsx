@@ -558,7 +558,7 @@ export default function AddSchedule({
             {isAdding ? (
               <>
                 <LoaderCircle className="animate-spin mr-2 h-4 w-4" />
-                Confirming...
+                Confirm
               </>
             ) : (
               "Confirm"

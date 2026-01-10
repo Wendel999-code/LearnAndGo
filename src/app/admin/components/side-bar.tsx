@@ -41,12 +41,12 @@ const navItems = [
   { label: "Instructor", href: "/admin/instructor", icon: Speech },
   {
     label: "Organizational Chart",
-    href: "/admin/organizational",
+    href: "/admin/org-chart",
     icon: ChartBarBig,
   },
   {
     label: "User Accounts",
-    href: "/admin/user-accounts",
+    href: "/admin/user-account",
     icon: UserCog,
   },
 ];
@@ -101,8 +101,8 @@ function SideBar() {
               className={`flex items-center relative gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-300
           ${
             isActive
-              ? "bg-gradient-to-r font-sans from-yellow-400 via-yellow-500 to-yellow-600 text-black shadow-md"
-              : "text-gray-600 dark:text-gray-300 hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-200 dark:hover:from-gray-800 dark:hover:to-gray-700"
+              ? "bg-linear-to-r font-sans from-yellow-400 via-yellow-500 to-yellow-600 text-black shadow-md"
+              : "text-gray-600 dark:text-gray-300 hover:bg-linear-to-r hover:from-gray-100 hover:to-gray-200 dark:hover:from-gray-800 dark:hover:to-gray-700"
           }
         `}
             >
@@ -125,7 +125,7 @@ function SideBar() {
               {isEnrollee && (
                 <span className="absolute top-1.5 right-1 flex items-center justify-center">
                   {isLoading ? (
-                    <Skeleton className="w-4 h-4 rounded-full animate-pulse bg-gradient-to-r from-red-400 via-red-500 to-red-400" />
+                    <Skeleton className="w-4 h-4 rounded-full animate-pulse bg-linear-to-r from-red-400 via-red-500 to-red-400" />
                   ) : (enrollee?.length ?? 0) > 0 ? (
                     <>
                       <span className="absolute inline-flex w-5.5 h-5.5 rounded-full bg-red-400 opacity-75 animate-ping"></span>
@@ -141,7 +141,7 @@ function SideBar() {
               {isSchedule && (
                 <span className="absolute top-1.5 right-1 flex items-center justify-center">
                   {isLoadingStudents ? (
-                    <Skeleton className="w-4 h-4 rounded-full animate-pulse bg-gradient-to-r from-red-400 via-red-500 to-red-400" />
+                    <Skeleton className="w-4 h-4 rounded-full animate-pulse bg-linear-to-r from-red-400 via-red-500 to-red-400" />
                   ) : (students?.length ?? 0) > 0 ? (
                     <span className="relative inline-flex w-5 h-5">
                       <span className="absolute inline-flex h-full w-full rounded-full bg-yellow-500 opacity-75 animate-ping"></span>

@@ -313,7 +313,7 @@ function RegisterForm() {
                   <Label className="text-lg font-semibold">
                     Select Course *
                   </Label>
-                  <div className="grid md:grid-cols-2 mt-6  gap-8 max-w-3xl place-items-center mx-auto">
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 mt-6  gap-8 md:max-w-5xl! mx-auto">
                     {coursesData?.map((course, index) => (
                       <CoursesCard
                         key={course.id}
