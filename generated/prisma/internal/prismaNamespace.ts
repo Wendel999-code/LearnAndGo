@@ -16,10 +16,10 @@
  */
 
 import * as runtime from "@prisma/client/runtime/client"
-import type * as Prisma from "../models"
-import { type PrismaClient } from "./class"
+import type * as Prisma from "../models.js"
+import { type PrismaClient } from "./class.js"
 
-export type * from '../models'
+export type * from '../models.js'
 
 export type DMMF = typeof runtime.DMMF
 
@@ -993,9 +993,9 @@ export const StudentScalarFieldEnum = {
   selfie_URL: 'selfie_URL',
   course_id: 'course_id',
   status: 'status',
-  certificateStatus: 'certificateStatus',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  certificateStatus: 'certificateStatus'
 } as const
 
 export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]
@@ -1018,10 +1018,10 @@ export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof 
 export const CerticateScalarFieldEnum = {
   id: 'id',
   student_id: 'student_id',
-  cert_control_no: 'cert_control_no',
   school_admintrator: 'school_admintrator',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  cert_control_no: 'cert_control_no'
 } as const
 
 export type CerticateScalarFieldEnum = (typeof CerticateScalarFieldEnum)[keyof typeof CerticateScalarFieldEnum]
@@ -1033,11 +1033,11 @@ export const ScheduleScalarFieldEnum = {
   first_session: 'first_session',
   second_session: 'second_session',
   third_session: 'third_session',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   first_instructor_id: 'first_instructor_id',
   second_instructor_id: 'second_instructor_id',
-  third_instructor_id: 'third_instructor_id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  third_instructor_id: 'third_instructor_id'
 } as const
 
 export type ScheduleScalarFieldEnum = (typeof ScheduleScalarFieldEnum)[keyof typeof ScheduleScalarFieldEnum]

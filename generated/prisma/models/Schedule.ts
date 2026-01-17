@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums"
-import type * as Prisma from "../internal/prismaNamespace"
+import type * as $Enums from "../enums.js"
+import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Schedule
@@ -30,11 +30,11 @@ export type ScheduleMinAggregateOutputType = {
   first_session: string | null
   second_session: string | null
   third_session: string | null
+  createdAt: Date | null
+  updatedAt: Date | null
   first_instructor_id: string | null
   second_instructor_id: string | null
   third_instructor_id: string | null
-  createdAt: Date | null
-  updatedAt: Date | null
 }
 
 export type ScheduleMaxAggregateOutputType = {
@@ -43,11 +43,11 @@ export type ScheduleMaxAggregateOutputType = {
   first_session: string | null
   second_session: string | null
   third_session: string | null
+  createdAt: Date | null
+  updatedAt: Date | null
   first_instructor_id: string | null
   second_instructor_id: string | null
   third_instructor_id: string | null
-  createdAt: Date | null
-  updatedAt: Date | null
 }
 
 export type ScheduleCountAggregateOutputType = {
@@ -56,11 +56,11 @@ export type ScheduleCountAggregateOutputType = {
   first_session: number
   second_session: number
   third_session: number
+  createdAt: number
+  updatedAt: number
   first_instructor_id: number
   second_instructor_id: number
   third_instructor_id: number
-  createdAt: number
-  updatedAt: number
   _all: number
 }
 
@@ -71,11 +71,11 @@ export type ScheduleMinAggregateInputType = {
   first_session?: true
   second_session?: true
   third_session?: true
+  createdAt?: true
+  updatedAt?: true
   first_instructor_id?: true
   second_instructor_id?: true
   third_instructor_id?: true
-  createdAt?: true
-  updatedAt?: true
 }
 
 export type ScheduleMaxAggregateInputType = {
@@ -84,11 +84,11 @@ export type ScheduleMaxAggregateInputType = {
   first_session?: true
   second_session?: true
   third_session?: true
+  createdAt?: true
+  updatedAt?: true
   first_instructor_id?: true
   second_instructor_id?: true
   third_instructor_id?: true
-  createdAt?: true
-  updatedAt?: true
 }
 
 export type ScheduleCountAggregateInputType = {
@@ -97,11 +97,11 @@ export type ScheduleCountAggregateInputType = {
   first_session?: true
   second_session?: true
   third_session?: true
+  createdAt?: true
+  updatedAt?: true
   first_instructor_id?: true
   second_instructor_id?: true
   third_instructor_id?: true
-  createdAt?: true
-  updatedAt?: true
   _all?: true
 }
 
@@ -183,11 +183,11 @@ export type ScheduleGroupByOutputType = {
   first_session: string | null
   second_session: string | null
   third_session: string | null
+  createdAt: Date
+  updatedAt: Date
   first_instructor_id: string | null
   second_instructor_id: string | null
   third_instructor_id: string | null
-  createdAt: Date
-  updatedAt: Date
   _count: ScheduleCountAggregateOutputType | null
   _min: ScheduleMinAggregateOutputType | null
   _max: ScheduleMaxAggregateOutputType | null
@@ -217,14 +217,14 @@ export type ScheduleWhereInput = {
   first_session?: Prisma.StringNullableFilter<"Schedule"> | string | null
   second_session?: Prisma.StringNullableFilter<"Schedule"> | string | null
   third_session?: Prisma.StringNullableFilter<"Schedule"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
   first_instructor_id?: Prisma.StringNullableFilter<"Schedule"> | string | null
   second_instructor_id?: Prisma.StringNullableFilter<"Schedule"> | string | null
   third_instructor_id?: Prisma.StringNullableFilter<"Schedule"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
-  student?: Prisma.XOR<Prisma.StudentScalarRelationFilter, Prisma.StudentWhereInput>
   first_instructor?: Prisma.XOR<Prisma.InstructorNullableScalarRelationFilter, Prisma.InstructorWhereInput> | null
   second_instructor?: Prisma.XOR<Prisma.InstructorNullableScalarRelationFilter, Prisma.InstructorWhereInput> | null
+  student?: Prisma.XOR<Prisma.StudentScalarRelationFilter, Prisma.StudentWhereInput>
   third_instructor?: Prisma.XOR<Prisma.InstructorNullableScalarRelationFilter, Prisma.InstructorWhereInput> | null
 }
 
@@ -234,14 +234,14 @@ export type ScheduleOrderByWithRelationInput = {
   first_session?: Prisma.SortOrderInput | Prisma.SortOrder
   second_session?: Prisma.SortOrderInput | Prisma.SortOrder
   third_session?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   first_instructor_id?: Prisma.SortOrderInput | Prisma.SortOrder
   second_instructor_id?: Prisma.SortOrderInput | Prisma.SortOrder
   third_instructor_id?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
-  student?: Prisma.StudentOrderByWithRelationInput
   first_instructor?: Prisma.InstructorOrderByWithRelationInput
   second_instructor?: Prisma.InstructorOrderByWithRelationInput
+  student?: Prisma.StudentOrderByWithRelationInput
   third_instructor?: Prisma.InstructorOrderByWithRelationInput
 }
 
@@ -254,14 +254,14 @@ export type ScheduleWhereUniqueInput = Prisma.AtLeast<{
   first_session?: Prisma.StringNullableFilter<"Schedule"> | string | null
   second_session?: Prisma.StringNullableFilter<"Schedule"> | string | null
   third_session?: Prisma.StringNullableFilter<"Schedule"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
   first_instructor_id?: Prisma.StringNullableFilter<"Schedule"> | string | null
   second_instructor_id?: Prisma.StringNullableFilter<"Schedule"> | string | null
   third_instructor_id?: Prisma.StringNullableFilter<"Schedule"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
-  student?: Prisma.XOR<Prisma.StudentScalarRelationFilter, Prisma.StudentWhereInput>
   first_instructor?: Prisma.XOR<Prisma.InstructorNullableScalarRelationFilter, Prisma.InstructorWhereInput> | null
   second_instructor?: Prisma.XOR<Prisma.InstructorNullableScalarRelationFilter, Prisma.InstructorWhereInput> | null
+  student?: Prisma.XOR<Prisma.StudentScalarRelationFilter, Prisma.StudentWhereInput>
   third_instructor?: Prisma.XOR<Prisma.InstructorNullableScalarRelationFilter, Prisma.InstructorWhereInput> | null
 }, "id" | "student_id">
 
@@ -271,11 +271,11 @@ export type ScheduleOrderByWithAggregationInput = {
   first_session?: Prisma.SortOrderInput | Prisma.SortOrder
   second_session?: Prisma.SortOrderInput | Prisma.SortOrder
   third_session?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   first_instructor_id?: Prisma.SortOrderInput | Prisma.SortOrder
   second_instructor_id?: Prisma.SortOrderInput | Prisma.SortOrder
   third_instructor_id?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
   _count?: Prisma.ScheduleCountOrderByAggregateInput
   _max?: Prisma.ScheduleMaxOrderByAggregateInput
   _min?: Prisma.ScheduleMinOrderByAggregateInput
@@ -290,11 +290,11 @@ export type ScheduleScalarWhereWithAggregatesInput = {
   first_session?: Prisma.StringNullableWithAggregatesFilter<"Schedule"> | string | null
   second_session?: Prisma.StringNullableWithAggregatesFilter<"Schedule"> | string | null
   third_session?: Prisma.StringNullableWithAggregatesFilter<"Schedule"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Schedule"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Schedule"> | Date | string
   first_instructor_id?: Prisma.StringNullableWithAggregatesFilter<"Schedule"> | string | null
   second_instructor_id?: Prisma.StringNullableWithAggregatesFilter<"Schedule"> | string | null
   third_instructor_id?: Prisma.StringNullableWithAggregatesFilter<"Schedule"> | string | null
-  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Schedule"> | Date | string
-  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Schedule"> | Date | string
 }
 
 export type ScheduleCreateInput = {
@@ -304,9 +304,9 @@ export type ScheduleCreateInput = {
   third_session?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  student: Prisma.StudentCreateNestedOneWithoutScheduleInput
   first_instructor?: Prisma.InstructorCreateNestedOneWithoutFirstSchedulesInput
   second_instructor?: Prisma.InstructorCreateNestedOneWithoutSecondSchedulesInput
+  student: Prisma.StudentCreateNestedOneWithoutScheduleInput
   third_instructor?: Prisma.InstructorCreateNestedOneWithoutThirdSchedulesInput
 }
 
@@ -316,11 +316,11 @@ export type ScheduleUncheckedCreateInput = {
   first_session?: string | null
   second_session?: string | null
   third_session?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   first_instructor_id?: string | null
   second_instructor_id?: string | null
   third_instructor_id?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
 }
 
 export type ScheduleUpdateInput = {
@@ -330,9 +330,9 @@ export type ScheduleUpdateInput = {
   third_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  student?: Prisma.StudentUpdateOneRequiredWithoutScheduleNestedInput
   first_instructor?: Prisma.InstructorUpdateOneWithoutFirstSchedulesNestedInput
   second_instructor?: Prisma.InstructorUpdateOneWithoutSecondSchedulesNestedInput
+  student?: Prisma.StudentUpdateOneRequiredWithoutScheduleNestedInput
   third_instructor?: Prisma.InstructorUpdateOneWithoutThirdSchedulesNestedInput
 }
 
@@ -342,11 +342,11 @@ export type ScheduleUncheckedUpdateInput = {
   first_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   second_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   third_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   first_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   second_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   third_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ScheduleCreateManyInput = {
@@ -355,11 +355,11 @@ export type ScheduleCreateManyInput = {
   first_session?: string | null
   second_session?: string | null
   third_session?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   first_instructor_id?: string | null
   second_instructor_id?: string | null
   third_instructor_id?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
 }
 
 export type ScheduleUpdateManyMutationInput = {
@@ -377,11 +377,11 @@ export type ScheduleUncheckedUpdateManyInput = {
   first_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   second_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   third_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   first_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   second_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   third_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ScheduleNullableScalarRelationFilter = {
@@ -395,11 +395,11 @@ export type ScheduleCountOrderByAggregateInput = {
   first_session?: Prisma.SortOrder
   second_session?: Prisma.SortOrder
   third_session?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   first_instructor_id?: Prisma.SortOrder
   second_instructor_id?: Prisma.SortOrder
   third_instructor_id?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
 }
 
 export type ScheduleMaxOrderByAggregateInput = {
@@ -408,11 +408,11 @@ export type ScheduleMaxOrderByAggregateInput = {
   first_session?: Prisma.SortOrder
   second_session?: Prisma.SortOrder
   third_session?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   first_instructor_id?: Prisma.SortOrder
   second_instructor_id?: Prisma.SortOrder
   third_instructor_id?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
 }
 
 export type ScheduleMinOrderByAggregateInput = {
@@ -421,11 +421,11 @@ export type ScheduleMinOrderByAggregateInput = {
   first_session?: Prisma.SortOrder
   second_session?: Prisma.SortOrder
   third_session?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   first_instructor_id?: Prisma.SortOrder
   second_instructor_id?: Prisma.SortOrder
   third_instructor_id?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
 }
 
 export type ScheduleListRelationFilter = {
@@ -613,11 +613,11 @@ export type ScheduleUncheckedCreateWithoutStudentInput = {
   first_session?: string | null
   second_session?: string | null
   third_session?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   first_instructor_id?: string | null
   second_instructor_id?: string | null
   third_instructor_id?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
 }
 
 export type ScheduleCreateOrConnectWithoutStudentInput = {
@@ -653,11 +653,11 @@ export type ScheduleUncheckedUpdateWithoutStudentInput = {
   first_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   second_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   third_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   first_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   second_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   third_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ScheduleCreateWithoutFirst_instructorInput = {
@@ -667,8 +667,8 @@ export type ScheduleCreateWithoutFirst_instructorInput = {
   third_session?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  student: Prisma.StudentCreateNestedOneWithoutScheduleInput
   second_instructor?: Prisma.InstructorCreateNestedOneWithoutSecondSchedulesInput
+  student: Prisma.StudentCreateNestedOneWithoutScheduleInput
   third_instructor?: Prisma.InstructorCreateNestedOneWithoutThirdSchedulesInput
 }
 
@@ -678,10 +678,10 @@ export type ScheduleUncheckedCreateWithoutFirst_instructorInput = {
   first_session?: string | null
   second_session?: string | null
   third_session?: string | null
-  second_instructor_id?: string | null
-  third_instructor_id?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  second_instructor_id?: string | null
+  third_instructor_id?: string | null
 }
 
 export type ScheduleCreateOrConnectWithoutFirst_instructorInput = {
@@ -701,8 +701,8 @@ export type ScheduleCreateWithoutSecond_instructorInput = {
   third_session?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  student: Prisma.StudentCreateNestedOneWithoutScheduleInput
   first_instructor?: Prisma.InstructorCreateNestedOneWithoutFirstSchedulesInput
+  student: Prisma.StudentCreateNestedOneWithoutScheduleInput
   third_instructor?: Prisma.InstructorCreateNestedOneWithoutThirdSchedulesInput
 }
 
@@ -712,10 +712,10 @@ export type ScheduleUncheckedCreateWithoutSecond_instructorInput = {
   first_session?: string | null
   second_session?: string | null
   third_session?: string | null
-  first_instructor_id?: string | null
-  third_instructor_id?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  first_instructor_id?: string | null
+  third_instructor_id?: string | null
 }
 
 export type ScheduleCreateOrConnectWithoutSecond_instructorInput = {
@@ -735,9 +735,9 @@ export type ScheduleCreateWithoutThird_instructorInput = {
   third_session?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  student: Prisma.StudentCreateNestedOneWithoutScheduleInput
   first_instructor?: Prisma.InstructorCreateNestedOneWithoutFirstSchedulesInput
   second_instructor?: Prisma.InstructorCreateNestedOneWithoutSecondSchedulesInput
+  student: Prisma.StudentCreateNestedOneWithoutScheduleInput
 }
 
 export type ScheduleUncheckedCreateWithoutThird_instructorInput = {
@@ -746,10 +746,10 @@ export type ScheduleUncheckedCreateWithoutThird_instructorInput = {
   first_session?: string | null
   second_session?: string | null
   third_session?: string | null
-  first_instructor_id?: string | null
-  second_instructor_id?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  first_instructor_id?: string | null
+  second_instructor_id?: string | null
 }
 
 export type ScheduleCreateOrConnectWithoutThird_instructorInput = {
@@ -787,11 +787,11 @@ export type ScheduleScalarWhereInput = {
   first_session?: Prisma.StringNullableFilter<"Schedule"> | string | null
   second_session?: Prisma.StringNullableFilter<"Schedule"> | string | null
   third_session?: Prisma.StringNullableFilter<"Schedule"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
   first_instructor_id?: Prisma.StringNullableFilter<"Schedule"> | string | null
   second_instructor_id?: Prisma.StringNullableFilter<"Schedule"> | string | null
   third_instructor_id?: Prisma.StringNullableFilter<"Schedule"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Schedule"> | Date | string
 }
 
 export type ScheduleUpsertWithWhereUniqueWithoutSecond_instructorInput = {
@@ -832,10 +832,10 @@ export type ScheduleCreateManyFirst_instructorInput = {
   first_session?: string | null
   second_session?: string | null
   third_session?: string | null
-  second_instructor_id?: string | null
-  third_instructor_id?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  second_instructor_id?: string | null
+  third_instructor_id?: string | null
 }
 
 export type ScheduleCreateManySecond_instructorInput = {
@@ -844,10 +844,10 @@ export type ScheduleCreateManySecond_instructorInput = {
   first_session?: string | null
   second_session?: string | null
   third_session?: string | null
-  first_instructor_id?: string | null
-  third_instructor_id?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  first_instructor_id?: string | null
+  third_instructor_id?: string | null
 }
 
 export type ScheduleCreateManyThird_instructorInput = {
@@ -856,10 +856,10 @@ export type ScheduleCreateManyThird_instructorInput = {
   first_session?: string | null
   second_session?: string | null
   third_session?: string | null
-  first_instructor_id?: string | null
-  second_instructor_id?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  first_instructor_id?: string | null
+  second_instructor_id?: string | null
 }
 
 export type ScheduleUpdateWithoutFirst_instructorInput = {
@@ -869,8 +869,8 @@ export type ScheduleUpdateWithoutFirst_instructorInput = {
   third_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  student?: Prisma.StudentUpdateOneRequiredWithoutScheduleNestedInput
   second_instructor?: Prisma.InstructorUpdateOneWithoutSecondSchedulesNestedInput
+  student?: Prisma.StudentUpdateOneRequiredWithoutScheduleNestedInput
   third_instructor?: Prisma.InstructorUpdateOneWithoutThirdSchedulesNestedInput
 }
 
@@ -880,10 +880,10 @@ export type ScheduleUncheckedUpdateWithoutFirst_instructorInput = {
   first_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   second_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   third_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  second_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  third_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  second_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  third_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ScheduleUncheckedUpdateManyWithoutFirst_instructorInput = {
@@ -892,10 +892,10 @@ export type ScheduleUncheckedUpdateManyWithoutFirst_instructorInput = {
   first_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   second_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   third_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  second_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  third_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  second_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  third_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ScheduleUpdateWithoutSecond_instructorInput = {
@@ -905,8 +905,8 @@ export type ScheduleUpdateWithoutSecond_instructorInput = {
   third_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  student?: Prisma.StudentUpdateOneRequiredWithoutScheduleNestedInput
   first_instructor?: Prisma.InstructorUpdateOneWithoutFirstSchedulesNestedInput
+  student?: Prisma.StudentUpdateOneRequiredWithoutScheduleNestedInput
   third_instructor?: Prisma.InstructorUpdateOneWithoutThirdSchedulesNestedInput
 }
 
@@ -916,10 +916,10 @@ export type ScheduleUncheckedUpdateWithoutSecond_instructorInput = {
   first_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   second_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   third_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  first_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  third_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  first_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  third_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ScheduleUncheckedUpdateManyWithoutSecond_instructorInput = {
@@ -928,10 +928,10 @@ export type ScheduleUncheckedUpdateManyWithoutSecond_instructorInput = {
   first_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   second_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   third_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  first_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  third_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  first_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  third_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ScheduleUpdateWithoutThird_instructorInput = {
@@ -941,9 +941,9 @@ export type ScheduleUpdateWithoutThird_instructorInput = {
   third_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  student?: Prisma.StudentUpdateOneRequiredWithoutScheduleNestedInput
   first_instructor?: Prisma.InstructorUpdateOneWithoutFirstSchedulesNestedInput
   second_instructor?: Prisma.InstructorUpdateOneWithoutSecondSchedulesNestedInput
+  student?: Prisma.StudentUpdateOneRequiredWithoutScheduleNestedInput
 }
 
 export type ScheduleUncheckedUpdateWithoutThird_instructorInput = {
@@ -952,10 +952,10 @@ export type ScheduleUncheckedUpdateWithoutThird_instructorInput = {
   first_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   second_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   third_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  first_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  second_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  first_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  second_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ScheduleUncheckedUpdateManyWithoutThird_instructorInput = {
@@ -964,10 +964,10 @@ export type ScheduleUncheckedUpdateManyWithoutThird_instructorInput = {
   first_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   second_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   third_session?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  first_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  second_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  first_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  second_instructor_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -978,14 +978,14 @@ export type ScheduleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   first_session?: boolean
   second_session?: boolean
   third_session?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   first_instructor_id?: boolean
   second_instructor_id?: boolean
   third_instructor_id?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   first_instructor?: boolean | Prisma.Schedule$first_instructorArgs<ExtArgs>
   second_instructor?: boolean | Prisma.Schedule$second_instructorArgs<ExtArgs>
+  student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   third_instructor?: boolean | Prisma.Schedule$third_instructorArgs<ExtArgs>
 }, ExtArgs["result"]["schedule"]>
 
@@ -995,14 +995,14 @@ export type ScheduleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   first_session?: boolean
   second_session?: boolean
   third_session?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   first_instructor_id?: boolean
   second_instructor_id?: boolean
   third_instructor_id?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   first_instructor?: boolean | Prisma.Schedule$first_instructorArgs<ExtArgs>
   second_instructor?: boolean | Prisma.Schedule$second_instructorArgs<ExtArgs>
+  student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   third_instructor?: boolean | Prisma.Schedule$third_instructorArgs<ExtArgs>
 }, ExtArgs["result"]["schedule"]>
 
@@ -1012,14 +1012,14 @@ export type ScheduleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   first_session?: boolean
   second_session?: boolean
   third_session?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   first_instructor_id?: boolean
   second_instructor_id?: boolean
   third_instructor_id?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   first_instructor?: boolean | Prisma.Schedule$first_instructorArgs<ExtArgs>
   second_instructor?: boolean | Prisma.Schedule$second_instructorArgs<ExtArgs>
+  student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   third_instructor?: boolean | Prisma.Schedule$third_instructorArgs<ExtArgs>
 }, ExtArgs["result"]["schedule"]>
 
@@ -1029,39 +1029,39 @@ export type ScheduleSelectScalar = {
   first_session?: boolean
   second_session?: boolean
   third_session?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   first_instructor_id?: boolean
   second_instructor_id?: boolean
   third_instructor_id?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
 }
 
-export type ScheduleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "student_id" | "first_session" | "second_session" | "third_session" | "first_instructor_id" | "second_instructor_id" | "third_instructor_id" | "createdAt" | "updatedAt", ExtArgs["result"]["schedule"]>
+export type ScheduleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "student_id" | "first_session" | "second_session" | "third_session" | "createdAt" | "updatedAt" | "first_instructor_id" | "second_instructor_id" | "third_instructor_id", ExtArgs["result"]["schedule"]>
 export type ScheduleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   first_instructor?: boolean | Prisma.Schedule$first_instructorArgs<ExtArgs>
   second_instructor?: boolean | Prisma.Schedule$second_instructorArgs<ExtArgs>
+  student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   third_instructor?: boolean | Prisma.Schedule$third_instructorArgs<ExtArgs>
 }
 export type ScheduleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   first_instructor?: boolean | Prisma.Schedule$first_instructorArgs<ExtArgs>
   second_instructor?: boolean | Prisma.Schedule$second_instructorArgs<ExtArgs>
+  student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   third_instructor?: boolean | Prisma.Schedule$third_instructorArgs<ExtArgs>
 }
 export type ScheduleIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   first_instructor?: boolean | Prisma.Schedule$first_instructorArgs<ExtArgs>
   second_instructor?: boolean | Prisma.Schedule$second_instructorArgs<ExtArgs>
+  student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   third_instructor?: boolean | Prisma.Schedule$third_instructorArgs<ExtArgs>
 }
 
 export type $SchedulePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Schedule"
   objects: {
-    student: Prisma.$StudentPayload<ExtArgs>
     first_instructor: Prisma.$InstructorPayload<ExtArgs> | null
     second_instructor: Prisma.$InstructorPayload<ExtArgs> | null
+    student: Prisma.$StudentPayload<ExtArgs>
     third_instructor: Prisma.$InstructorPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1070,11 +1070,11 @@ export type $SchedulePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     first_session: string | null
     second_session: string | null
     third_session: string | null
+    createdAt: Date
+    updatedAt: Date
     first_instructor_id: string | null
     second_instructor_id: string | null
     third_instructor_id: string | null
-    createdAt: Date
-    updatedAt: Date
   }, ExtArgs["result"]["schedule"]>
   composites: {}
 }
@@ -1469,9 +1469,9 @@ readonly fields: ScheduleFieldRefs;
  */
 export interface Prisma__ScheduleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  student<T extends Prisma.StudentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StudentDefaultArgs<ExtArgs>>): Prisma.Prisma__StudentClient<runtime.Types.Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   first_instructor<T extends Prisma.Schedule$first_instructorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Schedule$first_instructorArgs<ExtArgs>>): Prisma.Prisma__InstructorClient<runtime.Types.Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   second_instructor<T extends Prisma.Schedule$second_instructorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Schedule$second_instructorArgs<ExtArgs>>): Prisma.Prisma__InstructorClient<runtime.Types.Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  student<T extends Prisma.StudentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StudentDefaultArgs<ExtArgs>>): Prisma.Prisma__StudentClient<runtime.Types.Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   third_instructor<T extends Prisma.Schedule$third_instructorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Schedule$third_instructorArgs<ExtArgs>>): Prisma.Prisma__InstructorClient<runtime.Types.Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1507,11 +1507,11 @@ export interface ScheduleFieldRefs {
   readonly first_session: Prisma.FieldRef<"Schedule", 'String'>
   readonly second_session: Prisma.FieldRef<"Schedule", 'String'>
   readonly third_session: Prisma.FieldRef<"Schedule", 'String'>
+  readonly createdAt: Prisma.FieldRef<"Schedule", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Schedule", 'DateTime'>
   readonly first_instructor_id: Prisma.FieldRef<"Schedule", 'String'>
   readonly second_instructor_id: Prisma.FieldRef<"Schedule", 'String'>
   readonly third_instructor_id: Prisma.FieldRef<"Schedule", 'String'>
-  readonly createdAt: Prisma.FieldRef<"Schedule", 'DateTime'>
-  readonly updatedAt: Prisma.FieldRef<"Schedule", 'DateTime'>
 }
     
 

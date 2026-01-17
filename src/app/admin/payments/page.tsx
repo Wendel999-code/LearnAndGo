@@ -24,6 +24,7 @@ type Payment = {
 export default function PaymentsPage() {
   const { data: enrollees, isLoading, error } = useGetInvoices();
 
+
   const handleCopy = (ref: string) => {
     navigator.clipboard.writeText(ref);
     toast.success("Reference number copied to clipboard.");

@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums"
-import type * as Prisma from "../internal/prismaNamespace"
+import type * as $Enums from "../enums.js"
+import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Student
@@ -46,9 +46,9 @@ export type StudentMinAggregateOutputType = {
   selfie_URL: string | null
   course_id: string | null
   status: $Enums.StudentStatus | null
-  certificateStatus: $Enums.CertificateStatus | null
   createdAt: Date | null
   updatedAt: Date | null
+  certificateStatus: $Enums.CertificateStatus | null
 }
 
 export type StudentMaxAggregateOutputType = {
@@ -63,9 +63,9 @@ export type StudentMaxAggregateOutputType = {
   selfie_URL: string | null
   course_id: string | null
   status: $Enums.StudentStatus | null
-  certificateStatus: $Enums.CertificateStatus | null
   createdAt: Date | null
   updatedAt: Date | null
+  certificateStatus: $Enums.CertificateStatus | null
 }
 
 export type StudentCountAggregateOutputType = {
@@ -80,9 +80,9 @@ export type StudentCountAggregateOutputType = {
   selfie_URL: number
   course_id: number
   status: number
-  certificateStatus: number
   createdAt: number
   updatedAt: number
+  certificateStatus: number
   _all: number
 }
 
@@ -107,9 +107,9 @@ export type StudentMinAggregateInputType = {
   selfie_URL?: true
   course_id?: true
   status?: true
-  certificateStatus?: true
   createdAt?: true
   updatedAt?: true
+  certificateStatus?: true
 }
 
 export type StudentMaxAggregateInputType = {
@@ -124,9 +124,9 @@ export type StudentMaxAggregateInputType = {
   selfie_URL?: true
   course_id?: true
   status?: true
-  certificateStatus?: true
   createdAt?: true
   updatedAt?: true
+  certificateStatus?: true
 }
 
 export type StudentCountAggregateInputType = {
@@ -141,9 +141,9 @@ export type StudentCountAggregateInputType = {
   selfie_URL?: true
   course_id?: true
   status?: true
-  certificateStatus?: true
   createdAt?: true
   updatedAt?: true
+  certificateStatus?: true
   _all?: true
 }
 
@@ -245,9 +245,9 @@ export type StudentGroupByOutputType = {
   selfie_URL: string
   course_id: string | null
   status: $Enums.StudentStatus
-  certificateStatus: $Enums.CertificateStatus
   createdAt: Date
   updatedAt: Date
+  certificateStatus: $Enums.CertificateStatus
   _count: StudentCountAggregateOutputType | null
   _avg: StudentAvgAggregateOutputType | null
   _sum: StudentSumAggregateOutputType | null
@@ -285,13 +285,13 @@ export type StudentWhereInput = {
   selfie_URL?: Prisma.StringFilter<"Student"> | string
   course_id?: Prisma.StringNullableFilter<"Student"> | string | null
   status?: Prisma.EnumStudentStatusFilter<"Student"> | $Enums.StudentStatus
-  certificateStatus?: Prisma.EnumCertificateStatusFilter<"Student"> | $Enums.CertificateStatus
   createdAt?: Prisma.DateTimeFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Student"> | Date | string
+  certificateStatus?: Prisma.EnumCertificateStatusFilter<"Student"> | $Enums.CertificateStatus
+  certificate?: Prisma.XOR<Prisma.CerticateNullableScalarRelationFilter, Prisma.CerticateWhereInput> | null
   invoices?: Prisma.XOR<Prisma.InvoiceNullableScalarRelationFilter, Prisma.InvoiceWhereInput> | null
   schedule?: Prisma.XOR<Prisma.ScheduleNullableScalarRelationFilter, Prisma.ScheduleWhereInput> | null
   course?: Prisma.XOR<Prisma.CourseNullableScalarRelationFilter, Prisma.CourseWhereInput> | null
-  certificate?: Prisma.XOR<Prisma.CerticateNullableScalarRelationFilter, Prisma.CerticateWhereInput> | null
 }
 
 export type StudentOrderByWithRelationInput = {
@@ -306,13 +306,13 @@ export type StudentOrderByWithRelationInput = {
   selfie_URL?: Prisma.SortOrder
   course_id?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
-  certificateStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  certificateStatus?: Prisma.SortOrder
+  certificate?: Prisma.CerticateOrderByWithRelationInput
   invoices?: Prisma.InvoiceOrderByWithRelationInput
   schedule?: Prisma.ScheduleOrderByWithRelationInput
   course?: Prisma.CourseOrderByWithRelationInput
-  certificate?: Prisma.CerticateOrderByWithRelationInput
 }
 
 export type StudentWhereUniqueInput = Prisma.AtLeast<{
@@ -330,13 +330,13 @@ export type StudentWhereUniqueInput = Prisma.AtLeast<{
   selfie_URL?: Prisma.StringFilter<"Student"> | string
   course_id?: Prisma.StringNullableFilter<"Student"> | string | null
   status?: Prisma.EnumStudentStatusFilter<"Student"> | $Enums.StudentStatus
-  certificateStatus?: Prisma.EnumCertificateStatusFilter<"Student"> | $Enums.CertificateStatus
   createdAt?: Prisma.DateTimeFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Student"> | Date | string
+  certificateStatus?: Prisma.EnumCertificateStatusFilter<"Student"> | $Enums.CertificateStatus
+  certificate?: Prisma.XOR<Prisma.CerticateNullableScalarRelationFilter, Prisma.CerticateWhereInput> | null
   invoices?: Prisma.XOR<Prisma.InvoiceNullableScalarRelationFilter, Prisma.InvoiceWhereInput> | null
   schedule?: Prisma.XOR<Prisma.ScheduleNullableScalarRelationFilter, Prisma.ScheduleWhereInput> | null
   course?: Prisma.XOR<Prisma.CourseNullableScalarRelationFilter, Prisma.CourseWhereInput> | null
-  certificate?: Prisma.XOR<Prisma.CerticateNullableScalarRelationFilter, Prisma.CerticateWhereInput> | null
 }, "id" | "email">
 
 export type StudentOrderByWithAggregationInput = {
@@ -351,9 +351,9 @@ export type StudentOrderByWithAggregationInput = {
   selfie_URL?: Prisma.SortOrder
   course_id?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
-  certificateStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  certificateStatus?: Prisma.SortOrder
   _count?: Prisma.StudentCountOrderByAggregateInput
   _avg?: Prisma.StudentAvgOrderByAggregateInput
   _max?: Prisma.StudentMaxOrderByAggregateInput
@@ -376,9 +376,9 @@ export type StudentScalarWhereWithAggregatesInput = {
   selfie_URL?: Prisma.StringWithAggregatesFilter<"Student"> | string
   course_id?: Prisma.StringNullableWithAggregatesFilter<"Student"> | string | null
   status?: Prisma.EnumStudentStatusWithAggregatesFilter<"Student"> | $Enums.StudentStatus
-  certificateStatus?: Prisma.EnumCertificateStatusWithAggregatesFilter<"Student"> | $Enums.CertificateStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Student"> | Date | string
+  certificateStatus?: Prisma.EnumCertificateStatusWithAggregatesFilter<"Student"> | $Enums.CertificateStatus
 }
 
 export type StudentCreateInput = {
@@ -392,13 +392,13 @@ export type StudentCreateInput = {
   valid_id_URL: string
   selfie_URL: string
   status?: $Enums.StudentStatus
-  certificateStatus?: $Enums.CertificateStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  certificateStatus?: $Enums.CertificateStatus
+  certificate?: Prisma.CerticateCreateNestedOneWithoutStudentInput
   invoices?: Prisma.InvoiceCreateNestedOneWithoutStudentInput
   schedule?: Prisma.ScheduleCreateNestedOneWithoutStudentInput
   course?: Prisma.CourseCreateNestedOneWithoutStudentsInput
-  certificate?: Prisma.CerticateCreateNestedOneWithoutStudentInput
 }
 
 export type StudentUncheckedCreateInput = {
@@ -413,12 +413,12 @@ export type StudentUncheckedCreateInput = {
   selfie_URL: string
   course_id?: string | null
   status?: $Enums.StudentStatus
-  certificateStatus?: $Enums.CertificateStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  certificateStatus?: $Enums.CertificateStatus
+  certificate?: Prisma.CerticateUncheckedCreateNestedOneWithoutStudentInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedOneWithoutStudentInput
   schedule?: Prisma.ScheduleUncheckedCreateNestedOneWithoutStudentInput
-  certificate?: Prisma.CerticateUncheckedCreateNestedOneWithoutStudentInput
 }
 
 export type StudentUpdateInput = {
@@ -432,13 +432,13 @@ export type StudentUpdateInput = {
   valid_id_URL?: Prisma.StringFieldUpdateOperationsInput | string
   selfie_URL?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
+  certificate?: Prisma.CerticateUpdateOneWithoutStudentNestedInput
   invoices?: Prisma.InvoiceUpdateOneWithoutStudentNestedInput
   schedule?: Prisma.ScheduleUpdateOneWithoutStudentNestedInput
   course?: Prisma.CourseUpdateOneWithoutStudentsNestedInput
-  certificate?: Prisma.CerticateUpdateOneWithoutStudentNestedInput
 }
 
 export type StudentUncheckedUpdateInput = {
@@ -453,12 +453,12 @@ export type StudentUncheckedUpdateInput = {
   selfie_URL?: Prisma.StringFieldUpdateOperationsInput | string
   course_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
+  certificate?: Prisma.CerticateUncheckedUpdateOneWithoutStudentNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateOneWithoutStudentNestedInput
   schedule?: Prisma.ScheduleUncheckedUpdateOneWithoutStudentNestedInput
-  certificate?: Prisma.CerticateUncheckedUpdateOneWithoutStudentNestedInput
 }
 
 export type StudentCreateManyInput = {
@@ -473,9 +473,9 @@ export type StudentCreateManyInput = {
   selfie_URL: string
   course_id?: string | null
   status?: $Enums.StudentStatus
-  certificateStatus?: $Enums.CertificateStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  certificateStatus?: $Enums.CertificateStatus
 }
 
 export type StudentUpdateManyMutationInput = {
@@ -489,9 +489,9 @@ export type StudentUpdateManyMutationInput = {
   valid_id_URL?: Prisma.StringFieldUpdateOperationsInput | string
   selfie_URL?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
 }
 
 export type StudentUncheckedUpdateManyInput = {
@@ -506,9 +506,9 @@ export type StudentUncheckedUpdateManyInput = {
   selfie_URL?: Prisma.StringFieldUpdateOperationsInput | string
   course_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
 }
 
 export type StudentCountOrderByAggregateInput = {
@@ -523,9 +523,9 @@ export type StudentCountOrderByAggregateInput = {
   selfie_URL?: Prisma.SortOrder
   course_id?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  certificateStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  certificateStatus?: Prisma.SortOrder
 }
 
 export type StudentAvgOrderByAggregateInput = {
@@ -544,9 +544,9 @@ export type StudentMaxOrderByAggregateInput = {
   selfie_URL?: Prisma.SortOrder
   course_id?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  certificateStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  certificateStatus?: Prisma.SortOrder
 }
 
 export type StudentMinOrderByAggregateInput = {
@@ -561,9 +561,9 @@ export type StudentMinOrderByAggregateInput = {
   selfie_URL?: Prisma.SortOrder
   course_id?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  certificateStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  certificateStatus?: Prisma.SortOrder
 }
 
 export type StudentSumOrderByAggregateInput = {
@@ -696,12 +696,12 @@ export type StudentCreateWithoutCourseInput = {
   valid_id_URL: string
   selfie_URL: string
   status?: $Enums.StudentStatus
-  certificateStatus?: $Enums.CertificateStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  certificateStatus?: $Enums.CertificateStatus
+  certificate?: Prisma.CerticateCreateNestedOneWithoutStudentInput
   invoices?: Prisma.InvoiceCreateNestedOneWithoutStudentInput
   schedule?: Prisma.ScheduleCreateNestedOneWithoutStudentInput
-  certificate?: Prisma.CerticateCreateNestedOneWithoutStudentInput
 }
 
 export type StudentUncheckedCreateWithoutCourseInput = {
@@ -715,12 +715,12 @@ export type StudentUncheckedCreateWithoutCourseInput = {
   valid_id_URL: string
   selfie_URL: string
   status?: $Enums.StudentStatus
-  certificateStatus?: $Enums.CertificateStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  certificateStatus?: $Enums.CertificateStatus
+  certificate?: Prisma.CerticateUncheckedCreateNestedOneWithoutStudentInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedOneWithoutStudentInput
   schedule?: Prisma.ScheduleUncheckedCreateNestedOneWithoutStudentInput
-  certificate?: Prisma.CerticateUncheckedCreateNestedOneWithoutStudentInput
 }
 
 export type StudentCreateOrConnectWithoutCourseInput = {
@@ -764,9 +764,9 @@ export type StudentScalarWhereInput = {
   selfie_URL?: Prisma.StringFilter<"Student"> | string
   course_id?: Prisma.StringNullableFilter<"Student"> | string | null
   status?: Prisma.EnumStudentStatusFilter<"Student"> | $Enums.StudentStatus
-  certificateStatus?: Prisma.EnumCertificateStatusFilter<"Student"> | $Enums.CertificateStatus
   createdAt?: Prisma.DateTimeFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Student"> | Date | string
+  certificateStatus?: Prisma.EnumCertificateStatusFilter<"Student"> | $Enums.CertificateStatus
 }
 
 export type StudentCreateWithoutCertificateInput = {
@@ -780,9 +780,9 @@ export type StudentCreateWithoutCertificateInput = {
   valid_id_URL: string
   selfie_URL: string
   status?: $Enums.StudentStatus
-  certificateStatus?: $Enums.CertificateStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  certificateStatus?: $Enums.CertificateStatus
   invoices?: Prisma.InvoiceCreateNestedOneWithoutStudentInput
   schedule?: Prisma.ScheduleCreateNestedOneWithoutStudentInput
   course?: Prisma.CourseCreateNestedOneWithoutStudentsInput
@@ -800,9 +800,9 @@ export type StudentUncheckedCreateWithoutCertificateInput = {
   selfie_URL: string
   course_id?: string | null
   status?: $Enums.StudentStatus
-  certificateStatus?: $Enums.CertificateStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  certificateStatus?: $Enums.CertificateStatus
   invoices?: Prisma.InvoiceUncheckedCreateNestedOneWithoutStudentInput
   schedule?: Prisma.ScheduleUncheckedCreateNestedOneWithoutStudentInput
 }
@@ -834,9 +834,9 @@ export type StudentUpdateWithoutCertificateInput = {
   valid_id_URL?: Prisma.StringFieldUpdateOperationsInput | string
   selfie_URL?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
   invoices?: Prisma.InvoiceUpdateOneWithoutStudentNestedInput
   schedule?: Prisma.ScheduleUpdateOneWithoutStudentNestedInput
   course?: Prisma.CourseUpdateOneWithoutStudentsNestedInput
@@ -854,9 +854,9 @@ export type StudentUncheckedUpdateWithoutCertificateInput = {
   selfie_URL?: Prisma.StringFieldUpdateOperationsInput | string
   course_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
   invoices?: Prisma.InvoiceUncheckedUpdateOneWithoutStudentNestedInput
   schedule?: Prisma.ScheduleUncheckedUpdateOneWithoutStudentNestedInput
 }
@@ -872,12 +872,12 @@ export type StudentCreateWithoutScheduleInput = {
   valid_id_URL: string
   selfie_URL: string
   status?: $Enums.StudentStatus
-  certificateStatus?: $Enums.CertificateStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  certificateStatus?: $Enums.CertificateStatus
+  certificate?: Prisma.CerticateCreateNestedOneWithoutStudentInput
   invoices?: Prisma.InvoiceCreateNestedOneWithoutStudentInput
   course?: Prisma.CourseCreateNestedOneWithoutStudentsInput
-  certificate?: Prisma.CerticateCreateNestedOneWithoutStudentInput
 }
 
 export type StudentUncheckedCreateWithoutScheduleInput = {
@@ -892,11 +892,11 @@ export type StudentUncheckedCreateWithoutScheduleInput = {
   selfie_URL: string
   course_id?: string | null
   status?: $Enums.StudentStatus
-  certificateStatus?: $Enums.CertificateStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  invoices?: Prisma.InvoiceUncheckedCreateNestedOneWithoutStudentInput
+  certificateStatus?: $Enums.CertificateStatus
   certificate?: Prisma.CerticateUncheckedCreateNestedOneWithoutStudentInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedOneWithoutStudentInput
 }
 
 export type StudentCreateOrConnectWithoutScheduleInput = {
@@ -926,12 +926,12 @@ export type StudentUpdateWithoutScheduleInput = {
   valid_id_URL?: Prisma.StringFieldUpdateOperationsInput | string
   selfie_URL?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
+  certificate?: Prisma.CerticateUpdateOneWithoutStudentNestedInput
   invoices?: Prisma.InvoiceUpdateOneWithoutStudentNestedInput
   course?: Prisma.CourseUpdateOneWithoutStudentsNestedInput
-  certificate?: Prisma.CerticateUpdateOneWithoutStudentNestedInput
 }
 
 export type StudentUncheckedUpdateWithoutScheduleInput = {
@@ -946,11 +946,11 @@ export type StudentUncheckedUpdateWithoutScheduleInput = {
   selfie_URL?: Prisma.StringFieldUpdateOperationsInput | string
   course_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  invoices?: Prisma.InvoiceUncheckedUpdateOneWithoutStudentNestedInput
+  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
   certificate?: Prisma.CerticateUncheckedUpdateOneWithoutStudentNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateOneWithoutStudentNestedInput
 }
 
 export type StudentCreateWithoutInvoicesInput = {
@@ -964,12 +964,12 @@ export type StudentCreateWithoutInvoicesInput = {
   valid_id_URL: string
   selfie_URL: string
   status?: $Enums.StudentStatus
-  certificateStatus?: $Enums.CertificateStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  certificateStatus?: $Enums.CertificateStatus
+  certificate?: Prisma.CerticateCreateNestedOneWithoutStudentInput
   schedule?: Prisma.ScheduleCreateNestedOneWithoutStudentInput
   course?: Prisma.CourseCreateNestedOneWithoutStudentsInput
-  certificate?: Prisma.CerticateCreateNestedOneWithoutStudentInput
 }
 
 export type StudentUncheckedCreateWithoutInvoicesInput = {
@@ -984,11 +984,11 @@ export type StudentUncheckedCreateWithoutInvoicesInput = {
   selfie_URL: string
   course_id?: string | null
   status?: $Enums.StudentStatus
-  certificateStatus?: $Enums.CertificateStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  schedule?: Prisma.ScheduleUncheckedCreateNestedOneWithoutStudentInput
+  certificateStatus?: $Enums.CertificateStatus
   certificate?: Prisma.CerticateUncheckedCreateNestedOneWithoutStudentInput
+  schedule?: Prisma.ScheduleUncheckedCreateNestedOneWithoutStudentInput
 }
 
 export type StudentCreateOrConnectWithoutInvoicesInput = {
@@ -1018,12 +1018,12 @@ export type StudentUpdateWithoutInvoicesInput = {
   valid_id_URL?: Prisma.StringFieldUpdateOperationsInput | string
   selfie_URL?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
+  certificate?: Prisma.CerticateUpdateOneWithoutStudentNestedInput
   schedule?: Prisma.ScheduleUpdateOneWithoutStudentNestedInput
   course?: Prisma.CourseUpdateOneWithoutStudentsNestedInput
-  certificate?: Prisma.CerticateUpdateOneWithoutStudentNestedInput
 }
 
 export type StudentUncheckedUpdateWithoutInvoicesInput = {
@@ -1038,11 +1038,11 @@ export type StudentUncheckedUpdateWithoutInvoicesInput = {
   selfie_URL?: Prisma.StringFieldUpdateOperationsInput | string
   course_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  schedule?: Prisma.ScheduleUncheckedUpdateOneWithoutStudentNestedInput
+  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
   certificate?: Prisma.CerticateUncheckedUpdateOneWithoutStudentNestedInput
+  schedule?: Prisma.ScheduleUncheckedUpdateOneWithoutStudentNestedInput
 }
 
 export type StudentCreateManyCourseInput = {
@@ -1056,9 +1056,9 @@ export type StudentCreateManyCourseInput = {
   valid_id_URL: string
   selfie_URL: string
   status?: $Enums.StudentStatus
-  certificateStatus?: $Enums.CertificateStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  certificateStatus?: $Enums.CertificateStatus
 }
 
 export type StudentUpdateWithoutCourseInput = {
@@ -1072,12 +1072,12 @@ export type StudentUpdateWithoutCourseInput = {
   valid_id_URL?: Prisma.StringFieldUpdateOperationsInput | string
   selfie_URL?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
+  certificate?: Prisma.CerticateUpdateOneWithoutStudentNestedInput
   invoices?: Prisma.InvoiceUpdateOneWithoutStudentNestedInput
   schedule?: Prisma.ScheduleUpdateOneWithoutStudentNestedInput
-  certificate?: Prisma.CerticateUpdateOneWithoutStudentNestedInput
 }
 
 export type StudentUncheckedUpdateWithoutCourseInput = {
@@ -1091,12 +1091,12 @@ export type StudentUncheckedUpdateWithoutCourseInput = {
   valid_id_URL?: Prisma.StringFieldUpdateOperationsInput | string
   selfie_URL?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
+  certificate?: Prisma.CerticateUncheckedUpdateOneWithoutStudentNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateOneWithoutStudentNestedInput
   schedule?: Prisma.ScheduleUncheckedUpdateOneWithoutStudentNestedInput
-  certificate?: Prisma.CerticateUncheckedUpdateOneWithoutStudentNestedInput
 }
 
 export type StudentUncheckedUpdateManyWithoutCourseInput = {
@@ -1110,9 +1110,9 @@ export type StudentUncheckedUpdateManyWithoutCourseInput = {
   valid_id_URL?: Prisma.StringFieldUpdateOperationsInput | string
   selfie_URL?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  certificateStatus?: Prisma.EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
 }
 
 
@@ -1129,13 +1129,13 @@ export type StudentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   selfie_URL?: boolean
   course_id?: boolean
   status?: boolean
-  certificateStatus?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  certificateStatus?: boolean
+  certificate?: boolean | Prisma.Student$certificateArgs<ExtArgs>
   invoices?: boolean | Prisma.Student$invoicesArgs<ExtArgs>
   schedule?: boolean | Prisma.Student$scheduleArgs<ExtArgs>
   course?: boolean | Prisma.Student$courseArgs<ExtArgs>
-  certificate?: boolean | Prisma.Student$certificateArgs<ExtArgs>
 }, ExtArgs["result"]["student"]>
 
 export type StudentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1150,9 +1150,9 @@ export type StudentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   selfie_URL?: boolean
   course_id?: boolean
   status?: boolean
-  certificateStatus?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  certificateStatus?: boolean
   course?: boolean | Prisma.Student$courseArgs<ExtArgs>
 }, ExtArgs["result"]["student"]>
 
@@ -1168,9 +1168,9 @@ export type StudentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   selfie_URL?: boolean
   course_id?: boolean
   status?: boolean
-  certificateStatus?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  certificateStatus?: boolean
   course?: boolean | Prisma.Student$courseArgs<ExtArgs>
 }, ExtArgs["result"]["student"]>
 
@@ -1186,17 +1186,17 @@ export type StudentSelectScalar = {
   selfie_URL?: boolean
   course_id?: boolean
   status?: boolean
-  certificateStatus?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  certificateStatus?: boolean
 }
 
-export type StudentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "age" | "email" | "phone" | "address" | "valid_id_URL" | "selfie_URL" | "course_id" | "status" | "certificateStatus" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
+export type StudentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "age" | "email" | "phone" | "address" | "valid_id_URL" | "selfie_URL" | "course_id" | "status" | "createdAt" | "updatedAt" | "certificateStatus", ExtArgs["result"]["student"]>
 export type StudentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  certificate?: boolean | Prisma.Student$certificateArgs<ExtArgs>
   invoices?: boolean | Prisma.Student$invoicesArgs<ExtArgs>
   schedule?: boolean | Prisma.Student$scheduleArgs<ExtArgs>
   course?: boolean | Prisma.Student$courseArgs<ExtArgs>
-  certificate?: boolean | Prisma.Student$certificateArgs<ExtArgs>
 }
 export type StudentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.Student$courseArgs<ExtArgs>
@@ -1208,10 +1208,10 @@ export type StudentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $StudentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Student"
   objects: {
+    certificate: Prisma.$CerticatePayload<ExtArgs> | null
     invoices: Prisma.$InvoicePayload<ExtArgs> | null
     schedule: Prisma.$SchedulePayload<ExtArgs> | null
     course: Prisma.$CoursePayload<ExtArgs> | null
-    certificate: Prisma.$CerticatePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1225,9 +1225,9 @@ export type $StudentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     selfie_URL: string
     course_id: string | null
     status: $Enums.StudentStatus
-    certificateStatus: $Enums.CertificateStatus
     createdAt: Date
     updatedAt: Date
+    certificateStatus: $Enums.CertificateStatus
   }, ExtArgs["result"]["student"]>
   composites: {}
 }
@@ -1622,10 +1622,10 @@ readonly fields: StudentFieldRefs;
  */
 export interface Prisma__StudentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  certificate<T extends Prisma.Student$certificateArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Student$certificateArgs<ExtArgs>>): Prisma.Prisma__CerticateClient<runtime.Types.Result.GetResult<Prisma.$CerticatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   invoices<T extends Prisma.Student$invoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Student$invoicesArgs<ExtArgs>>): Prisma.Prisma__InvoiceClient<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   schedule<T extends Prisma.Student$scheduleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Student$scheduleArgs<ExtArgs>>): Prisma.Prisma__ScheduleClient<runtime.Types.Result.GetResult<Prisma.$SchedulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   course<T extends Prisma.Student$courseArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Student$courseArgs<ExtArgs>>): Prisma.Prisma__CourseClient<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  certificate<T extends Prisma.Student$certificateArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Student$certificateArgs<ExtArgs>>): Prisma.Prisma__CerticateClient<runtime.Types.Result.GetResult<Prisma.$CerticatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1666,9 +1666,9 @@ export interface StudentFieldRefs {
   readonly selfie_URL: Prisma.FieldRef<"Student", 'String'>
   readonly course_id: Prisma.FieldRef<"Student", 'String'>
   readonly status: Prisma.FieldRef<"Student", 'StudentStatus'>
-  readonly certificateStatus: Prisma.FieldRef<"Student", 'CertificateStatus'>
   readonly createdAt: Prisma.FieldRef<"Student", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Student", 'DateTime'>
+  readonly certificateStatus: Prisma.FieldRef<"Student", 'CertificateStatus'>
 }
     
 
@@ -2065,6 +2065,25 @@ export type StudentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
+ * Student.certificate
+ */
+export type Student$certificateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Certicate
+   */
+  select?: Prisma.CerticateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Certicate
+   */
+  omit?: Prisma.CerticateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CerticateInclude<ExtArgs> | null
+  where?: Prisma.CerticateWhereInput
+}
+
+/**
  * Student.invoices
  */
 export type Student$invoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2119,25 +2138,6 @@ export type Student$courseArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   include?: Prisma.CourseInclude<ExtArgs> | null
   where?: Prisma.CourseWhereInput
-}
-
-/**
- * Student.certificate
- */
-export type Student$certificateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Certicate
-   */
-  select?: Prisma.CerticateSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Certicate
-   */
-  omit?: Prisma.CerticateOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CerticateInclude<ExtArgs> | null
-  where?: Prisma.CerticateWhereInput
 }
 
 /**

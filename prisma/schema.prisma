@@ -1,10 +1,11 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
 
 datasource db {
   provider = "postgresql"
-}
-
-generator client {
-  provider = "prisma-client-js"
 }
 
 model User {
@@ -30,13 +31,13 @@ model Student {
   selfie_URL        String
   course_id         String?
   status            StudentStatus     @default(PENDING)
-  certificateStatus CertificateStatus @default(PENDING)
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
+  certificateStatus CertificateStatus @default(PENDING)
+  certificate       Certicate?        @relation("StudentCertificate")
   invoices          Invoice?
   schedule          Schedule?
   course            Course?           @relation(fields: [course_id], references: [id])
-  certificate       Certicate?        @relation("StudentCertificate")
 }
 
 model Course {
@@ -52,39 +53,32 @@ model Course {
 }
 
 model Certicate {
-  id                 String  @id @default(uuid())
-  student_id         String  @unique
-  cert_control_no    String  @unique
+  id                 String   @id @default(uuid())
+  student_id         String   @unique
   school_admintrator String?
-
-  student Student @relation("StudentCertificate", fields: [student_id], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  cert_control_no    String   @unique
+  student            Student  @relation("StudentCertificate", fields: [student_id], references: [id], onDelete: Cascade)
 }
 
 model Schedule {
-  id             String  @id @default(uuid())
-  student_id     String  @unique
-  first_session  String?
-  second_session String?
-  third_session  String?
-
+  id                   String      @id @default(uuid())
+  student_id           String      @unique
+  first_session        String?
+  second_session       String?
+  third_session        String?
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
   first_instructor_id  String?
   second_instructor_id String?
   third_instructor_id  String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  student Student @relation(fields: [student_id], references: [id], onDelete: Cascade)
-
-  first_instructor  Instructor? @relation("FirstInstructor", fields: [first_instructor_id], references: [id], onDelete: Cascade)
-  second_instructor Instructor? @relation("SecondInstructor", fields: [second_instructor_id], references: [id], onDelete: Cascade)
-  third_instructor  Instructor? @relation("ThirdInstructor", fields: [third_instructor_id], references: [id], onDelete: Cascade)
+  first_instructor     Instructor? @relation("FirstInstructor", fields: [first_instructor_id], references: [id], onDelete: Cascade)
+  second_instructor    Instructor? @relation("SecondInstructor", fields: [second_instructor_id], references: [id], onDelete: Cascade)
+  student              Student     @relation(fields: [student_id], references: [id], onDelete: Cascade)
+  third_instructor     Instructor? @relation("ThirdInstructor", fields: [third_instructor_id], references: [id], onDelete: Cascade)
 }
 
-//TODO use reference id for getting each student schedule 
 model Invoice {
   id              String        @id @default(uuid())
   reference_id    String        @unique
@@ -100,17 +94,16 @@ model Invoice {
 }
 
 model Instructor {
-  id        String   @id @default(uuid())
-  firstName String
-  lastName  String
-  email     String?  @unique
-  phone     String?
-  address   String?
-  bio       String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  image_URL String?
-
+  id              String     @id @default(uuid())
+  firstName       String
+  lastName        String
+  email           String?    @unique
+  phone           String?
+  address         String?
+  bio             String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  image_URL       String?
   firstSchedules  Schedule[] @relation("FirstInstructor")
   secondSchedules Schedule[] @relation("SecondInstructor")
   thirdSchedules  Schedule[] @relation("ThirdInstructor")

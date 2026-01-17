@@ -56,7 +56,7 @@ function SideBar() {
   const { data: students, isLoading: isLoadingStudents } =
     useGetStudentWithoutSchedule();
 
-  console.log("Students without schedule:", students);
+ 
 
   const [open, setOpen] = useState(true);
   const pathname = usePathname();

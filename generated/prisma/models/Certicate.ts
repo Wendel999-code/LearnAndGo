@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums"
-import type * as Prisma from "../internal/prismaNamespace"
+import type * as $Enums from "../enums.js"
+import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Certicate
@@ -27,28 +27,28 @@ export type AggregateCerticate = {
 export type CerticateMinAggregateOutputType = {
   id: string | null
   student_id: string | null
-  cert_control_no: string | null
   school_admintrator: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  cert_control_no: string | null
 }
 
 export type CerticateMaxAggregateOutputType = {
   id: string | null
   student_id: string | null
-  cert_control_no: string | null
   school_admintrator: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  cert_control_no: string | null
 }
 
 export type CerticateCountAggregateOutputType = {
   id: number
   student_id: number
-  cert_control_no: number
   school_admintrator: number
   createdAt: number
   updatedAt: number
+  cert_control_no: number
   _all: number
 }
 
@@ -56,28 +56,28 @@ export type CerticateCountAggregateOutputType = {
 export type CerticateMinAggregateInputType = {
   id?: true
   student_id?: true
-  cert_control_no?: true
   school_admintrator?: true
   createdAt?: true
   updatedAt?: true
+  cert_control_no?: true
 }
 
 export type CerticateMaxAggregateInputType = {
   id?: true
   student_id?: true
-  cert_control_no?: true
   school_admintrator?: true
   createdAt?: true
   updatedAt?: true
+  cert_control_no?: true
 }
 
 export type CerticateCountAggregateInputType = {
   id?: true
   student_id?: true
-  cert_control_no?: true
   school_admintrator?: true
   createdAt?: true
   updatedAt?: true
+  cert_control_no?: true
   _all?: true
 }
 
@@ -156,10 +156,10 @@ export type CerticateGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
 export type CerticateGroupByOutputType = {
   id: string
   student_id: string
-  cert_control_no: string
   school_admintrator: string | null
   createdAt: Date
   updatedAt: Date
+  cert_control_no: string
   _count: CerticateCountAggregateOutputType | null
   _min: CerticateMinAggregateOutputType | null
   _max: CerticateMaxAggregateOutputType | null
@@ -186,20 +186,20 @@ export type CerticateWhereInput = {
   NOT?: Prisma.CerticateWhereInput | Prisma.CerticateWhereInput[]
   id?: Prisma.StringFilter<"Certicate"> | string
   student_id?: Prisma.StringFilter<"Certicate"> | string
-  cert_control_no?: Prisma.StringFilter<"Certicate"> | string
   school_admintrator?: Prisma.StringNullableFilter<"Certicate"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Certicate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Certicate"> | Date | string
+  cert_control_no?: Prisma.StringFilter<"Certicate"> | string
   student?: Prisma.XOR<Prisma.StudentScalarRelationFilter, Prisma.StudentWhereInput>
 }
 
 export type CerticateOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   student_id?: Prisma.SortOrder
-  cert_control_no?: Prisma.SortOrder
   school_admintrator?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  cert_control_no?: Prisma.SortOrder
   student?: Prisma.StudentOrderByWithRelationInput
 }
 
@@ -219,10 +219,10 @@ export type CerticateWhereUniqueInput = Prisma.AtLeast<{
 export type CerticateOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   student_id?: Prisma.SortOrder
-  cert_control_no?: Prisma.SortOrder
   school_admintrator?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  cert_control_no?: Prisma.SortOrder
   _count?: Prisma.CerticateCountOrderByAggregateInput
   _max?: Prisma.CerticateMaxOrderByAggregateInput
   _min?: Prisma.CerticateMinOrderByAggregateInput
@@ -234,72 +234,72 @@ export type CerticateScalarWhereWithAggregatesInput = {
   NOT?: Prisma.CerticateScalarWhereWithAggregatesInput | Prisma.CerticateScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Certicate"> | string
   student_id?: Prisma.StringWithAggregatesFilter<"Certicate"> | string
-  cert_control_no?: Prisma.StringWithAggregatesFilter<"Certicate"> | string
   school_admintrator?: Prisma.StringNullableWithAggregatesFilter<"Certicate"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Certicate"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Certicate"> | Date | string
+  cert_control_no?: Prisma.StringWithAggregatesFilter<"Certicate"> | string
 }
 
 export type CerticateCreateInput = {
   id?: string
-  cert_control_no: string
   school_admintrator?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  cert_control_no: string
   student: Prisma.StudentCreateNestedOneWithoutCertificateInput
 }
 
 export type CerticateUncheckedCreateInput = {
   id?: string
   student_id: string
-  cert_control_no: string
   school_admintrator?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  cert_control_no: string
 }
 
 export type CerticateUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  cert_control_no?: Prisma.StringFieldUpdateOperationsInput | string
   school_admintrator?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cert_control_no?: Prisma.StringFieldUpdateOperationsInput | string
   student?: Prisma.StudentUpdateOneRequiredWithoutCertificateNestedInput
 }
 
 export type CerticateUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   student_id?: Prisma.StringFieldUpdateOperationsInput | string
-  cert_control_no?: Prisma.StringFieldUpdateOperationsInput | string
   school_admintrator?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cert_control_no?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type CerticateCreateManyInput = {
   id?: string
   student_id: string
-  cert_control_no: string
   school_admintrator?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  cert_control_no: string
 }
 
 export type CerticateUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  cert_control_no?: Prisma.StringFieldUpdateOperationsInput | string
   school_admintrator?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cert_control_no?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type CerticateUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   student_id?: Prisma.StringFieldUpdateOperationsInput | string
-  cert_control_no?: Prisma.StringFieldUpdateOperationsInput | string
   school_admintrator?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cert_control_no?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type CerticateNullableScalarRelationFilter = {
@@ -310,28 +310,28 @@ export type CerticateNullableScalarRelationFilter = {
 export type CerticateCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   student_id?: Prisma.SortOrder
-  cert_control_no?: Prisma.SortOrder
   school_admintrator?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  cert_control_no?: Prisma.SortOrder
 }
 
 export type CerticateMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   student_id?: Prisma.SortOrder
-  cert_control_no?: Prisma.SortOrder
   school_admintrator?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  cert_control_no?: Prisma.SortOrder
 }
 
 export type CerticateMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   student_id?: Prisma.SortOrder
-  cert_control_no?: Prisma.SortOrder
   school_admintrator?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  cert_control_no?: Prisma.SortOrder
 }
 
 export type CerticateCreateNestedOneWithoutStudentInput = {
@@ -368,18 +368,18 @@ export type CerticateUncheckedUpdateOneWithoutStudentNestedInput = {
 
 export type CerticateCreateWithoutStudentInput = {
   id?: string
-  cert_control_no: string
   school_admintrator?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  cert_control_no: string
 }
 
 export type CerticateUncheckedCreateWithoutStudentInput = {
   id?: string
-  cert_control_no: string
   school_admintrator?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  cert_control_no: string
 }
 
 export type CerticateCreateOrConnectWithoutStudentInput = {
@@ -400,18 +400,18 @@ export type CerticateUpdateToOneWithWhereWithoutStudentInput = {
 
 export type CerticateUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  cert_control_no?: Prisma.StringFieldUpdateOperationsInput | string
   school_admintrator?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cert_control_no?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type CerticateUncheckedUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  cert_control_no?: Prisma.StringFieldUpdateOperationsInput | string
   school_admintrator?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cert_control_no?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -419,43 +419,43 @@ export type CerticateUncheckedUpdateWithoutStudentInput = {
 export type CerticateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   student_id?: boolean
-  cert_control_no?: boolean
   school_admintrator?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  cert_control_no?: boolean
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["certicate"]>
 
 export type CerticateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   student_id?: boolean
-  cert_control_no?: boolean
   school_admintrator?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  cert_control_no?: boolean
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["certicate"]>
 
 export type CerticateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   student_id?: boolean
-  cert_control_no?: boolean
   school_admintrator?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  cert_control_no?: boolean
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["certicate"]>
 
 export type CerticateSelectScalar = {
   id?: boolean
   student_id?: boolean
-  cert_control_no?: boolean
   school_admintrator?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  cert_control_no?: boolean
 }
 
-export type CerticateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "student_id" | "cert_control_no" | "school_admintrator" | "createdAt" | "updatedAt", ExtArgs["result"]["certicate"]>
+export type CerticateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "student_id" | "school_admintrator" | "createdAt" | "updatedAt" | "cert_control_no", ExtArgs["result"]["certicate"]>
 export type CerticateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
 }
@@ -474,10 +474,10 @@ export type $CerticatePayload<ExtArgs extends runtime.Types.Extensions.InternalA
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     student_id: string
-    cert_control_no: string
     school_admintrator: string | null
     createdAt: Date
     updatedAt: Date
+    cert_control_no: string
   }, ExtArgs["result"]["certicate"]>
   composites: {}
 }
@@ -904,10 +904,10 @@ export interface Prisma__CerticateClient<T, Null = never, ExtArgs extends runtim
 export interface CerticateFieldRefs {
   readonly id: Prisma.FieldRef<"Certicate", 'String'>
   readonly student_id: Prisma.FieldRef<"Certicate", 'String'>
-  readonly cert_control_no: Prisma.FieldRef<"Certicate", 'String'>
   readonly school_admintrator: Prisma.FieldRef<"Certicate", 'String'>
   readonly createdAt: Prisma.FieldRef<"Certicate", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Certicate", 'DateTime'>
+  readonly cert_control_no: Prisma.FieldRef<"Certicate", 'String'>
 }
     
 
