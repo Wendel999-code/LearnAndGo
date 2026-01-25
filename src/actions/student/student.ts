@@ -5,8 +5,9 @@ import supabase from "@/lib/supabase-storage";
 import axios from "axios";
 import { StudentFormData, StudentSchema } from "../zod/student";
 import { generateReferenceId } from "@/lib/utils/generate_id";
-import { Prisma } from "@prisma/client";
+import { CertificateStatus, Prisma } from "@prisma/client";
 import { baseURL } from "@/lib/utils/env";
+import { StudentsParams } from "@/constant/type";
 
 //helper 1: Upload file to Supabase
 export async function uploadFile(folder: string, file: File) {
@@ -34,7 +35,7 @@ async function createStudentAndInvoice(
   validIdURL: string,
   selfieURL: string,
   course: any,
-  reference_id: string
+  reference_id: string,
 ) {
   try {
     return await prisma.student.create({
@@ -83,7 +84,7 @@ async function createXenditInvoice(
   reference_id: string,
   parsed: any,
   course: any,
-  student: any
+  student: any,
 ) {
   try {
     const payload = {
@@ -125,7 +126,7 @@ async function createXenditInvoice(
           "X-Version": "2023-05-01",
           "X-IDEMPOTENCY-KEY": reference_id,
         },
-      }
+      },
     );
 
     return response.data;
@@ -175,7 +176,7 @@ export async function registerStudentAndPayment(formData: StudentFormData) {
       validIdURL,
       selfieURL,
       course,
-      reference_id
+      reference_id,
     );
 
     // Create Xendit invoice
@@ -183,7 +184,7 @@ export async function registerStudentAndPayment(formData: StudentFormData) {
       reference_id,
       parsed,
       course,
-      student
+      student,
     );
 
     return { success: true, data: invoice };
@@ -374,10 +375,39 @@ export async function graduateStudent(student_id: string) {
   }
 }
 
-export async function getEnrolledStudents() {
+export async function getEnrolledStudents(params: StudentsParams) {
+  const { searchName, course = "all", status } = params;
+
   try {
     const student = await prisma.student.findMany({
-      where: { status: "ENROLLED" },
+      where: {
+        status: status ? status : { in: ["ENROLLED", "GRADUATED"] },
+
+        ...(searchName && {
+          OR: [
+            {
+              firstName: {
+                contains: searchName,
+                mode: "insensitive",
+              },
+            },
+            {
+              lastName: {
+                contains: searchName,
+                mode: "insensitive",
+              },
+            },
+          ],
+        }),
+
+        ...(course &&
+          course !== "all" && {
+            course: {
+              courseCode: course,
+            },
+          }),
+      },
+
       include: {
         course: {
           select: {
@@ -404,18 +434,50 @@ export async function getEnrolledStudents() {
   }
 }
 
-export async function getGraduatedStudents() {
+//TODO add pagination
+export async function getGraduatedStudents(params: StudentsParams = {}) {
+  const { searchName, course = "all", certificateStatus } = params;
+
   try {
-    const student = await prisma.student.findMany({
-      where: { status: "GRADUATED" },
+    const students = await prisma.student.findMany({
+      where: {
+        status: "GRADUATED",
+
+        ...(certificateStatus && {
+          certificateStatus,
+        }),
+
+        ...(searchName && {
+          OR: [
+            {
+              firstName: {
+                contains: searchName,
+                mode: "insensitive",
+              },
+            },
+            {
+              lastName: {
+                contains: searchName,
+                mode: "insensitive",
+              },
+            },
+          ],
+        }),
+
+        ...(course &&
+          course !== "all" && {
+            course: {
+              courseCode: course,
+            },
+          }),
+      },
+
       select: {
         id: true,
         firstName: true,
         lastName: true,
         updatedAt: true,
-        //TODO ADD CERTIFICATE STATUS AND SCHEMA
         certificateStatus: true,
-
         course: {
           select: {
             courseTitle: true,
@@ -428,16 +490,14 @@ export async function getGraduatedStudents() {
       },
     });
 
-    if (student.length === 0)
-      return {
-        success: true,
-        message: "No student found.",
-        data: [],
-      };
-
-    return { success: true, message: "Fetched students.", data: student };
+    return {
+      success: true,
+      message:
+        students.length === 0 ? "No student found." : "Fetched students.",
+      data: students,
+    };
   } catch (error: any) {
-    console.log(error.message);
+    console.error(error.message);
     return { success: false, message: error.message, data: [] };
   }
 }

@@ -6,6 +6,7 @@ import { GenericTable } from "@/components/GenericTable";
 import { useGetEnrollees } from "@/hooks/use-student";
 import EnrolleeAction from "./components/EnrolleeAction";
 import { formatToMDYWithTime } from "@/lib/utils/date";
+import { handleCopy } from "@/lib/utils";
 
 //serve as table header
 type Enrollee = {
@@ -60,7 +61,23 @@ function EnrolleesPage() {
         return <span>₱{value.toLocaleString()}</span>;
       },
     },
-    { accessorKey: "reference_no", header: "Reference No." },
+    {
+      accessorKey: "reference_no",
+      header: "Reference No.",
+      cell: ({ row }) => {
+        const ref = row.getValue("reference_no") as string;
+
+        return (
+          <button
+            onClick={() => handleCopy(ref)}
+            className="text-sm text-yellow-600 hover:underline  cursor-pointer"
+            title="Click to copy"
+          >
+            {ref}
+          </button>
+        );
+      },
+    },
     {
       accessorKey: "status",
       header: "Status",
@@ -72,8 +89,8 @@ function EnrolleesPage() {
               status === "PENDING"
                 ? "bg-yellow-800 w-16 text-white lowercase"
                 : status === "Pending"
-                ? "bg-yellow-500 w-16 text-black"
-                : "bg-yellow-600 w-16 text-white lowercase"
+                  ? "bg-yellow-500 w-16 text-black"
+                  : "bg-yellow-600 w-16 text-white lowercase"
             }
           >
             {status}

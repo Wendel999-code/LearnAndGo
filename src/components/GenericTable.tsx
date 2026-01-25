@@ -82,13 +82,13 @@ export function GenericTable<TData, TValue>({
                 >
                   {flexRender(
                     header.column.columnDef.header,
-                    header.getContext()
+                    header.getContext(),
                   )}
                   {header.column.getIsSorted() === "asc"
                     ? " 🔼"
                     : header.column.getIsSorted() === "desc"
-                    ? " 🔽"
-                    : null}
+                      ? " 🔽"
+                      : null}
                 </TableHead>
               ))}
             </TableRow>

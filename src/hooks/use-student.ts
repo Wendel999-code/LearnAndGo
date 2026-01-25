@@ -5,7 +5,8 @@ import {
   verifyEnrollee,
   getGraduatedStudents,
 } from "@/actions/student/student";
-import { Enrollee, EnrolleeInvoice } from "@/constant/type";
+import { Enrollee, EnrolleeInvoice, StudentsParams } from "@/constant/type";
+import { CertificateStatus } from "@prisma/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useGetEnrollees = () =>
@@ -65,11 +66,11 @@ export const useVerifyEnrollee = () => {
   });
 };
 
-export const useGetStudents = () =>
+export const useGetStudents = (params: StudentsParams) =>
   useQuery<Partial<Enrollee>[]>({
-    queryKey: ["get-students"],
+    queryKey: ["get-students", params],
     queryFn: async () => {
-      const res = await getEnrolledStudents();
+      const res = await getEnrolledStudents(params);
       if (!res.success) throw new Error(res.message);
       return res.data!;
     },
@@ -79,18 +80,17 @@ export const useGetStudents = () =>
     refetchOnWindowFocus: true,
   });
 
-export const useGetGraduatedStudents = () =>
+export const useGetGraduatedStudents = (params: StudentsParams) =>
   useQuery<Partial<Enrollee>[]>({
-    queryKey: ["get-graduated-students"],
+    queryKey: ["get-graduated-students", params],
     queryFn: async () => {
-      const res = await getGraduatedStudents();
+      const res = await getGraduatedStudents(params);
       if (!res.success) throw new Error(res.message);
-      return res.data!;
+      return res.data;
     },
-    staleTime: 60 * 60 * 1000, // 1 hour
-    gcTime: 30 * 60 * 1000, // 30 minutes
-    retry: 1,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    refetchOnMount: false,
     refetchOnWindowFocus: true,
+    retry: 1,
   });
-
-getGraduatedStudents;

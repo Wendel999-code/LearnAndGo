@@ -7,6 +7,8 @@ import { formatToMDYWithTime } from "@/lib/utils/date";
 import { useGetInvoices } from "@/hooks/use-invoice";
 import toast from "react-hot-toast";
 import PaymentAction from "./components/PaymentAction";
+import { cn, handleCopy } from "@/lib/utils";
+import { Copy, CreditCard } from "lucide-react";
 
 // table col header
 type Payment = {
@@ -23,12 +25,6 @@ type Payment = {
 
 export default function PaymentsPage() {
   const { data: enrollees, isLoading, error } = useGetInvoices();
-
-
-  const handleCopy = (ref: string) => {
-    navigator.clipboard.writeText(ref);
-    toast.success("Reference number copied to clipboard.");
-  };
 
   const tableData: Payment[] = enrollees
     ? enrollees?.map((enrollee) => ({
@@ -59,22 +55,15 @@ export default function PaymentsPage() {
         const course = row.getValue("course") as Payment["course"];
         return (
           <Badge
-            className={(() => {
-              switch (course) {
-                case "TDC":
-                  return "bg-yellow-700 w-10 p-1 text-white capitalize";
-                case "PDC":
-                  return "bg-sky-600 w-10 text-white capitalize";
-                default:
-                  return "bg-gray-500 w-10 text-white capitalize";
-              }
-            })()}
+            variant="outline"
+            className={cn(
+              "px-2.5 py-0.5 rounded-full text-xs font-semibold transition-colors shadow-sm",
+              course === "TDC"
+                ? "bg-amber-50 text-amber-700 border-amber-200/60 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800"
+                : "bg-sky-50 text-sky-700 border-sky-200/60 dark:bg-sky-900/20 dark:text-sky-400 dark:border-sky-800",
+            )}
           >
-            {course === "TDC"
-              ? "TDC"
-              : course === "PDC"
-              ? "PDC"
-              : course.toLowerCase().replace("_", " ")}
+            {course ?? "N/A"}
           </Badge>
         );
       },
@@ -100,19 +89,32 @@ export default function PaymentsPage() {
       header: "Payment Mode",
       cell: ({ row }) => {
         const val = row.getValue(
-          "payment_channel"
+          "payment_channel",
         ) as Payment["payment_channel"];
-        const isGcash = val?.toUpperCase() === "GCASH";
 
         return (
           <Badge
-            className={
-              isGcash
-                ? " bg-[#007AFF]  text-white border-none"
-                : "bg-gray-200 text-gray-800"
-            }
+            className={cn(
+              "rounded-full px-2.5 py-0.5 font-medium shadow-none border flex items-center w-fit gap-1",
+              (() => {
+                const channel = val?.toUpperCase();
+                switch (channel) {
+                  case "GCASH":
+                    return "bg-[#007CFF] text-white border-none"; // Official GCash Blue
+                  case "MAYA":
+                  case "PAYMAYA":
+                    return "bg-[#00945A] text-white border-none"; // Official Maya Green
+                  case "GRABPAY":
+                    return "bg-[#02B150] text-white border-none"; // Official Grab Green
+                  default:
+                    return "bg-slate-100 text-slate-700 border-slate-200";
+                }
+              })(),
+            )}
           >
-            {val ?? "N/A"}
+            <span className="text-[11px] font-bold tracking-tight">
+              {val ?? "N/A"}
+            </span>
           </Badge>
         );
       },
@@ -125,11 +127,11 @@ export default function PaymentsPage() {
 
         return (
           <button
-            onClick={() => handleCopy(ref)}
-            className="text-sm text-yellow-600 hover:underline  cursor-pointer"
-            title="Click to copy"
+            onClick={() => handleCopy(ref ?? "")}
+            className="flex items-center gap-1.5 text-xs font-mono text-muted-foreground hover:text-amber-700 transition-colors"
           >
-            {ref}
+            {ref ?? "N/A"}
+            <Copy className="h-3 w-3" />
           </button>
         );
       },
@@ -141,14 +143,28 @@ export default function PaymentsPage() {
       cell: ({ row }) => {
         const status = row.getValue("status") as Payment["status"];
         return (
-          <Badge className="bg-emerald-600 ">{status.toLowerCase()}</Badge>
+          <Badge
+            className={cn(
+              "px-2.5 py-0.5 rounded-full text-xs font-medium border shadow-none capitalize",
+              status === "PAID"
+                ? "bg-emerald-100/80 text-emerald-800 border-emerald-200 hover:bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800"
+                : "bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700",
+            )}
+          >
+            <span
+              className={cn(
+                "mr-1.5 h-1.5 w-1.5 rounded-full",
+                status === "PAID" ? "bg-emerald-500" : "bg-slate-400",
+              )}
+            />
+            {status?.toLowerCase()}
+          </Badge>
         );
       },
     },
 
     { accessorKey: "paidAt", header: "Paid At" },
 
-    // TODO replace enrollee action to payment action
     {
       header: "Actions",
       id: "actions",

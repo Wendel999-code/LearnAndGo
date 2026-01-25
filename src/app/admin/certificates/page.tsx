@@ -38,6 +38,8 @@ import Generate from "./Generate";
 import { useGetGraduatedStudents } from "@/hooks/use-student";
 import { formatToMDY } from "@/lib/utils/date";
 import { Skeleton } from "@/components/ui/skeleton";
+import { CertificateStatus } from "@prisma/client";
+import DebouncedSearchInput from "@/lib/utils/use-debounce";
 
 //TODO ADD REAL DATA HERE
 const wendelTDCData = {
@@ -51,57 +53,120 @@ const wendelTDCData = {
   administratorName: "Wendel clark dawson",
 };
 
+// Framer Motion variants for animations
+const containerVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeInOut" },
+  },
+};
+
+const tableRowVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0 },
+};
+
 // Main Component
 function Certificates() {
-  const { data: graduatedStudents, isLoading } = useGetGraduatedStudents();
+  const [searchName, setSearchName] = React.useState("");
+  const [courseFilter, setCourseFilter] = React.useState("all");
+  const [statusFilter, setStatusFilter] = React.useState<
+    CertificateStatus | "all"
+  >("all");
+
+  const { data: graduatedStudents, isLoading } = useGetGraduatedStudents({
+    searchName,
+    course: courseFilter,
+    certificateStatus: statusFilter === "all" ? undefined : statusFilter,
+  });
 
   console.log("Graduated Students:", graduatedStudents);
 
-  const [searchName, setSearchName] = React.useState("");
-  const [courseFilter, setCourseFilter] = React.useState("all");
-  const [statusFilter, setStatusFilter] = React.useState("PENDING");
+  const handleStatusChange = (value: string) => {
+    if (value === "all") {
+      setStatusFilter("all");
+    } else if (value in CertificateStatus) {
+      setStatusFilter(value as CertificateStatus);
+    }
+  };
 
-  const [isGenerating, setIsGenerating] = React.useState(false);
-
-  // Memoized filter logic for performance
-  const filteredData = React.useMemo(() => {
-    const data = graduatedStudents
-
-      ?.filter((student: any) => {
-        const fullName = `${student.firstName ?? ""} ${
-          student.lastName ?? ""
-        }`.trim();
-
-        return fullName.toLowerCase().includes(searchName.toLowerCase());
-      })
-      .filter((student: any) =>
-        courseFilter === "all"
-          ? true
-          : student.course?.courseTitle === courseFilter
-      )
-      .filter((student) =>
-        student.certificateStatus === statusFilter
-          ? true
-          : student.certificateStatus === statusFilter
+  const renderCertificateStatus = (status: string) => {
+    if (status === "GENERATED") {
+      return (
+        <span className="flex items-center gap-2 text-green-600 dark:text-green-400">
+          <CheckCircle2 className="h-4 w-4" /> Generated
+        </span>
       );
+    }
 
-    return data;
-  }, [graduatedStudents, searchName, courseFilter, statusFilter]);
-
-  // Framer Motion variants for animations
-  const containerVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: "easeInOut" },
-    },
+    return (
+      <span className="flex items-center gap-2 text-yellow-600 dark:text-yellow-400">
+        <RefreshCw className="h-4 w-4 animate-spin" />
+        Pending
+      </span>
+    );
   };
 
-  const tableRowVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0 },
+  const renderActionButton = (status: string) => {
+    if (status === "GENERATED") {
+      return (
+        <Button variant="ghost" size="icon">
+          <Download className="h-4 w-4" />
+          <span className="sr-only">Download</span>
+        </Button>
+      );
+    }
+
+    return (
+      <Button
+        size="sm"
+        className="bg-green-600 hover:bg-green-700 text-white font-medium"
+      >
+        <FileText className="h-4 w-4 mr-2" />
+        Generate
+      </Button>
+    );
   };
+
+  const renderCourseBadge = (courseTitle?: string) => {
+    const isPractical = courseTitle?.startsWith("Practical");
+
+    return (
+      <Badge
+        variant={isPractical ? "default" : "secondary"}
+        className={
+          isPractical
+            ? "bg-blue-600/90 text-blue-50"
+            : "bg-purple-600/90 text-purple-50"
+        }
+      >
+        {courseTitle}
+      </Badge>
+    );
+  };
+
+  const students = graduatedStudents ?? [];
+  const hasData = students.length > 0;
+
+  const SkeletonRows = () => (
+    <>
+      {[...Array(5)].map((_, i) => (
+        <motion.tr
+          key={i}
+          variants={tableRowVariants}
+          className="hover:bg-muted/30"
+        >
+          {Array.from({ length: 6 }).map((_, cellIndex) => (
+            <TableCell key={cellIndex}>
+              <Skeleton className="h-4 w-full rounded-md animate-pulse bg-gray-300 dark:bg-gray-700" />
+            </TableCell>
+          ))}
+        </motion.tr>
+      ))}
+    </>
+  );
 
   return (
     <>
@@ -128,11 +193,10 @@ function Certificates() {
                   className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
                   aria-hidden="true"
                 />
-                <Input
-                  placeholder="Search by student name..."
-                  className="pl-10 h-10"
-                  value={searchName}
-                  onChange={(e) => setSearchName(e.target.value)}
+
+                <DebouncedSearchInput
+                  defaultValue={searchName}
+                  searchUser={setSearchName}
                 />
               </div>
               <Select value={courseFilter} onValueChange={setCourseFilter}>
@@ -141,21 +205,18 @@ function Certificates() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Courses</SelectItem>
-                  <SelectItem value="Theoretical Driving Course">
-                    Theoretical Driving
-                  </SelectItem>
-                  <SelectItem value="Practical Driving Course">
-                    Practical Driving
-                  </SelectItem>
+                  <SelectItem value="TDC">Theoretical Driving</SelectItem>
+                  <SelectItem value="PDC">Practical Driving</SelectItem>
                 </SelectContent>
               </Select>
 
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <Select value={statusFilter} onValueChange={handleStatusChange}>
                 <SelectTrigger className="w-full md:w-[140px] h-10">
                   <SelectValue placeholder="Filter by certificate status" />
                 </SelectTrigger>
 
                 <SelectContent>
+                  <SelectItem value="all">All Statuses</SelectItem>
                   <SelectItem value="PENDING">Pending</SelectItem>
                   <SelectItem value="GENERATED">Generated</SelectItem>
                 </SelectContent>
@@ -182,121 +243,64 @@ function Certificates() {
                   </TableRow>
                 </TableHeader>
                 <motion.tbody
-                  variants={{
-                    visible: { transition: { staggerChildren: 0.05 } },
-                  }}
                   initial="hidden"
                   animate="visible"
+                  variants={{
+                    hidden: { opacity: 1 },
+                    visible: {
+                      opacity: 1,
+                      transition: { staggerChildren: 0.05 },
+                    },
+                  }}
                 >
-                  {isLoading &&
-                    [...Array(5)].map((_, i) => (
-                      <motion.tr
-                        key={i}
-                        variants={tableRowVariants}
-                        className="hover:bg-muted/30"
-                      >
-                        <TableCell className="font-medium">
-                          <Skeleton className="h-4 w-6 rounded-md animate-pulse bg-gray-300 dark:bg-gray-700" />
-                        </TableCell>
-                        <TableCell className="font-medium capitalize">
-                          <Skeleton className="h-4 w-40 rounded-md animate-pulse bg-gray-300 dark:bg-gray-700" />
-                        </TableCell>
-                        <TableCell>
-                          <Skeleton className="h-6 w-32 rounded-lg animate-pulse bg-gray-300 dark:bg-gray-700" />
-                        </TableCell>
-                        <TableCell>
-                          <Skeleton className="h-4 w-24 rounded-md animate-pulse bg-gray-300 dark:bg-gray-700" />
-                        </TableCell>
-                        <TableCell>
-                          <Skeleton className="h-4 w-24 rounded-md animate-pulse bg-gray-300 dark:bg-gray-700" />
-                        </TableCell>
-                        <TableCell>
-                          <Skeleton className="h-4 w-24 rounded-md animate-pulse bg-gray-300 dark:bg-gray-700" />
-                        </TableCell>
-                      </motion.tr>
-                    ))}
+                  {isLoading && <SkeletonRows />}
 
-                  {!isLoading && (
+                  {!isLoading && hasData && (
                     <>
-                      {(filteredData?.length ?? 0) > 0 ? (
-                        filteredData?.map((student, i) => (
-                          <motion.tr
-                            key={student.id}
-                            variants={tableRowVariants}
-                            className="hover:bg-muted/30"
-                          >
-                            <TableCell className="font-medium">
-                              {i + 1}
-                            </TableCell>
-                            <TableCell className="font-medium capitalize">
-                              {student.firstName} {student.lastName}
-                            </TableCell>
-                            <TableCell>
-                              <Badge
-                                variant={
-                                  student.course?.courseTitle?.startsWith(
-                                    "Practical"
-                                  )
-                                    ? "default"
-                                    : "secondary"
-                                }
-                                className={
-                                  student.course?.courseTitle?.startsWith(
-                                    "Practical"
-                                  )
-                                    ? "bg-blue-600/90 text-blue-50"
-                                    : "bg-purple-600/90 text-purple-50"
-                                }
-                              >
-                                {student.course?.courseTitle}
-                              </Badge>
-                            </TableCell>
-                            <TableCell>
-                              {formatToMDY(student.updatedAt)}
-                            </TableCell>
-                            <TableCell>
-                              {/* //TODO ADD CERTIFICATE STATUS */}
-                              {student.certificateStatus === "GENERATED" ? (
-                                <span className="flex items-center gap-2 text-green-600 dark:text-green-400">
-                                  <CheckCircle2 className="h-4 w-4" /> Generated
-                                </span>
-                              ) : (
-                                <span className="flex items-center gap-2 text-yellow-600 dark:text-yellow-400">
-                                  <RefreshCw className="h-4 w-4 animate-spin" />
-                                  Pending
-                                </span>
-                              )}
-                            </TableCell>
-                            <TableCell className="text-center">
-                              {student.certificateStatus === "GENERATED" ? (
-                                <Button variant="ghost" size="icon">
-                                  <Download className="h-4 w-4" />
-                                  <span className="sr-only">Download</span>
-                                </Button>
-                              ) : (
-                                <Button
-                                  onClick={() => setIsGenerating(true)}
-                                  size="sm"
-                                  className="bg-green-600  hover:bg-green-700 text-white font-medium"
-                                >
-                                  <FileText className="h-4 w-4 mr-2" />
-                                  Generate
-                                </Button>
-                              )}
-                            </TableCell>
-                          </motion.tr>
-                        ))
-                      ) : (
-                        <TableRow>
-                          <TableCell
-                            colSpan={5}
-                            className="text-center h-24 text-muted-foreground"
-                          >
-                            No matching students found.
+                      {students.map((student, i) => (
+                        <motion.tr
+                          key={student.id}
+                          className="hover:bg-muted/30"
+                        >
+                          <TableCell className="font-medium">{i + 1}</TableCell>
+
+                          <TableCell className="font-medium capitalize">
+                            {student.firstName} {student.lastName}
                           </TableCell>
-                        </TableRow>
-                      )}
+
+                          <TableCell>
+                            {renderCourseBadge(student.course?.courseTitle)}
+                          </TableCell>
+
+                          <TableCell>
+                            {formatToMDY(student.updatedAt)}
+                          </TableCell>
+
+                          <TableCell>
+                            {renderCertificateStatus(
+                              student.certificateStatus as CertificateStatus,
+                            )}
+                          </TableCell>
+
+                          <TableCell className="text-center">
+                            {renderActionButton(
+                              student.certificateStatus as CertificateStatus,
+                            )}
+                          </TableCell>
+                        </motion.tr>
+                      ))}
                     </>
+                  )}
+
+                  {!isLoading && !hasData && (
+                    <TableRow>
+                      <TableCell
+                        colSpan={6}
+                        className="text-center h-24 text-muted-foreground"
+                      >
+                        No matching students found.
+                      </TableCell>
+                    </TableRow>
                   )}
                 </motion.tbody>
               </Table>
@@ -305,13 +309,13 @@ function Certificates() {
         </Card>
       </motion.div>
 
-      {isGenerating && (
+      {/* {isGenerating && (
         <Generate
           isGenerating={isGenerating}
           setIsGenerating={setIsGenerating}
           certificateData={wendelTDCData}
         />
-      )}
+      )} */}
     </>
   );
 }

@@ -85,3 +85,10 @@ export type Instructor = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type StudentsParams = {
+  searchName?: string;
+  course?: string;
+  certificateStatus?: CertificateStatus;
+  status?: StudentStatus;
+};

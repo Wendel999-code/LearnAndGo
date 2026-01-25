@@ -115,15 +115,17 @@ function Dashboard() {
                 <div className="flex items-center justify-between mb-4">
                   <div className={`p-3 rounded-xl ${stat.bgClass}`}>
                     <stat.icon
-                      className={`w-6 h-6 ${stat.bgClass.includes("yellow")
-                        ? "text-black"
-                        : "text-white"
-                        }`}
+                      className={`w-6 h-6 ${
+                        stat.bgClass.includes("yellow")
+                          ? "text-black"
+                          : "text-white"
+                      }`}
                     />
                   </div>
                   <span
-                    className={`text-sm font-medium ${stat.trend === "up" ? "text-green-600" : "text-red-600"
-                      }`}
+                    className={`text-sm font-medium ${
+                      stat.trend === "up" ? "text-green-600" : "text-red-600"
+                    }`}
                   >
                     {stat.change}
                   </span>
@@ -186,9 +188,21 @@ function Dashboard() {
               </div>
               <div className="space-y-6">
                 {[
-                  { label: "Theoretical Lessons", color: "bg-blue-500", value: 85 },
-                  { label: "Practical Lessons", color: "bg-green-500", value: 88 },
-                  { label: "Refresher Lessons", color: "bg-yellow-500", value: 91 },
+                  {
+                    label: "Theoretical Lessons",
+                    color: "bg-blue-500",
+                    value: 85,
+                  },
+                  {
+                    label: "Practical Lessons",
+                    color: "bg-green-500",
+                    value: 88,
+                  },
+                  {
+                    label: "Refresher Lessons",
+                    color: "bg-yellow-500",
+                    value: 91,
+                  },
                 ].map((item, index) => (
                   <div key={index}>
                     <div className="flex items-center justify-between mb-2">
@@ -211,7 +225,6 @@ function Dashboard() {
                 ))}
               </div>
             </motion.div>
-
           </div>
         </motion.div>
       </main>
