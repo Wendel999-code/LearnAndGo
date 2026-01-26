@@ -82,8 +82,6 @@ function Certificates() {
     certificateStatus: statusFilter === "all" ? undefined : statusFilter,
   });
 
-  console.log("Graduated Students:", graduatedStudents);
-
   const handleStatusChange = (value: string) => {
     if (value === "all") {
       setStatusFilter("all");

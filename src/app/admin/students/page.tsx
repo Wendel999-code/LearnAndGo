@@ -33,7 +33,6 @@ import DebouncedSearchInput from "@/lib/utils/use-debounce";
 import { StudentStatus } from "@prisma/client";
 import { cn } from "@/lib/utils";
 
-// Animation variants matching your reference
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
@@ -42,7 +41,7 @@ const containerVariants = {
 export default function Students() {
   const [searchName, setSearchName] = useState("");
   const [statusFilter, setStatusFilter] = React.useState<StudentStatus | "all">(
-    "ENROLLED",
+    "all",
   );
   const [courseFilter, setCourseFilter] = React.useState("all");
 
@@ -55,7 +54,6 @@ export default function Students() {
     course: courseFilter,
     status: statusFilter === "all" ? undefined : statusFilter,
   });
-  console.log("Fetched Students:", students);
 
   const [attendance, setAttendance] = useState(() => {
     if (typeof window === "undefined") return {};

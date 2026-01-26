@@ -381,7 +381,7 @@ export async function getEnrolledStudents(params: StudentsParams) {
   try {
     const student = await prisma.student.findMany({
       where: {
-        status: status ? status : { in: ["ENROLLED", "GRADUATED"] },
+        status: status ? { not: "PENDING" } : { not: "PENDING" },
 
         ...(searchName && {
           OR: [
