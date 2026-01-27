@@ -25,6 +25,7 @@ import { cn, handleCopy } from "@/lib/utils";
 import { useGetInvoices } from "@/hooks/use-invoice";
 import PaymentAction from "./components/PaymentAction";
 import { Skeleton } from "@/components/ui/skeleton";
+import { GenPagination } from "@/components/Pagination";
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -32,19 +33,20 @@ const containerVariants = {
 };
 
 export default function PaymentsPage() {
-  const { data: enrollees, isLoading, error } = useGetInvoices();
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(25);
 
-  if (error)
-    return (
-      <div className="p-6 text-red-500 text-center">Error: {error.message}</div>
-    );
+  const { data, isLoading } = useGetInvoices(page, limit);
+
+  const enrollees = data?.data ?? [];
+  const pagination = data?.pagination;
 
   return (
     <motion.div
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="p-2"
+      className=""
     >
       <Card className="shadow-lg border-none bg-card/50 backdrop-blur-sm">
         <CardHeader>
@@ -97,7 +99,7 @@ export default function PaymentsPage() {
                     </TableRow>
                   ))
                 ) : enrollees && enrollees.length > 0 ? (
-                  enrollees.map((enrollee, i) => {
+                  enrollees.map((enrollee: any, i: any) => {
                     const invoice = enrollee.invoices;
                     const channel = invoice?.payment_channel?.toUpperCase();
 
@@ -184,37 +186,18 @@ export default function PaymentsPage() {
             </Table>
           </div>
 
-          {/* Pagination UI - Only UI for now */}
-          <div className="flex items-center justify-between mt-6 px-2">
-            <p className="text-sm text-muted-foreground">
-              Showing <span className="font-medium">1</span> to{" "}
-              <span className="font-medium">10</span> of{" "}
-              <span className="font-medium">20</span> results
-            </p>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 w-8 p-0"
-                disabled
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 bg-primary text-primary-foreground hover:bg-primary/90"
-              >
-                1
-              </Button>
-              <Button variant="outline" size="sm" className="h-8">
-                2
-              </Button>
-              <Button variant="outline" size="sm" className="h-8 w-8 p-0">
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
+          {pagination && (
+            <GenPagination
+              page={page}
+              totalPages={pagination.totalPages}
+              limit={pagination.limit}
+              onPageChange={(p) => setPage(Math.max(1, p))}
+              onLimitChange={(l) => {
+                setPage(1);
+                setLimit(l);
+              }}
+            />
+          )}
         </CardContent>
       </Card>
     </motion.div>

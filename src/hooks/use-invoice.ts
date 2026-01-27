@@ -1,18 +1,22 @@
+// hooks/use-invoice.ts
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getStudentWithInvoice } from "@/actions/student/invoice";
 import { Enrollee } from "@/constant/type";
-import { useQuery } from "@tanstack/react-query";
 
-export const useGetInvoices = () =>
-  useQuery<Enrollee[]>({
-    queryKey: ["get-invoices"],
-    queryFn: async () => {
-      const res = await getStudentWithInvoice();
-      if (!res.success)
-        throw new Error(res.message || "Failed to fetch invoices");
-      return res.data ?? [];
-    },
-    staleTime: 60 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
-    retry: 1,
-    refetchOnWindowFocus: true,
+export interface InvoiceResponse {
+  data: Enrollee[];
+  pagination: {
+    totalCount: number;
+    currentPage: number;
+    totalPages: number;
+    limit: number;
+  };
+}
+
+export const useGetInvoices = (page = 1, limit = 25) =>
+  useQuery<InvoiceResponse>({
+    queryKey: ["get-invoices", page, limit],
+    queryFn: () => getStudentWithInvoice({ page, limit }),
+    placeholderData: keepPreviousData,
+    staleTime: 5 * 60 * 1000,
   });
