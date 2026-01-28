@@ -5,9 +5,19 @@ import {
   verifyEnrollee,
   getGraduatedStudents,
 } from "@/actions/student/student";
-import { Enrollee, EnrolleeInvoice, StudentsParams } from "@/constant/type";
+import {
+  Enrollee,
+  EnrolleeInvoice,
+  InvoiceResponse,
+  StudentsParams,
+} from "@/constant/type";
 import { CertificateStatus } from "@prisma/client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 export const useGetEnrollees = () =>
   useQuery<Enrollee[]>({
@@ -66,18 +76,12 @@ export const useVerifyEnrollee = () => {
   });
 };
 
-export const useGetStudents = (params: StudentsParams) =>
-  useQuery<Partial<Enrollee>[]>({
-    queryKey: ["get-students", params],
-    queryFn: async () => {
-      const res = await getEnrolledStudents(params);
-      if (!res.success) throw new Error(res.message);
-      return res.data!;
-    },
-    staleTime: 60 * 60 * 1000, // 1 hour
-    gcTime: 30 * 60 * 1000, // 30 minutes
-    retry: 1,
-    refetchOnWindowFocus: true,
+export const useGetStudents = (params: StudentsParams, page = 1, limit = 25) =>
+  useQuery<InvoiceResponse>({
+    queryKey: ["get-students", params, page, limit],
+    queryFn: () => getEnrolledStudents(params, page, limit),
+    placeholderData: keepPreviousData,
+    staleTime: 5 * 60 * 1000,
   });
 
 export const useGetGraduatedStudents = (params: StudentsParams) =>

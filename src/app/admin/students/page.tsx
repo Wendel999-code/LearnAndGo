@@ -32,6 +32,7 @@ import StudentAction from "./StudentAction";
 import DebouncedSearchInput from "@/lib/utils/use-debounce";
 import { StudentStatus } from "@prisma/client";
 import { cn } from "@/lib/utils";
+import { GenPagination } from "@/components/Pagination";
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -45,15 +46,21 @@ export default function Students() {
   );
   const [courseFilter, setCourseFilter] = React.useState("all");
 
-  const {
-    data: students,
-    isLoading,
-    error,
-  } = useGetStudents({
-    searchName,
-    course: courseFilter,
-    status: statusFilter === "all" ? undefined : statusFilter,
-  });
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(25);
+
+  const { data, isLoading, error } = useGetStudents(
+    {
+      searchName,
+      course: courseFilter,
+      status: statusFilter === "all" ? undefined : statusFilter,
+    },
+    page,
+    limit,
+  );
+
+  const students = data?.data ?? [];
+  const pagination = data?.pagination;
 
   const [attendance, setAttendance] = useState(() => {
     if (typeof window === "undefined") return {};
@@ -261,6 +268,19 @@ export default function Students() {
               </TableBody>
             </Table>
           </div>
+
+          {pagination && (
+            <GenPagination
+              page={page}
+              totalPages={pagination.totalPages}
+              limit={pagination.limit}
+              onPageChange={(p) => setPage(Math.max(1, p))}
+              onLimitChange={(l) => {
+                setPage(1);
+                setLimit(l);
+              }}
+            />
+          )}
         </CardContent>
       </Card>
     </motion.div>

@@ -92,3 +92,21 @@ export type StudentsParams = {
   certificateStatus?: CertificateStatus;
   status?: StudentStatus;
 };
+
+export interface PaginationProps {
+  page: number;
+  totalPages: number;
+  limit: number;
+  onPageChange: (page: number) => void;
+  onLimitChange: (limit: number) => void;
+}
+
+export interface InvoiceResponse {
+  data: Enrollee[];
+  pagination: {
+    totalCount: number;
+    currentPage: number;
+    totalPages: number;
+    limit: number;
+  };
+}

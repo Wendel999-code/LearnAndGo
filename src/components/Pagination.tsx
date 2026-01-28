@@ -1,31 +1,15 @@
 "use client";
 
 import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Field, FieldLabel } from "@/components/ui/field";
 import { Button } from "./ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
-interface Props {
-  page: number;
-  totalPages: number;
-  limit: number;
-  onPageChange: (page: number) => void;
-  onLimitChange: (limit: number) => void;
-}
+import { PaginationProps } from "@/constant/type";
 
 export function GenPagination({
   page,
@@ -33,7 +17,7 @@ export function GenPagination({
   limit,
   onPageChange,
   onLimitChange,
-}: Props) {
+}: PaginationProps) {
   return (
     <div className="flex items-center justify-between mt-6 border-border/40">
       {/* Left Side: Rows per Page (Compact Style) */}

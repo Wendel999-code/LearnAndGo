@@ -1,17 +1,7 @@
 // hooks/use-invoice.ts
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getStudentWithInvoice } from "@/actions/student/invoice";
-import { Enrollee } from "@/constant/type";
-
-export interface InvoiceResponse {
-  data: Enrollee[];
-  pagination: {
-    totalCount: number;
-    currentPage: number;
-    totalPages: number;
-    limit: number;
-  };
-}
+import { InvoiceResponse } from "@/constant/type";
 
 export const useGetInvoices = (page = 1, limit = 25) =>
   useQuery<InvoiceResponse>({

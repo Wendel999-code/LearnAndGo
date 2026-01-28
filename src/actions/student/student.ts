@@ -375,62 +375,61 @@ export async function graduateStudent(student_id: string) {
   }
 }
 
-export async function getEnrolledStudents(params: StudentsParams) {
+export async function getEnrolledStudents(
+  params: StudentsParams,
+  page = 1,
+  limit = 25,
+) {
   const { searchName, course = "all", status } = params;
 
+  const skip = (page - 1) * limit;
+
+  const where: any = {
+    ...(status ? { status } : { status: { not: "PENDING" } }),
+
+    ...(searchName && {
+      OR: [
+        { firstName: { contains: searchName, mode: "insensitive" } },
+        { lastName: { contains: searchName, mode: "insensitive" } },
+      ],
+    }),
+
+    ...(course &&
+      course !== "all" && {
+        course: { courseCode: course },
+      }),
+  };
+
   try {
-    const student = await prisma.student.findMany({
-      where: {
-        status: status ? { not: "PENDING" } : { not: "PENDING" },
-
-        ...(searchName && {
-          OR: [
-            {
-              firstName: {
-                contains: searchName,
-                mode: "insensitive",
-              },
+    const [data, totalCount] = await Promise.all([
+      prisma.student.findMany({
+        skip,
+        take: limit,
+        where,
+        include: {
+          course: {
+            select: {
+              courseCode: true,
             },
-            {
-              lastName: {
-                contains: searchName,
-                mode: "insensitive",
-              },
-            },
-          ],
-        }),
-
-        ...(course &&
-          course !== "all" && {
-            course: {
-              courseCode: course,
-            },
-          }),
-      },
-
-      include: {
-        course: {
-          select: {
-            courseCode: true,
           },
         },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.student.count({ where }),
+    ]);
 
-    if (student.length === 0)
-      return {
-        success: true,
-        message: "No student found.",
-        data: [],
-      };
-
-    return { success: true, message: "Fetched students.", data: student };
+    return {
+      data,
+      pagination: {
+        totalCount,
+        currentPage: page,
+        totalPages: Math.ceil(totalCount / limit),
+        limit,
+      },
+    };
   } catch (error: any) {
-    console.log(error.message);
-    return { success: false, message: error.message, data: [] };
+    console.error("getEnrolledStudents error:", error);
+    throw new Error("Failed to fetch students");
   }
 }
 
