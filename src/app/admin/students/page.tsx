@@ -30,9 +30,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useGetStudents } from "@/hooks/use-student";
 import StudentAction from "./StudentAction";
 import DebouncedSearchInput from "@/lib/utils/use-debounce";
-import { StudentStatus } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { GenPagination } from "@/components/Pagination";
+import { StudentStatus } from "@/generated/prisma/enums";
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },

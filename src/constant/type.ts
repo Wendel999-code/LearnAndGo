@@ -1,8 +1,4 @@
-import {
-  CertificateStatus,
-  InvoiceStatus,
-  StudentStatus,
-} from "@prisma/client";
+import { CertificateStatus, InvoiceStatus, StudentStatus } from "@/generated/prisma/enums";
 
 export type EnrolleeInvoice = {
   id: string;

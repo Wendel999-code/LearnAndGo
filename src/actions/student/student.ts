@@ -5,9 +5,9 @@ import supabase from "@/lib/supabase-storage";
 import axios from "axios";
 import { StudentFormData, StudentSchema } from "../zod/student";
 import { generateReferenceId } from "@/lib/utils/generate_id";
-import { CertificateStatus, Prisma } from "@prisma/client";
 import { baseURL } from "@/lib/utils/env";
 import { StudentsParams } from "@/constant/type";
+import { Prisma } from "@/generated/prisma/client";
 
 //helper 1: Upload file to Supabase
 export async function uploadFile(folder: string, file: File) {
