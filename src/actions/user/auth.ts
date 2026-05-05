@@ -1,8 +1,8 @@
 "use server";
 
+import { Role } from "@/generated/prisma/enums";
 import prisma from "@/lib/prisma-instance";
 import { auth, clerkClient } from "@clerk/nextjs/server";
-import { Role } from "@prisma/client";
 
 export const completeOnboarding = async () => {
   const { isAuthenticated, userId } = await auth();

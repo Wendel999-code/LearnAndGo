@@ -11,7 +11,6 @@ import {
   InvoiceResponse,
   StudentsParams,
 } from "@/constant/type";
-import { CertificateStatus } from "@prisma/client";
 import {
   keepPreviousData,
   useMutation,

@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import Header from "./components/Header";
 import { redirect } from "next/navigation";
-import { Role } from "@prisma/client";
+import { Role } from "@/generated/prisma/enums";
 
 export default async function StudentLayout({
   children,

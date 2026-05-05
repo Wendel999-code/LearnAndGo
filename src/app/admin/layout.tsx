@@ -1,8 +1,8 @@
 import { auth } from "@clerk/nextjs/server";
 import Header from "./components/header";
 import SideBar from "./components/side-bar";
-import { Role } from "@prisma/client";
 import { redirect } from "next/navigation";
+import { Role } from "@/generated/prisma/enums";
 
 export default async function AdminLayout({
   children,

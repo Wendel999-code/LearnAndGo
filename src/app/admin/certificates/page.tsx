@@ -38,8 +38,8 @@ import Generate from "./Generate";
 import { useGetGraduatedStudents } from "@/hooks/use-student";
 import { formatToMDY } from "@/lib/utils/date";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CertificateStatus } from "@prisma/client";
 import DebouncedSearchInput from "@/lib/utils/use-debounce";
+import { CertificateStatus } from "@/generated/prisma/enums";
 
 //TODO ADD REAL DATA HERE
 const wendelTDCData = {
